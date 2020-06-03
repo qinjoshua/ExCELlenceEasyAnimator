@@ -2,7 +2,6 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
-import java.util.Map;
 import java.util.SortedMap;
 
 /**

@@ -2,7 +2,6 @@ package com.company.model.shape.shapes;
 
 import com.company.model.shape.AShape;
 import com.company.model.shape.Posn;
-import com.company.model.shape.PosnCart;
 import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
 

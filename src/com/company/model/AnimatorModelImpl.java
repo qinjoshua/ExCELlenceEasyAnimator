@@ -2,11 +2,11 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Represents an animator model that computes the frames at a given time based on linear
@@ -14,16 +14,6 @@ import java.util.TreeMap;
  */
 public class AnimatorModelImpl implements AnimatorModel {
   private final SortedMap<String, SortedSet<Frame>> timelines;
-
-  /**
-   * Creates a new animator model implementation using the given sorted map of timelines.
-   *
-   * @param timelines a sorted map representing the timeline of the animation, mapping shape
-   *                  names to lists of frames.
-   */
-  public AnimatorModelImpl(SortedMap<String, SortedSet<Frame>> timelines) {
-    this.timelines = timelines;
-  }
 
   /**
    * Default constructor that does not initialize any shapes.
@@ -82,8 +72,40 @@ public class AnimatorModelImpl implements AnimatorModel {
     return frames.last();
   }
 
+  /**
+   * This implementation of createKeyframe will overwrite any existing keyframes that are within
+   * 1e-9 seconds apart in time, otherwise behaves like createKeyframe does.
+   *
+   * @param shapeName The name of the shape for which the keyframe is being created for.
+   * @param shape     The shape in the keyframe.
+   * @param time      The time the keyframe is at.
+   */
   @Override
   public void createKeyframe(String shapeName, Shape shape, double time) {
+    if (time < 0) {
+      throw new IllegalArgumentException("Time cannot be negative");
+    }
 
+    if (this.timelines.containsKey(shapeName)) {
+
+      SortedSet<Frame> timeline = timelines.get(shapeName);
+
+      if (timeline.first().getShape().getShapeType() != shape.getShapeType()) {
+        throw new IllegalArgumentException("Shape is not the same type as other keyframes.");
+      }
+
+      for (Frame frame : timeline) {
+        if (Math.abs(frame.getTime() - time) < 1e-9) {
+          timeline.remove(frame);
+        }
+      }
+
+      this.timelines.get(shapeName).add(new FrameImpl(time, shape));
+    } else {
+      TreeSet<Frame> newFrames = new TreeSet<>();
+      newFrames.add(new FrameImpl(time, shape));
+
+      this.timelines.put(shapeName, newFrames);
+    }
   }
 }
