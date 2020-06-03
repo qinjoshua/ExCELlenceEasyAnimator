@@ -7,6 +7,9 @@ import com.company.model.shape.ShapeType;
 
 import java.awt.*;
 
+/**
+ * Represents an ellipse shape.
+ */
 public class Ellipse extends AShape implements Shape {
   /**
    * Constructor that initializes all the fields for this shape.

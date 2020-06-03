@@ -3,6 +3,7 @@ package com.company.model;
 import com.company.model.shape.Shape;
 
 import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * This interface represents the model for an animation that allows adding keyframes for specific
@@ -16,7 +17,7 @@ public interface AnimatorModel {
    * @return A map of the names and shapes representing the contents of a scene
    * @throws IllegalArgumentException if the time is negative
    */
-  Map<String, Shape> shapesAt(double time) throws IllegalArgumentException;
+  SortedMap<String, Shape> shapesAt(double time) throws IllegalArgumentException;
 
   /**
    * Adds a new keyframe at the given time, with the given shape. This will overwrite any

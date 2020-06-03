@@ -17,7 +17,8 @@ public class AnimatorModelImpl implements AnimatorModel {
   /**
    * Creates a new animator model implementation using the given sorted map of timelines.
    *
-   * @param timelines
+   * @param timelines a sorted map representing the timeline of the animation, mapping shape
+   *                  names to lists of frames.
    */
   public AnimatorModelImpl(SortedMap<String, List<Frame>> timelines) {
     this.timelines = timelines;
@@ -31,8 +32,29 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   @Override
-  public Map<String, Shape> shapesAt(double time) {
+  public SortedMap<String, Shape> shapesAt(double time) {
+
+    SortedMap<String, Shape> shapes = new TreeMap<String, Shape>();
+
+    for (Map.Entry<String, List<Frame>> frame : timelines.entrySet()) {
+      // TODO does this maintain order? IDK
+
+
+    }
+
     return null;
+  }
+
+  // Returns the nearest previous keyframe to
+  private double previousKeyframeTime(double time, List<Frame> frames) {
+    double closestTime = time;
+
+    for (Frame frame : frames) {
+      if (frame.getTime() - time < 0 && Math.abs(frame.getTime() - time) < closestTime) {
+        return frame.getTime();
+      }
+    }
+
   }
 
   @Override
