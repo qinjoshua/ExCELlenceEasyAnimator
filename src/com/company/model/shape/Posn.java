@@ -3,11 +3,17 @@ import java.util.Objects;
 
 /**
  * Represents a coordinate on the screen with a publicly accessible x and y position.
+ * TODO what coordinate system is this?
  */
 public class Posn {
   public final int x;
   public final int y;
 
+  /**
+   * Constructs a Posn with the given x and y coordinates.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   */
   public Posn(int x, int y) {
     this.x = x;
     this.y = y;

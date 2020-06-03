@@ -10,35 +10,35 @@ public interface Shape {
   /**
    * Gets the position of this shape.
    *
-   * @return the coordinate position of the shape as a Posn.
+   * @return the coordinate position of the shape as a {@link Posn}
    */
-  public Posn getPosition();
+  Posn getPosition();
 
   /**
    * Gets the width of this shape.
    *
-   * @return the width of the shape as an integer.
+   * @return the width of the shape as an integer
    */
-  public int getWidth();
+  int getWidth();
 
   /**
    * Gets the height of this shape.
    *
-   * @return the height of the shape as an integer.
+   * @return the height of the shape as an integer
    */
-  public int getHeight();
+  int getHeight();
 
   /**
    * Gets the color of this shape.
    *
-   * @return the color of this shape.
+   * @return the color of this shape
    */
-  public Color getColor();
+  Color getColor();
 
   /**
    * Gets the shape type for this shape.
    *
-   * @return the ShapeType of this shape.
+   * @return the {@link ShapeType} of this shape
    */
-  public ShapeType getShapeType();
+  ShapeType getShapeType();
 }
