@@ -6,11 +6,11 @@ import java.awt.*;
  * Abstract class that represents a shape, tracking position, width, height, and color.
  */
 public abstract class AShape implements Shape {
-  Posn posn;
-  int width;
-  int height;
-  Color color;
-  ShapeType shapeType;
+  private final Posn posn;
+  private final int width;
+  private final int height;
+  private final Color color;
+  private final ShapeType shapeType;
 
   /**
    * Constructor that initializes all the fields for this shape.

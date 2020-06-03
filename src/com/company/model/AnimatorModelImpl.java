@@ -55,6 +55,8 @@ public class AnimatorModelImpl implements AnimatorModel {
       }
     }
 
+    return 0.0;
+
   }
 
   @Override
