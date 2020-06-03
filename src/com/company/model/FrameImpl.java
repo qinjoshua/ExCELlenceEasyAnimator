@@ -11,8 +11,13 @@ public class FrameImpl implements Frame {
    *
    * @param time  the time the frame occurs at, in seconds
    * @param shape the shape in the frame
+   * @throws IllegalArgumentException if the time is negative
    */
   public FrameImpl(double time, Shape shape) {
+    if (time < 0) {
+      throw new IllegalArgumentException("Time cannot be negative");
+    }
+
     this.time = time;
     this.shape = shape;
   }

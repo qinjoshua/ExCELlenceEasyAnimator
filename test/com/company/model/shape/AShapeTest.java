@@ -55,18 +55,20 @@ public class AShapeTest {
   @Test
   public void getWidth() {
     this.initTestData();
-    assertEquals(5, rect1.getWidth());
-    assertEquals(4, rect2.getWidth());
-    assertEquals(5, ellipse1.getWidth());
-    assertEquals(7, ellipse2.getWidth());
+    assertEquals(5, rect1.getWidth(), 0.01);
+    assertEquals(4, rect2.getWidth(), 0.01);
+    assertEquals(5, ellipse1.getWidth(), 0.01);
+    assertEquals(7, ellipse2.getWidth(), 0.01);
   }
 
   @Test
   public void getHeight() {
     this.initTestData();
-    assertEquals(6, rect1.getHeight());
-    assertEquals(3, rect2.getHeight());
-    assertEquals(5, ellipse1.getHeight());
-    assertEquals(3, ellipse2.getHeight());
+    assertEquals(6, rect1.getHeight(), 0.01);
+    assertEquals(3, rect2.getHeight(), 0.01);
+    assertEquals(5, ellipse1.getHeight(), 0.01);
+    assertEquals(3, ellipse2.getHeight(), 0.01);
   }
+
+  //TODO test equality
 }

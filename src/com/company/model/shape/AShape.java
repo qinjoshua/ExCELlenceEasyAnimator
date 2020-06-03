@@ -1,6 +1,7 @@
 package com.company.model.shape;
 
 import java.awt.*;
+import java.util.Objects;
 
 /**
  * Abstract class that represents a shape, tracking position, width, height, and color.
@@ -85,4 +86,22 @@ public abstract class AShape implements Shape {
    * @return the new shape
    */
   protected abstract AShape newShape(Posn posn, double width, double height, Color color);
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    AShape aShape = (AShape) o;
+    return Double.compare(aShape.width, width) == 0 &&
+            Double.compare(aShape.height, height) == 0 &&
+            posn.equals(aShape.posn) &&
+            color.equals(aShape.color) &&
+            shapeType == aShape.shapeType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(posn, width, height, color, shapeType);
+  }
+
 }
