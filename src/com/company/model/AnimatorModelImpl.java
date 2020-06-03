@@ -22,28 +22,6 @@ public class AnimatorModelImpl implements AnimatorModel {
     this.timelines = new TreeMap<>();
   }
 
-  @Override
-  public SortedMap<String, Shape> shapesAt(double time) {
-
-    SortedMap<String, Shape> shapes = new TreeMap<>();
-
-    for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
-      if (time >= frame.getValue().last().getTime()) {
-        shapes.put(frame.getKey(), frame.getValue().last().getShape());
-      }
-      else if (!(time <= frame.getValue().first().getTime())) {
-        Frame prev = previousKeyframe(time, frame.getValue());
-        Frame next = nextKeyframe(time, frame.getValue());
-        double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
-
-        shapes.put(frame.getKey(), prev.interpolateFrame(next, progress));
-      }
-      // If the time is before the first keyframe for this shape, don't draw the shape
-    }
-
-    return shapes;
-  }
-
   // Returns the latest keyframe whose time is strictly less than the given time
   private static Frame previousKeyframe(double time, SortedSet<Frame> frames) {
     Frame closestFrame = frames.first();
@@ -67,6 +45,27 @@ public class AnimatorModelImpl implements AnimatorModel {
     }
 
     return frames.last();
+  }
+
+  @Override
+  public SortedMap<String, Shape> shapesAt(double time) {
+
+    SortedMap<String, Shape> shapes = new TreeMap<>();
+
+    for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
+      if (time >= frame.getValue().last().getTime()) {
+        shapes.put(frame.getKey(), frame.getValue().last().getShape());
+      } else if (!(time <= frame.getValue().first().getTime())) {
+        Frame prev = previousKeyframe(time, frame.getValue());
+        Frame next = nextKeyframe(time, frame.getValue());
+        double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
+
+        shapes.put(frame.getKey(), prev.interpolateFrame(next, progress));
+      }
+      // If the time is before the first keyframe for this shape, don't draw the shape
+    }
+
+    return shapes;
   }
 
   /**

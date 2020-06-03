@@ -9,7 +9,7 @@ public class FrameImpl implements Frame {
   /**
    * Initializes all the fields in frame.
    *
-   * @param time the time the frame occurs at, in seconds
+   * @param time  the time the frame occurs at, in seconds
    * @param shape the shape in the frame
    */
   public FrameImpl(double time, Shape shape) {
@@ -21,8 +21,7 @@ public class FrameImpl implements Frame {
   public Shape interpolateFrame(Frame to, double progress) throws IllegalArgumentException {
     if (progress < 0 || progress > 1) {
       throw new IllegalArgumentException("Progress must be between 0 and 1");
-    }
-    else if (this.compareTo(to) > 0) {
+    } else if (this.compareTo(to) > 0) {
       throw new IllegalArgumentException("This frame must come before the to frame");
     }
 
