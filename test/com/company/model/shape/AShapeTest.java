@@ -19,19 +19,19 @@ public class AShapeTest {
   AShape ellipse2;
 
   private void initTestData() {
-    this.rect1 = new Rectangle(new Posn(3, 5), 5, 6, Color.BLUE);
-    this.rect2 = new Rectangle(new Posn(17, 2), 4, 3, Color.GREEN);
-    this.ellipse1 = new Ellipse(new Posn(10, 10), 5, 5, Color.RED);
-    this.ellipse2 = new Ellipse(new Posn(20, 5), 7, 3, Color.MAGENTA);
+    this.rect1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    this.rect2 = new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN);
+    this.ellipse1 = new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED);
+    this.ellipse2 = new Ellipse(new PosnCart(20, 5), 7, 3, Color.MAGENTA);
   }
 
   @Test
   public void getPosn() {
     this.initTestData();
-    assertEquals(new Posn(3, 5), rect1.getPosition());
-    assertEquals(new Posn(17, 2), rect2.getPosition());
-    assertEquals(new Posn(10, 10), ellipse1.getPosition());
-    assertEquals(new Posn(20, 5), ellipse2.getPosition());
+    assertEquals(new PosnCart(3, 5), rect1.getPosition());
+    assertEquals(new PosnCart(17, 2), rect2.getPosition());
+    assertEquals(new PosnCart(10, 10), ellipse1.getPosition());
+    assertEquals(new PosnCart(20, 5), ellipse2.getPosition());
   }
 
   @Test

@@ -10,7 +10,7 @@ public interface Shape {
   /**
    * Gets the position of this shape.
    *
-   * @return the coordinate position of the shape as a {@link Posn}
+   * @return the coordinate position of the shape as a {@link PosnCart}
    */
   Posn getPosition();
 
@@ -19,14 +19,14 @@ public interface Shape {
    *
    * @return the width of the shape as an integer
    */
-  int getWidth();
+  double getWidth();
 
   /**
    * Gets the height of this shape.
    *
    * @return the height of the shape as an integer
    */
-  int getHeight();
+  double getHeight();
 
   /**
    * Gets the color of this shape.
@@ -41,4 +41,16 @@ public interface Shape {
    * @return the {@link ShapeType} of this shape
    */
   ShapeType getShapeType();
+
+  /**
+   * Gets the interpolated shape between this shape and the given shape, at the given progress.
+   *
+   * @param to       the shape to interpolate to
+   * @param progress a number between 0 and 1 that represents the progress between this shape and
+   *                 the to shape
+   * @return the interpolated shape
+   * @throws IllegalArgumentException if progress is not between 0 and 1, or the from and to shapes
+   *                                  are of different types
+   */
+  Shape interpolate(Shape to, double progress);
 }
