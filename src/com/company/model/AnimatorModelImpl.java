@@ -31,17 +31,14 @@ public class AnimatorModelImpl implements AnimatorModel {
       if (time >= frame.getValue().last().getTime()) {
         shapes.put(frame.getKey(), frame.getValue().last().getShape());
       }
-      else if (time <= frame.getValue().first().getTime()) {
-        // If the time is before the first keyframe for this shape, don't draw the shape
-        continue;
-      }
-      else {
-        Frame prev = this.previousKeyframe(time, frame.getValue());
-        Frame next = this.nextKeyframe(time, frame.getValue());
+      else if (!(time <= frame.getValue().first().getTime())) {
+        Frame prev = previousKeyframe(time, frame.getValue());
+        Frame next = nextKeyframe(time, frame.getValue());
         double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
 
         shapes.put(frame.getKey(), prev.interpolateFrame(next, progress));
       }
+      // If the time is before the first keyframe for this shape, don't draw the shape
     }
 
     return shapes;
@@ -94,11 +91,7 @@ public class AnimatorModelImpl implements AnimatorModel {
         throw new IllegalArgumentException("Shape is not the same type as other keyframes.");
       }
 
-      for (Frame frame : timeline) {
-        if (Math.abs(frame.getTime() - time) < 1e-9) {
-          timeline.remove(frame);
-        }
-      }
+      timeline.removeIf(frame -> Math.abs(frame.getTime() - time) < 1e-9);
 
       this.timelines.get(shapeName).add(new FrameImpl(time, shape));
     } else {

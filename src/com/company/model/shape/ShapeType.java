@@ -6,5 +6,5 @@ package com.company.model.shape;
  */
 public enum ShapeType {
   Rectangle(),
-  Ellipse();
+  Ellipse()
 }
