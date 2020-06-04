@@ -7,7 +7,7 @@ import com.company.model.shape.shapes.Rectangle;
 
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Color;
 
 import static org.junit.Assert.assertEquals;
 
@@ -70,10 +70,10 @@ public class FrameTest {
 
     // Tests correct interpolation of rectangles, going from
     assertEquals(new Rectangle(new PosnCart(18.5, 16.5), 16, 17, new Color(0, 128, 128)),
-            testFrame2.interpolateShape(testFrame3, 0.5));
+        testFrame2.interpolateShape(testFrame3, 0.5));
 
     assertEquals(new Ellipse(new PosnCart(18.5, 28.5), 12.1, 16.4, new Color(255, 0, 0)),
-            testFrame.interpolateShape(testFrame4, 0.7));
+        testFrame.interpolateShape(testFrame4, 0.7));
   }
 
   // Test negative progress

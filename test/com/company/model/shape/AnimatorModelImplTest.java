@@ -6,6 +6,7 @@ import com.company.model.shape.shapes.Ellipse;
 import com.company.model.shape.shapes.Rectangle;
 
 import org.junit.Test;
+
 import java.awt.Color;
 import java.util.SortedMap;
 
@@ -20,14 +21,14 @@ public class AnimatorModelImplTest {
 
   private void initTests() {
     testModel.createKeyframe("E", new Ellipse(new PosnCart(10, 10), 10, 20, new Color(0, 144,
-            144)), 10);
+        144)), 10);
     testModel.createKeyframe("E", new Ellipse(new PosnCart(20, 20), 15, 15, new Color(144,
-            150, 150)), 20);
+        150, 150)), 20);
     testModel.createKeyframe("E", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
-            200, 200)), 27);
+        200, 200)), 27);
 
     testModel.createKeyframe("R", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
-            200, 200)), 10);
+        200, 200)), 10);
   }
 
   @Test
@@ -35,11 +36,11 @@ public class AnimatorModelImplTest {
     this.initTests();
 
     String result = "shape E ellipse\n" +
-            "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150\n" +
-            "motion\tE\t20\t20\t20\t15\t15\t144\t150\t150\t\tE\t27\t131\t20\t21\t34\t200\t200\t" +
-            "200\n\n" +
-            "shape R ellipse\n" +
-            "motion\tR\t10\t131\t20\t21\t34\t200\t200\t200";
+        "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150\n" +
+        "motion\tE\t20\t20\t20\t15\t15\t144\t150\t150\t\tE\t27\t131\t20\t21\t34\t200\t200\t" +
+        "200\n\n" +
+        "shape R ellipse\n" +
+        "motion\tR\t10\t131\t20\t21\t34\t200\t200\t200";
 
     assertEquals(result, testModel.renderShapes());
   }
@@ -66,13 +67,13 @@ public class AnimatorModelImplTest {
     assertEquals(result, testModelCreateKeyframe.renderShapes());
 
     testModelCreateKeyframe.createKeyframe("E", new Ellipse(
-        new PosnCart(10, 10), 10, 20, new Color(0, 144,144)), 10);
+        new PosnCart(10, 10), 10, 20, new Color(0, 144, 144)), 10);
     result = "shape E ellipse\n" +
         "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144";
     assertEquals(result, testModelCreateKeyframe.renderShapes());
 
     testModelCreateKeyframe.createKeyframe("E", new Ellipse(
-        new PosnCart(20, 20), 15, 15, new Color(144,150, 150)), 20);
+        new PosnCart(20, 20), 15, 15, new Color(144, 150, 150)), 20);
     result = "shape E ellipse\n" +
         "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150";
     assertEquals(result, testModelCreateKeyframe.renderShapes());

@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 
 /**
@@ -33,10 +33,10 @@ public abstract class AShape implements Shape {
   /**
    * Interpolates between the given from and to numbers, with the given progress.
    *
-   * @param from
-   * @param to
-   * @param progress
-   * @return
+   * @param from the start number
+   * @param to the end number
+   * @param progress the weight to assign to the end number in the weighted average
+   * @return a weighted average, {@code (1 - progress) * from + progress * to}
    */
   private static double interpolateNum(double from, double to, double progress) {
     return from + progress * (to - from);
@@ -76,16 +76,16 @@ public abstract class AShape implements Shape {
     }
 
     return newShape(this.posn.interpolate(to.getPosition(), progress),
-            interpolateNum(this.width, to.getWidth(), progress),
-            interpolateNum(this.height, to.getHeight(), progress),
-            new Color(
-                    (int) Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(),
-                            progress)),
-                    (int) Math.round(
-                            interpolateNum(
-                                    this.color.getGreen(), to.getColor().getGreen(), progress)),
-                    (int) Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
-                            progress))));
+        interpolateNum(this.width, to.getWidth(), progress),
+        interpolateNum(this.height, to.getHeight(), progress),
+        new Color(
+            (int) Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(),
+                progress)),
+            (int) Math.round(
+                interpolateNum(
+                    this.color.getGreen(), to.getColor().getGreen(), progress)),
+            (int) Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
+                progress))));
   }
 
   /**
