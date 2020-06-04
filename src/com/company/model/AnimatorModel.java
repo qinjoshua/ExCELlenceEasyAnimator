@@ -29,4 +29,11 @@ public interface AnimatorModel {
    *                                  as the other keyframes for this shape name
    */
   void createKeyframe(String shapeName, Shape shape, double time) throws IllegalArgumentException;
+
+  /**
+   * Render information about every frame of each shape.
+   *
+   * @return string displaying the information for each of the shapes
+   */
+  String renderShapes();
 }

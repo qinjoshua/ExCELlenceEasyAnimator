@@ -47,4 +47,17 @@ public class FrameImpl implements Frame {
   public int compareTo(Frame o) {
     return Double.compare(this.time, o.getTime());
   }
+  
+  @Override
+  public String toString() {
+    return String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+            (int)this.getTime(),
+            (int)this.getShape().getPosition().getX(),
+            (int)this.getShape().getPosition().getY(),
+            (int)this.getShape().getWidth(),
+            (int)this.getShape().getHeight(),
+            this.getShape().getColor().getRed(),
+            this.getShape().getColor().getGreen(),
+            this.getShape().getColor().getBlue());
+  }
 }

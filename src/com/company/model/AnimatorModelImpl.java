@@ -101,4 +101,34 @@ public class AnimatorModelImpl implements AnimatorModel {
       this.timelines.put(shapeName, newFrames);
     }
   }
+
+  @Override
+  public String renderShapes() {
+    String renderString = "";
+
+    for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
+      renderString += "shape " + timeline.getKey() + " " +
+              timeline.getValue().first().getShape().getShapeType() + "\n";
+
+      Frame prevFrame = null;
+
+      if (timeline.getValue().size() == 1) {
+        renderString += this.motionNumbers(timeline.getKey(), timeline.getValue().first());
+      } else {
+        for (Frame frame : timeline.getValue()) {
+          if (prevFrame != null) {
+            renderString += this.motionNumbers(timeline.getKey(), prevFrame) + "\t\t";
+            renderString += this.motionNumbers(timeline.getKey(), frame) + "\n";
+          }
+          prevFrame = frame;
+        }
+      }
+      renderString += "\n";
+    }
+    return renderString;
+  }
+
+  private String motionNumbers(String shapeName, Frame frame) {
+    return "motion\t" + shapeName + "\t" + frame;
+  }
 }

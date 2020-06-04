@@ -5,6 +5,17 @@ package com.company.model.shape;
  * necessary to specify them.
  */
 public enum ShapeType {
-  Rectangle(),
-  Ellipse()
+  Rectangle("rectangle"),
+  Ellipse("ellipse");
+
+  private final String disp;
+
+  ShapeType(String disp) {
+    this.disp = disp;
+  }
+
+  @Override
+  public String toString() {
+    return this.disp;
+  }
 }
