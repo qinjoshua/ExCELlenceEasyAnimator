@@ -103,7 +103,7 @@ public class AShapeTest {
   public void interpolate_happyPath() {
     this.initTestData();
     Rectangle interpolated = new Rectangle(
-        new PosnCart(10, 3.5), 4.5, 4.5, new Color(0, 127, 127));
+        new PosnCart(10, 3.5), 4.5, 4.5, new Color(0f, 0.5f, 0.5f));
     assertEquals(interpolated, rect1.interpolate(rect2, 0.5));
     assertEquals(interpolated, rect2.interpolate(rect1, 0.5));
     assertEquals(rect1, rect1.interpolate(rect2, 0));

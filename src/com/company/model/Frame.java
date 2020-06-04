@@ -19,7 +19,7 @@ public interface Frame extends Comparable<Frame> {
    * @throws IllegalArgumentException if progress is outside of the interval 0 and 1 or if the to
    *                                  frame is before this frame.
    */
-  Shape interpolateFrame(Frame to, double progress) throws IllegalArgumentException;
+  Shape interpolateShape(Frame to, double progress) throws IllegalArgumentException;
 
   /**
    * Gets the shape for this frame.

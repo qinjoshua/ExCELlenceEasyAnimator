@@ -64,33 +64,33 @@ public class FrameTest {
   // Test interpolation
   @Test
   public void testInterpolation() {
-    assertEquals(testFrame2.getShape(), testFrame2.interpolateFrame(testFrame3, 0));
+    assertEquals(testFrame2.getShape(), testFrame2.interpolateShape(testFrame3, 0));
 
-    assertEquals(testFrame3.getShape(), testFrame2.interpolateFrame(testFrame3, 1));
+    assertEquals(testFrame3.getShape(), testFrame2.interpolateShape(testFrame3, 1));
 
     // Tests correct interpolation of rectangles, going from
-    assertEquals(new Rectangle(new PosnCart(18.5, 16.5), 16, 17, new Color(0, 127, 127)),
-        testFrame2.interpolateFrame(testFrame3, 0.5));
+    assertEquals(new Rectangle(new PosnCart(18.5, 16.5), 16, 17, new Color(0, 128, 128)),
+            testFrame2.interpolateShape(testFrame3, 0.5));
 
     assertEquals(new Ellipse(new PosnCart(18.5, 28.5), 12.1, 16.4, new Color(255, 0, 0)),
-        testFrame.interpolateFrame(testFrame4, 0.7));
+            testFrame.interpolateShape(testFrame4, 0.7));
   }
 
   // Test negative progress
   @Test(expected = IllegalArgumentException.class)
   public void testInterpolationNegativeProgress() {
-    testFrame2.interpolateFrame(testFrame3, -1);
+    testFrame2.interpolateShape(testFrame3, -1);
   }
 
   // Test progress out of range
   @Test(expected = IllegalArgumentException.class)
   public void testInterpolationGreaterThanOne() {
-    testFrame2.interpolateFrame(testFrame3, 1.1);
+    testFrame2.interpolateShape(testFrame3, 1.1);
   }
 
   // Test to frame comes before from frame
   @Test(expected = IllegalArgumentException.class)
   public void testInterpolationToFrameBefore() {
-    testFrame3.interpolateFrame(testFrame2, 0.5);
+    testFrame3.interpolateShape(testFrame2, 0.5);
   }
 }

@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -79,10 +79,12 @@ public abstract class AShape implements Shape {
             interpolateNum(this.width, to.getWidth(), progress),
             interpolateNum(this.height, to.getHeight(), progress),
             new Color(
-                    Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(), progress)),
-                    Math.round(
-                            interpolateNum(this.color.getGreen(), to.getColor().getGreen(), progress)),
-                    Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
+                    (int) Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(),
+                            progress)),
+                    (int) Math.round(
+                            interpolateNum(
+                                    this.color.getGreen(), to.getColor().getGreen(), progress)),
+                    (int) Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
                             progress))));
   }
 

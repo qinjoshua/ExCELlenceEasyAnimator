@@ -60,7 +60,7 @@ public class AnimatorModelImpl implements AnimatorModel {
         Frame next = nextKeyframe(time, frame.getValue());
         double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
 
-        shapes.put(frame.getKey(), prev.interpolateFrame(next, progress));
+        shapes.put(frame.getKey(), prev.interpolateShape(next, progress));
       }
       // If the time is before the first keyframe for this shape, don't draw the shape
     }
@@ -113,12 +113,14 @@ public class AnimatorModelImpl implements AnimatorModel {
       Frame prevFrame = null;
 
       if (timeline.getValue().size() == 1) {
-        renderString.append("motion\t" + timeline.getKey() + "\t" + timeline.getValue().first());
+        renderString.append("motion\t").append(timeline.getKey()).append("\t")
+                .append(timeline.getValue().first());
       } else {
         for (Frame frame : timeline.getValue()) {
           if (prevFrame != null) {
-            renderString.append("motion\t" + timeline.getKey() + "\t" + prevFrame).append("\t\t");
-            renderString.append(timeline.getKey() + "\t" + frame + "\n");
+            renderString.append("motion\t").append(timeline.getKey()).append("\t")
+                    .append(prevFrame).append("\t\t");
+            renderString.append(timeline.getKey()).append("\t").append(frame).append("\n");
           }
           prevFrame = frame;
         }

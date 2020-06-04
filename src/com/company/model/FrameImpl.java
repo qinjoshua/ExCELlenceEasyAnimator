@@ -25,7 +25,7 @@ public class FrameImpl implements Frame {
   }
 
   @Override
-  public Shape interpolateFrame(Frame to, double progress) throws IllegalArgumentException {
+  public Shape interpolateShape(Frame to, double progress) throws IllegalArgumentException {
     if (progress < 0 || progress > 1) {
       throw new IllegalArgumentException("Progress must be between 0 and 1");
     } else if (this.compareTo(to) > 0) {
