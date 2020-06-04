@@ -6,6 +6,8 @@ import com.company.model.shape.shapes.Ellipse;
 
 import org.junit.Test;
 import java.awt.Color;
+import java.util.SortedMap;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -44,5 +46,27 @@ public class AnimatorModelImplTest {
   @Test
   public void testGetModelFrame() {
 
+  }
+
+  @Test
+  public void shapesAt_happyPath() {
+    this.initTests();
+    SortedMap<String, Shape> shapes12 = testModel.shapesAt(12);
+    assertEquals(2, shapes12.entrySet().size());
+    Shape e12 = shapes12.get("E");
+    Shape r12 = shapes12.get("R");
+    assertEquals(new Ellipse(
+        new PosnCart(12, 12),
+        11, 19,
+        new Color(29, 145, 145)), e12);
+    assertEquals(r12, testModel.shapesAt(10).get("R"));
+    assertEquals(0, testModel.shapesAt(9.9).size());
+    assertEquals(0, testModel.shapesAt(0).size());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shapesAt_timeNegative() {
+    this.initTests();
+    testModel.shapesAt(-0.0001);
   }
 }
