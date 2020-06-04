@@ -16,9 +16,9 @@ public class PosnCartTest {
    */
   @Test
   public void equals_notReferential() {
-    PosnCart posnCart1 = new PosnCart(3, 5);
-    PosnCart posnCart2 = new PosnCart(3, 5);
-    PosnCart posnCart3 = new PosnCart(5, 3);
+    Posn posnCart1 = new PosnCart(3, 5);
+    Posn posnCart2 = new PosnCart(3, 5);
+    Posn posnCart3 = new PosnCart(5, 3);
     assertEquals(posnCart1, posnCart2);
     assertEquals(posnCart1, posnCart1);
     assertNotEquals(posnCart1, posnCart3);
@@ -29,9 +29,9 @@ public class PosnCartTest {
    */
   @Test
   public void hashCode_notReferential() {
-    PosnCart posnCart1 = new PosnCart(3, 5);
-    PosnCart posnCart2 = new PosnCart(3, 5);
-    PosnCart posnCart3 = new PosnCart(15, 20);
+    Posn posnCart1 = new PosnCart(3, 5);
+    Posn posnCart2 = new PosnCart(3, 5);
+    Posn posnCart3 = new PosnCart(15, 20);
     assertEquals(posnCart1.hashCode(), posnCart2.hashCode());
     assertEquals(posnCart1.hashCode(), posnCart1.hashCode());
     assertNotEquals(posnCart1.hashCode(), posnCart3.hashCode());

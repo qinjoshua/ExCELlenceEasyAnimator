@@ -68,15 +68,7 @@ public class FrameTest {
 
     assertEquals(testFrame3.getShape(), testFrame2.interpolateFrame(testFrame3, 1));
 
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getColor().getRed());
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getColor().getGreen());
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getColor().getBlue());
-
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getWidth());
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getHeight());
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getPosition().getX());
-    System.out.println(testFrame.interpolateFrame(testFrame4, 0.7).getPosition().getY());
-
+    // Tests correct interpolation of rectangles, going from
     assertEquals(new Rectangle(new PosnCart(18.5, 16.5), 16, 17, new Color(0, 127, 127)),
         testFrame2.interpolateFrame(testFrame3, 0.5));
 

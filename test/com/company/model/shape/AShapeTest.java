@@ -70,5 +70,25 @@ public class AShapeTest {
     assertEquals(3, ellipse2.getHeight(), 0.01);
   }
 
-  //TODO test equality
+
+  // Checks that referential equality is not being used
+  @Test
+  public void testEquality() {
+    this.initTestData();
+    assertEquals(false, this.rect1.equals(this.rect2));
+    assertEquals(new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN), this.rect2);
+    assertEquals(false, this.ellipse1.equals(this.ellipse2));
+    assertEquals(new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED), this.ellipse1);
+  }
+
+  @Test
+  public void testHashcode() {
+    this.initTestData();
+    assertEquals(false, this.rect1.hashCode() == this.rect2.hashCode());
+    assertEquals(new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN).hashCode(),
+            this.rect2.hashCode());
+    assertEquals(false, this.ellipse1.hashCode() == this.ellipse2.hashCode());
+    assertEquals(new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED).hashCode(),
+            this.ellipse1.hashCode());
+  }
 }
