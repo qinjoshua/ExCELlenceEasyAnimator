@@ -5,11 +5,15 @@ import com.company.model.AnimatorModelImpl;
 import com.company.model.shape.shapes.Ellipse;
 
 import org.junit.Test;
+import java.awt.Color;
+import static org.junit.Assert.assertEquals;
 
-import java.awt.*;
-
+/**
+ * Tests for the animator model.
+ */
 public class AnimatorModelImplTest {
   AnimatorModel testModel = new AnimatorModelImpl();
+  AnimatorModel testRectangleMove = new AnimatorModelImpl();
 
   private void initTests() {
     testModel.createKeyframe("E", new Ellipse(new PosnCart(10, 10), 10, 20, new Color(0, 144,
@@ -26,7 +30,19 @@ public class AnimatorModelImplTest {
   @Test
   public void testModelRenderString() {
     this.initTests();
-    System.out.println(testModel.renderShapes());
+
+    String result = "shape E ellipse\n" +
+            "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150\n" +
+            "motion\tE\t20\t20\t20\t15\t15\t144\t150\t150\t\tE\t27\t131\t20\t21\t34\t200\t200\t" +
+            "200\n\n" +
+            "shape R ellipse\n" +
+            "motion\tR\t10\t131\t20\t21\t34\t200\t200\t200";
+
+    assertEquals(result, testModel.renderShapes());
   }
 
+  @Test
+  public void testGetModelFrame() {
+
+  }
 }

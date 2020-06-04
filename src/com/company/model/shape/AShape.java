@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 
 /**
@@ -30,8 +30,15 @@ public abstract class AShape implements Shape {
     this.shapeType = shapeType;
   }
 
-  // Interpolates between from
-  private static double interpolate(double from, double to, double progress) {
+  /**
+   * Interpolates between the given from and to numbers, with the given progress.
+   *
+   * @param from
+   * @param to
+   * @param progress
+   * @return
+   */
+  private static double interpolateNum(double from, double to, double progress) {
     return from + progress * (to - from);
   }
 
@@ -69,11 +76,14 @@ public abstract class AShape implements Shape {
     }
 
     return newShape(this.posn.interpolate(to.getPosition(), progress),
-        interpolate(this.width, to.getWidth(), progress),
-        interpolate(this.height, to.getHeight(), progress),
-        new Color((int) interpolate(this.color.getRed(), to.getColor().getRed(), progress),
-            (int) interpolate(this.color.getGreen(), to.getColor().getGreen(), progress),
-            (int) interpolate(this.color.getBlue(), to.getColor().getBlue(), progress)));
+            interpolateNum(this.width, to.getWidth(), progress),
+            interpolateNum(this.height, to.getHeight(), progress),
+            new Color(
+                    Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(), progress)),
+                    Math.round(
+                            interpolateNum(this.color.getGreen(), to.getColor().getGreen(), progress)),
+                    Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
+                            progress))));
   }
 
   /**
@@ -89,8 +99,12 @@ public abstract class AShape implements Shape {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     AShape aShape = (AShape) o;
     return Double.compare(aShape.width, width) == 0 &&
         Double.compare(aShape.height, height) == 0 &&

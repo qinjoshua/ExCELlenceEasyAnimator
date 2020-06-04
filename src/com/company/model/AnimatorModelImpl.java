@@ -55,7 +55,7 @@ public class AnimatorModelImpl implements AnimatorModel {
     for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
       if (time >= frame.getValue().last().getTime()) {
         shapes.put(frame.getKey(), frame.getValue().last().getShape());
-      } else if (!(time <= frame.getValue().first().getTime())) {
+      } else if (time > frame.getValue().first().getTime()) {
         Frame prev = previousKeyframe(time, frame.getValue());
         Frame next = nextKeyframe(time, frame.getValue());
         double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
@@ -104,31 +104,27 @@ public class AnimatorModelImpl implements AnimatorModel {
 
   @Override
   public String renderShapes() {
-    String renderString = "";
+    StringBuilder renderString = new StringBuilder();
 
     for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
-      renderString += "shape " + timeline.getKey() + " " +
-              timeline.getValue().first().getShape().getShapeType() + "\n";
+      renderString.append("shape ").append(timeline.getKey()).append(" ").
+              append(timeline.getValue().first().getShape().getShapeType()).append("\n");
 
       Frame prevFrame = null;
 
       if (timeline.getValue().size() == 1) {
-        renderString += this.motionNumbers(timeline.getKey(), timeline.getValue().first());
+        renderString.append("motion\t" + timeline.getKey() + "\t" + timeline.getValue().first());
       } else {
         for (Frame frame : timeline.getValue()) {
           if (prevFrame != null) {
-            renderString += this.motionNumbers(timeline.getKey(), prevFrame) + "\t\t";
-            renderString += this.motionNumbers(timeline.getKey(), frame) + "\n";
+            renderString.append("motion\t" + timeline.getKey() + "\t" + prevFrame).append("\t\t");
+            renderString.append(timeline.getKey() + "\t" + frame + "\n");
           }
           prevFrame = frame;
         }
       }
-      renderString += "\n";
+      renderString.append("\n");
     }
-    return renderString;
-  }
-
-  private String motionNumbers(String shapeName, Frame frame) {
-    return "motion\t" + shapeName + "\t" + frame;
+    return renderString.toString().stripTrailing();
   }
 }

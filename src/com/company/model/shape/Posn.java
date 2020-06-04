@@ -12,7 +12,7 @@ public interface Posn {
   double getX();
 
   /**
-   * Gets the y position in Cartesian coordinates
+   * Gets the y position in Cartesian coordinates.
    *
    * @return the y position in Cartesian coordinates
    */

@@ -5,7 +5,7 @@ import com.company.model.shape.shapes.Rectangle;
 
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Color;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

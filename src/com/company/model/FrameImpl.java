@@ -1,7 +1,9 @@
 package com.company.model;
-
 import com.company.model.shape.Shape;
 
+/**
+ * Implementation of {@link Frame} that uses a single shape and timestamp.
+ */
 public class FrameImpl implements Frame {
   private final double time;
   private final Shape shape;
