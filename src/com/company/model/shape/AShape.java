@@ -104,4 +104,14 @@ public abstract class AShape implements Shape {
     return Objects.hash(posn, width, height, color, shapeType);
   }
 
+  @Override
+  public String toString() {
+    return "AShape{" +
+        "posn=" + posn +
+        ", width=" + width +
+        ", height=" + height +
+        ", color=" + color +
+        ", shapeType=" + shapeType +
+        '}';
+  }
 }

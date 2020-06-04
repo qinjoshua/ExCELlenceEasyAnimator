@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * A class to test AShape and its implementations.
@@ -70,25 +71,64 @@ public class AShapeTest {
     assertEquals(3, ellipse2.getHeight(), 0.01);
   }
 
-
-  // Checks that referential equality is not being used
   @Test
-  public void testEquality() {
+  public void equals_notReferential() {
     this.initTestData();
-    assertEquals(false, this.rect1.equals(this.rect2));
-    assertEquals(new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN), this.rect2);
-    assertEquals(false, this.ellipse1.equals(this.ellipse2));
-    assertEquals(new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED), this.ellipse1);
+    Rectangle rectCopy1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    assertEquals(rectCopy1, this.rect1);
   }
 
   @Test
-  public void testHashcode() {
+  public void equals_shapeTypeMatters() {
     this.initTestData();
-    assertEquals(false, this.rect1.hashCode() == this.rect2.hashCode());
-    assertEquals(new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN).hashCode(),
-            this.rect2.hashCode());
-    assertEquals(false, this.ellipse1.hashCode() == this.ellipse2.hashCode());
-    assertEquals(new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED).hashCode(),
-            this.ellipse1.hashCode());
+    Ellipse ellipseRect1 = new Ellipse(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    assertNotEquals(ellipseRect1, this.rect1);
+  }
+
+  @Test
+  public void hashCode_notReferential() {
+    this.initTestData();
+    Rectangle rectCopy1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    assertEquals(rectCopy1.hashCode(), this.rect1.hashCode());
+  }
+
+  @Test
+  public void hashCode_shapeTypeMatters() {
+    this.initTestData();
+    Ellipse ellipseRect1 = new Ellipse(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    assertNotEquals(ellipseRect1.hashCode(), this.rect1.hashCode());
+  }
+
+  @Test
+  public void interpolate_happyPath() {
+    this.initTestData();
+    Rectangle interpolated = new Rectangle(
+        new PosnCart(10, 3.5), 4.5, 4.5, new Color(0, 127, 127));
+    assertEquals(interpolated, rect1.interpolate(rect2, 0.5));
+    assertEquals(interpolated, rect2.interpolate(rect1, 0.5));
+    assertEquals(rect1, rect1.interpolate(rect2, 0));
+    assertEquals(rect1, rect2.interpolate(rect1, 1));
+    Ellipse interpolatedUneven = new Ellipse(
+        new PosnCart(12, 9), 5.4, 4.6, new Color(255, 0, 51));
+    assertEquals(interpolatedUneven, ellipse1.interpolate(ellipse2, 0.2));
+    assertEquals(interpolatedUneven, ellipse2.interpolate(ellipse1, 0.8));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void interpolate_tooSmallProgress() {
+    this.initTestData();
+    rect1.interpolate(rect2, -0.001);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void interpolate_tooBigProgress() {
+    this.initTestData();
+    rect1.interpolate(rect2, 1.001);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void interpolate_wrongType() {
+    this.initTestData();
+    rect1.interpolate(ellipse1, 0.5);
   }
 }
