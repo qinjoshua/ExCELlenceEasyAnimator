@@ -1,9 +1,9 @@
 package com.company.model.shape;
+
 import java.util.Objects;
 
 /**
- * Represents a coordinate on the screen with x and y positions, with a
- * Cartesian coordinate system.
+ * Represents a coordinate on the screen with x and y positions, with a Cartesian coordinate system.
  * TODO what coordinate system is this?
  */
 public class PosnCart implements Posn {
@@ -12,6 +12,7 @@ public class PosnCart implements Posn {
 
   /**
    * Constructs a Posn with the given x and y coordinates.
+   *
    * @param x the x coordinate
    * @param y the y coordinate
    */
@@ -37,7 +38,7 @@ public class PosnCart implements Posn {
     }
 
     return new PosnCart(this.x + progress * (to.getX() - this.x),
-            this.y + progress * (to.getY() - this.y));
+        this.y + progress * (to.getY() - this.y));
   }
 
   @Override

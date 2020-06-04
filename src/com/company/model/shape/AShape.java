@@ -93,10 +93,10 @@ public abstract class AShape implements Shape {
     if (o == null || getClass() != o.getClass()) return false;
     AShape aShape = (AShape) o;
     return Double.compare(aShape.width, width) == 0 &&
-            Double.compare(aShape.height, height) == 0 &&
-            posn.equals(aShape.posn) &&
-            color.equals(aShape.color) &&
-            shapeType == aShape.shapeType;
+        Double.compare(aShape.height, height) == 0 &&
+        posn.equals(aShape.posn) &&
+        color.equals(aShape.color) &&
+        shapeType == aShape.shapeType;
   }
 
   @Override
