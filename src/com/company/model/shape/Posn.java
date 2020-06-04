@@ -1,17 +1,20 @@
 package com.company.model.shape;
 
+/**
+ * A single 2D coordinate in a 2D coordinate system. Can be transformed to Cartesian coordinates.
+ */
 public interface Posn {
   /**
-   * Gets the x position.
+   * Gets the x position in Cartesian coordinates.
    *
-   * @return the x position.
+   * @return the x position in Cartesian coordinates
    */
   double getX();
 
   /**
-   * Gets the y position.
+   * Gets the y position in Cartesian coordinates
    *
-   * @return the y position.
+   * @return the y position in Cartesian coordinates
    */
   double getY();
 

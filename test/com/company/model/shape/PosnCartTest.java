@@ -58,4 +58,10 @@ public class PosnCartTest {
   public void interpolate_tooBigProgress() {
     new PosnCart(1, 2).interpolate(new PosnCart(2, 3), 1.001);
   }
+
+  @Test
+  public void toString_rounding() {
+    assertEquals("(0.21, 0.34)", new PosnCart(0.2101, 0.33999).toString());
+    assertEquals("(-0.21, -0.34)", new PosnCart(-0.2101, -0.33999).toString());
+  }
 }

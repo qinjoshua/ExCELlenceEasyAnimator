@@ -22,9 +22,9 @@ public interface AnimatorModel {
    * Adds a new keyframe at the given time, with the given shape. This will overwrite any existing
    * keyframes at the existing position.
    *
-   * @param shapeName The name of the shape for which the keyframe is being created for.
-   * @param shape     The shape in the keyframe.
-   * @param time      The time the keyframe is at.
+   * @param shapeName The name of the shape for which the keyframe is being created for
+   * @param shape     The shape in the keyframe
+   * @param time      The time the keyframe is at
    * @throws IllegalArgumentException if the time is negative, or if the shape is not the same type
    *                                  as the other keyframes for this shape name
    */

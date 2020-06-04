@@ -69,12 +69,13 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   /**
-   * This implementation of createKeyframe will overwrite any existing keyframes that are within
-   * 1e-9 seconds apart in time, otherwise behaves like createKeyframe does.
+   * Adds a new keyframe at the given time, with the given shape. This will overwrite any existing
+   * keyframes at the existing time, which is defined with nanosecond precision: any keyframe
+   * nanosecond or closer to the given time will be replaced with this new one.
    *
-   * @param shapeName The name of the shape for which the keyframe is being created for.
-   * @param shape     The shape in the keyframe.
-   * @param time      The time the keyframe is at.
+   * @param shapeName The name of the shape for which the keyframe is being created for
+   * @param shape     The shape in the keyframe
+   * @param time      The time the keyframe is at
    */
   @Override
   public void createKeyframe(String shapeName, Shape shape, double time) {

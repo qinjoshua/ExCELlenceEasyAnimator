@@ -4,7 +4,6 @@ import java.util.Objects;
 
 /**
  * Represents a coordinate on the screen with x and y positions, with a Cartesian coordinate system.
- * TODO what coordinate system is this?
  */
 public class PosnCart implements Posn {
   private final double x;
@@ -53,5 +52,10 @@ public class PosnCart implements Posn {
   @Override
   public int hashCode() {
     return Objects.hash(x, y);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("(%.2f, %.2f)", x, y);
   }
 }

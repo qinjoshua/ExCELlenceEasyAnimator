@@ -8,13 +8,14 @@ import com.company.model.shape.ShapeType;
 import java.awt.*;
 
 /**
- * Represents an ellipse shape.
+ * Represents an ellipse shape with a given center coordinate, major axis length, minor axis
+ * length, and color.
  */
 public class Ellipse extends AShape implements Shape {
   /**
    * Constructor that initializes all the fields for this shape.
    *
-   * @param posn   this shape's position
+   * @param posn   the center of this ellipse
    * @param width  this shape's width
    * @param height this shape's height
    * @param color  this shape's color

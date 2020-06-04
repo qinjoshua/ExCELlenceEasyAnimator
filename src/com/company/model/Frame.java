@@ -3,8 +3,8 @@ package com.company.model;
 import com.company.model.shape.Shape;
 
 /**
- * Interface representing a keyframe in an animation. It keeps track of the time the frame is on and
- * the state of the shape at that time. TODO this probably won't exist
+ * This interface represents a keyframe in an animation. It keeps track of the time the frame is on
+ * and the state of the shape at that time. TODO this probably won't exist
  */
 public interface Frame extends Comparable<Frame> {
 
