@@ -106,4 +106,35 @@ public class AnimatorModelImpl implements AnimatorModel {
       this.timelines.put(shapeName, newFrames);
     }
   }
+<<<<<<< HEAD
+=======
+
+  @Override
+  public String renderShapes() {
+    StringBuilder renderString = new StringBuilder();
+
+    for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
+      renderString.append("shape ").append(timeline.getKey()).append(" ").
+          append(timeline.getValue().first().getShape().getShapeType()).append("\n");
+
+      Frame prevFrame = null;
+
+      if (timeline.getValue().size() == 1) {
+        renderString.append("motion\t").append(timeline.getKey()).append("\t")
+            .append(timeline.getValue().first());
+      } else {
+        for (Frame frame : timeline.getValue()) {
+          if (prevFrame != null) {
+            renderString.append("motion\t").append(timeline.getKey()).append("\t")
+                .append(prevFrame).append("\t\t");
+            renderString.append(timeline.getKey()).append("\t").append(frame).append("\n");
+          }
+          prevFrame = frame;
+        }
+      }
+      renderString.append("\n");
+    }
+    return renderString.toString().stripTrailing();
+  }
+>>>>>>> 68c3786cef5a8828a6ff0e6dc91adcad6b901553
 }
