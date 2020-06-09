@@ -8,16 +8,7 @@ import java.util.SortedMap;
  * This interface represents the model for an animation that allows adding keyframes for specific
  * types of objects, and getting the state of the animation at a specific time.
  */
-public interface AnimatorModel {
-  /**
-   * Gets the state of each shape at a given time, excluding the ones that have not been drawn yet.
-   *
-   * @param time time in seconds of the desired scene
-   * @return A map of the names and shapes representing the contents of a scene
-   * @throws IllegalArgumentException if the time is negative
-   */
-  SortedMap<String, Shape> shapesAt(double time) throws IllegalArgumentException;
-
+public interface AnimatorModel extends ReadOnlyAnimatorModel {
   /**
    * Adds a new keyframe at the given time, with the given shape. This will overwrite any existing
    * keyframes at the existing position.
@@ -29,11 +20,4 @@ public interface AnimatorModel {
    *                                  as the other keyframes for this shape name
    */
   void createKeyframe(String shapeName, Shape shape, double time) throws IllegalArgumentException;
-
-  /**
-   * Render information about every frame of each shape.
-   *
-   * @return string displaying the information for each of the shapes
-   */
-  String renderShapes();
 }

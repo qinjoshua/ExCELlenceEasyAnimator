@@ -68,6 +68,11 @@ public class AnimatorModelImpl implements AnimatorModel {
     return shapes;
   }
 
+  @Override
+  public SortedMap<String, SortedSet<Frame>> getKeyframes() {
+    return new TreeMap<String, SortedSet<Frame>>(this.timelines);
+  }
+
   /**
    * Adds a new keyframe at the given time, with the given shape. This will overwrite any existing
    * keyframes at the existing time, which is defined with nanosecond precision: any keyframe
@@ -100,33 +105,5 @@ public class AnimatorModelImpl implements AnimatorModel {
 
       this.timelines.put(shapeName, newFrames);
     }
-  }
-
-  @Override
-  public String renderShapes() {
-    StringBuilder renderString = new StringBuilder();
-
-    for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
-      renderString.append("shape ").append(timeline.getKey()).append(" ").
-              append(timeline.getValue().first().getShape().getShapeType()).append("\n");
-
-      Frame prevFrame = null;
-
-      if (timeline.getValue().size() == 1) {
-        renderString.append("motion\t").append(timeline.getKey()).append("\t")
-                .append(timeline.getValue().first());
-      } else {
-        for (Frame frame : timeline.getValue()) {
-          if (prevFrame != null) {
-            renderString.append("motion\t").append(timeline.getKey()).append("\t")
-                    .append(prevFrame).append("\t\t");
-            renderString.append(timeline.getKey()).append("\t").append(frame).append("\n");
-          }
-          prevFrame = frame;
-        }
-      }
-      renderString.append("\n");
-    }
-    return renderString.toString().stripTrailing();
   }
 }
