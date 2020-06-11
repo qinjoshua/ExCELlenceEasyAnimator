@@ -3,10 +3,15 @@ package com.company.view;
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
+/**
+ * A view that outputs the results of the animation in several lies of texts, describing each
+ * keyframe of each shape in order order of time and placement.
+ */
 public class TextAnimatorView implements AnimatorView {
   private final ReadOnlyAnimatorModel model;
 
@@ -46,5 +51,15 @@ public class TextAnimatorView implements AnimatorView {
       renderString.append("\n");
     }
     return renderString.toString().stripTrailing();
+  }
+
+  @Override
+  public void setSpeed(int fps) {
+    // the text animator view does not need a speed in order to display, so this method does nothing
+  }
+
+  @Override
+  public void output(Appendable out) throws IOException {
+    out.append(this.renderShapes());
   }
 }
