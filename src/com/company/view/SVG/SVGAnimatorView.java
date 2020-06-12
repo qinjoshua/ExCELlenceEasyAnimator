@@ -50,11 +50,15 @@ public class SVGAnimatorView implements AnimatorView {
 
   @Override
   public void output(Appendable out) throws IOException {
-    StringBuilder stringBuilder = new StringBuilder();
-    //stringBuilder.append();
+    out.append(this.createSVGDocument());
   }
 
-  private String createSVGDocument(String tagName) {
+  /**
+   * Creates a new SVGDocument as a string.
+   *
+   * @return the SVGDocument detailing the entire animation, as a string.
+   */
+  private String createSVGDocument() {
     SVGTag svg = new SVGTag("svg",
             new SVGTagAttribute("width", Integer.toString(this.width)),
             new SVGTagAttribute("height", Integer.toString(this.height)),
@@ -80,7 +84,7 @@ public class SVGAnimatorView implements AnimatorView {
   private SVGTag shapeToSVG(String shapeName, SortedSet<Frame> frames) {
 
     // Gets the kind of svgShape that this shape is
-    SVGShape svgShape = this.svgShapes.get(frames.first().getShape());
+    SVGShape svgShape = this.svgShapes.get(frames.first().getShape().getShapeType());
 
     // Creates the shape tag to be animated
     SVGTag shapeTag = svgShape.getShapeTag(shapeName, frames.first().getShape());

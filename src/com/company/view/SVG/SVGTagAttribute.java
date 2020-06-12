@@ -11,6 +11,6 @@ public class SVGTagAttribute {
 
   @Override
   public String toString() {
-    return this.attribute + "=" + this.value;
+    return this.attribute + "=" + "\"" + this.value + "\"";
   }
 }

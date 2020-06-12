@@ -2,6 +2,7 @@ package com.company.view.SVG.SVGShapes;
 
 import com.company.model.Frame;
 import com.company.model.shape.Shape;
+import com.company.view.SVG.SVGSingleTag;
 import com.company.view.SVG.SVGTag;
 import com.company.view.SVG.SVGTagAttribute;
 
@@ -34,9 +35,9 @@ public abstract class ASVGShape implements SVGShape {
    * @return a tag representing the SVG animate tag that goes from one frame to the other,
    * changing the given attribute from the given value to the other
    */
-  protected SVGTag getAnimateTag(Frame frame1, Frame frame2, String attributeName, String from,
-                                 String to, int fps) {
-    SVGTag animateTag = new SVGTag("animate",
+  protected SVGTag getAnimateTag(Frame frame1, Frame frame2, String attributeName,
+                                       String from, String to, int fps) {
+    SVGSingleTag animateTag = new SVGSingleTag("animate",
             new SVGTagAttribute("attributeType", "xml"),
             new SVGTagAttribute("begin", frame1.getTime()/fps*1000 + "ms"),
             new SVGTagAttribute("dur", frame2.getTime()/fps*1000 + "ms"),

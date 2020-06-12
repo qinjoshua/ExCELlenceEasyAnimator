@@ -37,13 +37,15 @@ public class SVGTag {
       builder.append(" ");
       builder.append(attribute.toString());
     }
-    builder.append(">");
+    builder.append(">\n");
 
-    builder.append(this.innerSVGTags.toString());
+    for (SVGTag tag : this.innerSVGTags) {
+      builder.append(tag.toString());
+    }
 
     builder.append("</");
     builder.append(this.name);
-    builder.append("<");
+    builder.append(">\n");
     return builder.toString();
   }
 }
