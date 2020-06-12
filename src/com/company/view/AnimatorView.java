@@ -12,12 +12,12 @@ public interface AnimatorView {
    *
    * @param fps the speed in frames per second that you would like the animation to run at.
    */
-  public void setSpeed(int fps);
+  void setSpeed(int fps);
 
   /**
    * Outputs the animation to the view.
    *
    * @param out an appendable representing the output stream that the view could be written to.
    */
-  public void output(Appendable out) throws IOException;
+  void output(Appendable out) throws IOException;
 }
