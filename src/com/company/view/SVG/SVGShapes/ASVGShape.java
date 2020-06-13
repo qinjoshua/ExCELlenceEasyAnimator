@@ -17,9 +17,9 @@ public abstract class ASVGShape implements SVGShape {
   public SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY) {
 
     return new SVGTag(shape.getShapeType().SVGname(),
-            new SVGTagAttribute("id", shapeName),
-            new SVGTagAttribute("fill", colorToRGBString(shape.getColor())),
-            new SVGTagAttribute("visibility", "visible"));
+        new SVGTagAttribute("id", shapeName),
+        new SVGTagAttribute("fill", colorToRGBString(shape.getColor())),
+        new SVGTagAttribute("visibility", "visible"));
   }
 
   @Override

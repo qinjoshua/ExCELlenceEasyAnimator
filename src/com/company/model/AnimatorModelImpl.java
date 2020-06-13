@@ -198,15 +198,15 @@ public class AnimatorModelImpl implements AnimatorModel {
 
     @Override
     public AnimationBuilder<AnimatorModel> addMotion(
-            String name, int t1, int x1, int y1, int w1, int h1, int r1, int g1, int b1, int t2,
-            int x2, int y2, int w2, int h2, int r2, int g2, int b2) {
+        String name, int t1, int x1, int y1, int w1, int h1, int r1, int g1, int b1, int t2,
+        int x2, int y2, int w2, int h2, int r2, int g2, int b2) {
       return addKeyframe(name, t1, x1, y1, w1, h1, r1, g1, b1)
-              .addKeyframe(name, t2, x2, y2, w2, h2, r2, g2, b2);
+          .addKeyframe(name, t2, x2, y2, w2, h2, r2, g2, b2);
     }
 
     @Override
     public AnimationBuilder<AnimatorModel> addKeyframe(
-            String name, int t, int x, int y, int w, int h, int r, int g, int b) {
+        String name, int t, int x, int y, int w, int h, int r, int g, int b) {
       Shape newShape = shapeTypes.get(name).getShape(new PosnImpl(x, y), w, h, new Color(r, g, b));
       this.model.createKeyframe(name, newShape, t);
       return this;

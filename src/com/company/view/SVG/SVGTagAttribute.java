@@ -11,7 +11,7 @@ public class SVGTagAttribute {
    * Creates a new SVG attribute with the given attribute name and value for that attribute.
    *
    * @param attribute name of the attribute
-   * @param value attribute value
+   * @param value     attribute value
    */
   public SVGTagAttribute(String attribute, String value) {
     this.attribute = attribute;

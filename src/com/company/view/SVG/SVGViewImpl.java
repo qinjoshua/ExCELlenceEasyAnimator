@@ -60,10 +60,10 @@ public class SVGViewImpl implements SVGView {
    */
   private String createSVGDocument() {
     SVGTag svg = new SVGTag("svg",
-            new SVGTagAttribute("width", Integer.toString(this.model.getCanvasWidth())),
-            new SVGTagAttribute("height", Integer.toString(this.model.getCanvasHeight())),
-            new SVGTagAttribute("version", "1.1"),
-            new SVGTagAttribute("xmlns", "http://www.w3.org/2000/svg"));
+        new SVGTagAttribute("width", Integer.toString(this.model.getCanvasWidth())),
+        new SVGTagAttribute("height", Integer.toString(this.model.getCanvasHeight())),
+        new SVGTagAttribute("version", "1.1"),
+        new SVGTagAttribute("xmlns", "http://www.w3.org/2000/svg"));
 
     Map<String, SortedSet<Frame>> keyframes = model.getKeyframes();
 
@@ -88,7 +88,7 @@ public class SVGViewImpl implements SVGView {
 
     // Creates the shape tag to be animated
     SVGTag shapeTag = svgShape.getShapeTag(shapeName, frames.first().getShape(),
-            this.model.getCanvasX(), this.model.getCanvasY());
+        this.model.getCanvasX(), this.model.getCanvasY());
 
     // Add the internal animation tags
     Frame prevFrame = null;
@@ -98,7 +98,7 @@ public class SVGViewImpl implements SVGView {
     for (Frame frame : frames) {
       if (prevFrame != null) {
         svgShape.addMotionTags(prevFrame, frame, shapeTag, this.speed,
-                this.model.getCanvasX(), this.model.getCanvasY());
+            this.model.getCanvasX(), this.model.getCanvasY());
       }
       prevFrame = frame;
     }

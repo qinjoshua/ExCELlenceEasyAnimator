@@ -7,14 +7,11 @@ import com.company.model.shape.shapes.Ellipse;
 import com.company.model.shape.shapes.Rectangle;
 import com.company.util.AnimationBuilder;
 import com.company.util.AnimationReader;
-import com.company.view.SVG.SVGViewImpl;
-import com.company.view.SVGView;
 import com.company.view.VisualView;
 import com.company.view.swing.SwingView;
 
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
