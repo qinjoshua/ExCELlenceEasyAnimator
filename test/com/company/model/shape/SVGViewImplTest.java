@@ -116,14 +116,14 @@ public class SVGViewImplTest {
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"x\" from=\"100.0\" to=\"120.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
-              "attributeName=\"y\" from=\"100.0\" to=\"130.00\" fill=\"freeze\" />\n" +
+              "attributeName=\"y\" from=\"100.0\" to=\"130.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"width\" from=\"150.0\" to=\"100.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"height\" from=\"150.0\" to=\"129.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
-              "attributeName=\"fill\" from=\"rgb(377, 0, 0)\" to=\"rgb(0, 0, 377)\" " +
-              "fill=\"freeze\" />\n" +
+              "attributeName=\"fill\" from=\"rgb(377, 0, 0)\" to=\"rgb(0, 0, 377)\" fill" +
+              "=\"freeze\" />\n" +
               "</rect>\n" +
               "</svg>\n";
 
@@ -159,7 +159,7 @@ public class SVGViewImplTest {
               "<rect id=\"a\" fill=\"rgb(0, 377, 0)\" visibility=\"visible\" x=\"50.0\" y=\"10" +
               ".0\" width=\"211.0\" height=\"250.0\">\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
-              "attributeName=\"y\" from=\"10.0\" to=\"100.00\" fill=\"freeze\" />\n" +
+              "attributeName=\"y\" from=\"10.0\" to=\"100.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"height\" from=\"250.0\" to=\"350.0\" fill=\"freeze\" />\n" +
               "</rect>\n" +
@@ -188,8 +188,8 @@ public class SVGViewImplTest {
 
       String expectedOutput = "<svg width=\"640\" height=\"400\" version=\"1.1\" " +
               "xmlns=\"http://www.w3.org/2000/svg\">\n" +
-              "<rect id=\"dID\" fill=\"rgb(377, 0, 0)\" visibility=\"visible\" x=\"120.0\" " +
-              "y=\"130.0\" width=\"150.0\" height=\"150.0\">\n" +
+              "<rect id=\"dID\" fill=\"rgb(377, 0, 0)\" visibility=\"visible\" x=\"80.0\" y=\"70" +
+              ".0\" width=\"150.0\" height=\"150.0\">\n" +
               "</rect>\n" +
               "</svg>\n";
 
