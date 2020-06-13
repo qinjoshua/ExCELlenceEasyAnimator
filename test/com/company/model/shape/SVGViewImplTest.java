@@ -62,8 +62,6 @@ public class SVGViewImplTest {
       String output = appendable.toString();
       String[] outputLines = output.split("\n");
 
-      System.out.println(output);
-
       // Check the number of animate tags is as expected
       assertEquals(5, output.split("animate", -1).length - 1);
       // Check that the last line is the closing tag for svg
@@ -176,9 +174,37 @@ public class SVGViewImplTest {
   }
 
   @Test
+  public void testCustomOrigin() {
+    AnimatorModel testModel =
+            new AnimatorModelImpl.Builder().setBounds(20, 30, 640, 400).build();
+
+    testModel.createKeyframe("dID", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
+
+    SVGView view = new SVGViewImpl(testModel);
+
+    try {
+      Appendable appendable = new StringBuilder();
+      view.outputSVG(appendable);
+
+      String expectedOutput = "<svg width=\"640\" height=\"400\" version=\"1.1\" " +
+              "xmlns=\"http://www.w3.org/2000/svg\">\n" +
+              "<rect id=\"dID\" fill=\"rgb(377, 0, 0)\" visibility=\"visible\" x=\"120.0\" " +
+              "y=\"130.0\" width=\"150.0\" height=\"150.0\">\n" +
+              "</rect>\n" +
+              "</svg>\n";
+
+      String output = appendable.toString();
+      assertEquals(expectedOutput, output);
+
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
   public void testCustomCanvasSize() {
     ReadOnlyAnimatorModel testModel =
-            new AnimatorModelImpl.Builder().setBounds(0,0,500, 500).build();
+            new AnimatorModelImpl.Builder().setBounds(0, 0, 548, 567).build();
     SVGView view = new SVGViewImpl(testModel);
     try {
       Appendable appendable = new StringBuilder();
@@ -187,15 +213,9 @@ public class SVGViewImplTest {
       String output = appendable.toString();
       String[] outputLines = output.split("\n");
 
-      // Check that nothing else has changed
-      assertEquals(5, output.split("animate", -1).length - 1);
-      assertEquals("</svg>", outputLines[outputLines.length - 1]);
-      assertEquals(2, output.split("rect", -1).length - 1);
-
-      // Check that the durations match the 10 fps
-      assertEquals(5, output.split("1000.0ms", -1).length - 1);
-      assertEquals(2, output.split("2000.0ms", -1).length - 1);
-
+      // Check that the width and height shows up in the first line
+      assertTrue(outputLines[0].indexOf("width=\"548\"") > 0);
+      assertTrue(outputLines[0].indexOf("height=\"567\"") > 0);
     } catch (Exception e) {
       fail();
     }
