@@ -3,8 +3,9 @@ package com.company.model.shape;
 import java.util.Objects;
 
 /**
- * Represents a coordinate on the screen with x and y positions, with a Cartesian coordinate
- * system.
+ * Represents a coordinate on the screen with x and y positions, with the origin at the top left
+ * hand corner of the screen, the positive x coordinates extending to the right of the origin and
+ * the positive y coordinates extending downwards from the origin.
  */
 public class PosnCart implements Posn {
   private final double x;
