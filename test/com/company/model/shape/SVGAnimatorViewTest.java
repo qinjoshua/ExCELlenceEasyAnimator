@@ -20,9 +20,9 @@ public class SVGAnimatorViewTest {
   AnimatorModel model = new AnimatorModelImpl();
 
   private void initTests() {
-    model.createKeyframe("a", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
-    model.createKeyframe("a", new Rectangle(new PosnCart(200, 100), 150, 150, Color.RED), 100);
-    model.createKeyframe("a", new Rectangle(new PosnCart(200, 100), 150, 150, Color.BLUE), 200);
+    model.createKeyframe("c", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
+    model.createKeyframe("c", new Rectangle(new PosnCart(200, 200), 150, 150, Color.GREEN), 10);
+    model.createKeyframe("c", new Rectangle(new PosnCart(200, 100), 150, 150, Color.BLUE), 20);
   }
 
   @Test
@@ -33,7 +33,10 @@ public class SVGAnimatorViewTest {
       Appendable appendable = new StringBuilder();
       view.output(appendable);
 
-      System.out.println(appendable.toString());
+      String output = appendable.toString();
+
+      assertEquals(5, output.split("animate", -1).length-1);
+
     }
     catch(Exception e) {
       fail();
