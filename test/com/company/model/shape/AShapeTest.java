@@ -20,19 +20,19 @@ public class AShapeTest {
   AShape ellipse2;
 
   private void initTestData() {
-    this.rect1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
-    this.rect2 = new Rectangle(new PosnCart(17, 2), 4, 3, Color.GREEN);
-    this.ellipse1 = new Ellipse(new PosnCart(10, 10), 5, 5, Color.RED);
-    this.ellipse2 = new Ellipse(new PosnCart(20, 5), 7, 3, Color.MAGENTA);
+    this.rect1 = new Rectangle(new PosnImpl(3, 5), 5, 6, Color.BLUE);
+    this.rect2 = new Rectangle(new PosnImpl(17, 2), 4, 3, Color.GREEN);
+    this.ellipse1 = new Ellipse(new PosnImpl(10, 10), 5, 5, Color.RED);
+    this.ellipse2 = new Ellipse(new PosnImpl(20, 5), 7, 3, Color.MAGENTA);
   }
 
   @Test
   public void getPosn() {
     this.initTestData();
-    assertEquals(new PosnCart(3, 5), rect1.getPosition());
-    assertEquals(new PosnCart(17, 2), rect2.getPosition());
-    assertEquals(new PosnCart(10, 10), ellipse1.getPosition());
-    assertEquals(new PosnCart(20, 5), ellipse2.getPosition());
+    assertEquals(new PosnImpl(3, 5), rect1.getPosition());
+    assertEquals(new PosnImpl(17, 2), rect2.getPosition());
+    assertEquals(new PosnImpl(10, 10), ellipse1.getPosition());
+    assertEquals(new PosnImpl(20, 5), ellipse2.getPosition());
   }
 
   @Test
@@ -74,28 +74,28 @@ public class AShapeTest {
   @Test
   public void equals_notReferential() {
     this.initTestData();
-    Rectangle rectCopy1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    Rectangle rectCopy1 = new Rectangle(new PosnImpl(3, 5), 5, 6, Color.BLUE);
     assertEquals(rectCopy1, this.rect1);
   }
 
   @Test
   public void equals_shapeTypeMatters() {
     this.initTestData();
-    Ellipse ellipseRect1 = new Ellipse(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    Ellipse ellipseRect1 = new Ellipse(new PosnImpl(3, 5), 5, 6, Color.BLUE);
     assertNotEquals(ellipseRect1, this.rect1);
   }
 
   @Test
   public void hashCode_notReferential() {
     this.initTestData();
-    Rectangle rectCopy1 = new Rectangle(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    Rectangle rectCopy1 = new Rectangle(new PosnImpl(3, 5), 5, 6, Color.BLUE);
     assertEquals(rectCopy1.hashCode(), this.rect1.hashCode());
   }
 
   @Test
   public void hashCode_shapeTypeMatters() {
     this.initTestData();
-    Ellipse ellipseRect1 = new Ellipse(new PosnCart(3, 5), 5, 6, Color.BLUE);
+    Ellipse ellipseRect1 = new Ellipse(new PosnImpl(3, 5), 5, 6, Color.BLUE);
     assertNotEquals(ellipseRect1.hashCode(), this.rect1.hashCode());
   }
 
@@ -103,13 +103,13 @@ public class AShapeTest {
   public void interpolate_happyPath() {
     this.initTestData();
     Rectangle interpolated = new Rectangle(
-        new PosnCart(10, 3.5), 4.5, 4.5, new Color(0f, 0.5f, 0.5f));
+        new PosnImpl(10, 3.5), 4.5, 4.5, new Color(0f, 0.5f, 0.5f));
     assertEquals(interpolated, rect1.interpolate(rect2, 0.5));
     assertEquals(interpolated, rect2.interpolate(rect1, 0.5));
     assertEquals(rect1, rect1.interpolate(rect2, 0));
     assertEquals(rect1, rect2.interpolate(rect1, 1));
     Ellipse interpolatedUneven = new Ellipse(
-        new PosnCart(12, 9), 5.4, 4.6, new Color(255, 0, 51));
+        new PosnImpl(12, 9), 5.4, 4.6, new Color(255, 0, 51));
     assertEquals(interpolatedUneven, ellipse1.interpolate(ellipse2, 0.2));
     assertEquals(interpolatedUneven, ellipse2.interpolate(ellipse1, 0.8));
   }

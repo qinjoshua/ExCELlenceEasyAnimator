@@ -110,12 +110,7 @@ public class AnimationPanel extends JPanel {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
     AffineTransform oldAT = g2.getTransform();
-    // TODO add this in
-    // g2.translate(model.getCanvasX(), model.getCanvasY());
-    // convert from Cartesian to image coordinates: shift the y-axis to the top and then scale
-    // the y-axis by -1
-    // g2.translate(0, model.getCanvasHeight());
-    // g2.scale(1, -1);
+    g2.translate(-model.getCanvasX(), -model.getCanvasY());
     Map<String, Shape> shapes = model.shapesAt(t);
     for (Shape shape : shapes.values()) {
       this.drawModelShape(g2, shape);

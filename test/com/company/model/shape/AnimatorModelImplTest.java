@@ -20,14 +20,14 @@ public class AnimatorModelImplTest {
   AnimatorModel testRectangleMove = new AnimatorModelImpl();
 
   private void initTests() {
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(10, 10), 10, 20, new Color(0, 144,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(10, 10), 10, 20, new Color(0, 144,
         144)), 10);
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(20, 20), 15, 15, new Color(144,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(20, 20), 15, 15, new Color(144,
         150, 150)), 20);
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
         200, 200)), 27);
 
-    testModel.createKeyframe("R", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("R", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
         200, 200)), 10);
   }
 
@@ -35,7 +35,7 @@ public class AnimatorModelImplTest {
   public void testCreateKeyframe() {
     // test that creating a keyframe over an existing keyframe overwrites it
     this.initTests();
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(10, 10), 10, 20, new Color(0, 144,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(10, 10), 10, 20, new Color(0, 144,
         144)), 10);
 
     String result = "shape E ellipse\n" +
@@ -53,13 +53,13 @@ public class AnimatorModelImplTest {
 //    assertEquals(result, testModelCreateKeyframe.renderShapes());
 //
 //    testModelCreateKeyframe.createKeyframe("E", new Ellipse(
-//        new PosnCart(10, 10), 10, 20, new Color(0, 144, 144)), 10);
+//        new PosnImpl(10, 10), 10, 20, new Color(0, 144, 144)), 10);
 //    result = "shape E ellipse\n" +
 //        "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144";
 //    assertEquals(result, testModelCreateKeyframe.renderShapes());
 //
 //    testModelCreateKeyframe.createKeyframe("E", new Ellipse(
-//        new PosnCart(20, 20), 15, 15, new Color(144, 150, 150)), 20);
+//        new PosnImpl(20, 20), 15, 15, new Color(144, 150, 150)), 20);
 //    result = "shape E ellipse\n" +
 //        "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150";
 //    assertEquals(result, testModelCreateKeyframe.renderShapes());
@@ -67,14 +67,14 @@ public class AnimatorModelImplTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateKeyframeNegativeTime() {
-    testModel.createKeyframe("R", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("R", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
         200, 200)), -10);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateKeyframeNotSameType() {
     this.initTests();
-    testModel.createKeyframe("R", new Rectangle(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("R", new Rectangle(new PosnImpl(131, 20), 21, 34, new Color(200,
         200, 200)), 10);
   }
 
@@ -86,7 +86,7 @@ public class AnimatorModelImplTest {
     Shape e12 = shapes12.get("E");
     Shape r12 = shapes12.get("R");
     assertEquals(new Ellipse(
-        new PosnCart(12, 12),
+        new PosnImpl(12, 12),
         11, 19,
         new Color(29, 145, 145)), e12);
     assertEquals(r12, testModel.shapesAt(10).get("R"));

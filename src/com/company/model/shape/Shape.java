@@ -10,7 +10,7 @@ public interface Shape {
   /**
    * Gets the position of this shape.
    *
-   * @return the coordinate position of the shape as a {@link PosnCart}
+   * @return the coordinate position of the shape as a {@link PosnImpl}
    */
   Posn getPosition();
 

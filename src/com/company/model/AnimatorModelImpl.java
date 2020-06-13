@@ -1,6 +1,6 @@
 package com.company.model;
 
-import com.company.model.shape.PosnCart;
+import com.company.model.shape.PosnImpl;
 import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
 import com.company.util.AnimationBuilder;
@@ -207,7 +207,7 @@ public class AnimatorModelImpl implements AnimatorModel {
     @Override
     public AnimationBuilder<AnimatorModel> addKeyframe(
             String name, int t, int x, int y, int w, int h, int r, int g, int b) {
-      Shape newShape = shapeTypes.get(name).getShape(new PosnCart(x, y), w, h, new Color(r, g, b));
+      Shape newShape = shapeTypes.get(name).getShape(new PosnImpl(x, y), w, h, new Color(r, g, b));
       this.model.createKeyframe(name, newShape, t);
       return this;
     }

@@ -19,6 +19,6 @@ public class Rectangle2D implements SwingShape {
   public Shape createShape(double x, double y, double width, double height) {
     // subtract the y given by the height to account for the fact that it's given in Cartesian
     // coordinates
-    return new java.awt.geom.Rectangle2D.Double(x, y - height, width, height);
+    return new java.awt.geom.Rectangle2D.Double(x, y, width, height);
   }
 }

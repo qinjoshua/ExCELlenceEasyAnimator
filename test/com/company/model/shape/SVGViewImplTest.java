@@ -23,31 +23,31 @@ public class SVGViewImplTest {
   AnimatorModel smallModelManyShapes = new AnimatorModelImpl();
 
   private void initTests() {
-    model.createKeyframe("c", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
-    model.createKeyframe("c", new Rectangle(new PosnCart(200, 200), 150, 150, Color.GREEN), 10);
-    model.createKeyframe("c", new Rectangle(new PosnCart(200, 100), 150, 150, Color.BLUE), 20);
+    model.createKeyframe("c", new Rectangle(new PosnImpl(100, 100), 150, 150, Color.RED), 0);
+    model.createKeyframe("c", new Rectangle(new PosnImpl(200, 200), 150, 150, Color.GREEN), 10);
+    model.createKeyframe("c", new Rectangle(new PosnImpl(200, 100), 150, 150, Color.BLUE), 20);
 
-    model2.createKeyframe("dID", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
-    model2.createKeyframe("aID", new Rectangle(new PosnCart(200, 100), 150, 150, Color.RED), 0);
-    model2.createKeyframe("aID", new Rectangle(new PosnCart(200, 100), 150, 150, Color.BLUE), 10);
-    model2.createKeyframe("cID", new Rectangle(new PosnCart(200, 100), 150, 150, Color.BLUE), 10);
+    model2.createKeyframe("dID", new Rectangle(new PosnImpl(100, 100), 150, 150, Color.RED), 0);
+    model2.createKeyframe("aID", new Rectangle(new PosnImpl(200, 100), 150, 150, Color.RED), 0);
+    model2.createKeyframe("aID", new Rectangle(new PosnImpl(200, 100), 150, 150, Color.BLUE), 10);
+    model2.createKeyframe("cID", new Rectangle(new PosnImpl(200, 100), 150, 150, Color.BLUE), 10);
 
-    smallModelManyAnimations.createKeyframe("c", new Rectangle(new PosnCart(100, 100), 150, 150,
+    smallModelManyAnimations.createKeyframe("c", new Rectangle(new PosnImpl(100, 100), 150, 150,
             Color.RED), 0);
-    smallModelManyAnimations.createKeyframe("c", new Rectangle(new PosnCart(120, 130), 100, 129,
+    smallModelManyAnimations.createKeyframe("c", new Rectangle(new PosnImpl(120, 130), 100, 129,
             Color.BLUE),20);
 
-    smallModelManyShapes.createKeyframe("c", new Rectangle(new PosnCart(100, 100), 150, 150,
+    smallModelManyShapes.createKeyframe("c", new Rectangle(new PosnImpl(100, 100), 150, 150,
             Color.RED),0);
-    smallModelManyShapes.createKeyframe("c", new Rectangle(new PosnCart(120, 100), 150, 150,
+    smallModelManyShapes.createKeyframe("c", new Rectangle(new PosnImpl(120, 100), 150, 150,
             Color.RED),30);
-    smallModelManyShapes.createKeyframe("z", new Rectangle(new PosnCart(150, 150), 100, 150,
+    smallModelManyShapes.createKeyframe("z", new Rectangle(new PosnImpl(150, 150), 100, 150,
             Color.GREEN), 0);
-    smallModelManyShapes.createKeyframe("z", new Rectangle(new PosnCart(150, 150), 100, 150,
+    smallModelManyShapes.createKeyframe("z", new Rectangle(new PosnImpl(150, 150), 100, 150,
             Color.YELLOW), 50);
-    smallModelManyShapes.createKeyframe("a", new Rectangle(new PosnCart(50, 10), 211, 250,
+    smallModelManyShapes.createKeyframe("a", new Rectangle(new PosnImpl(50, 10), 211, 250,
             Color.GREEN), 0);
-    smallModelManyShapes.createKeyframe("a", new Rectangle(new PosnCart(50, 100), 211, 350,
+    smallModelManyShapes.createKeyframe("a", new Rectangle(new PosnImpl(50, 100), 211, 350,
             Color.GREEN), 20);
   }
 
@@ -178,7 +178,7 @@ public class SVGViewImplTest {
     AnimatorModel testModel =
             new AnimatorModelImpl.Builder().setBounds(20, 30, 640, 400).build();
 
-    testModel.createKeyframe("dID", new Rectangle(new PosnCart(100, 100), 150, 150, Color.RED), 0);
+    testModel.createKeyframe("dID", new Rectangle(new PosnImpl(100, 100), 150, 150, Color.RED), 0);
 
     SVGView view = new SVGViewImpl(testModel);
 
@@ -235,19 +235,19 @@ public class SVGViewImplTest {
 
       String output = appendable.toString();
 
-      assertTrue(output.indexOf("dID") > -1);
+      assertTrue(output.contains("dID"));
 
-      while (output.indexOf("dID") > -1) {
+      while (output.contains("dID")) {
         output = output.substring(output.indexOf("dID") + 4);
       }
 
-      assertTrue(output.indexOf("aID") > -1);
+      assertTrue(output.contains("aID"));
 
-      while (output.indexOf("aID") > -1) {
+      while (output.contains("aID")) {
         output = output.substring(output.indexOf("aID") + 4);
       }
 
-      assertTrue(output.indexOf("cID") > -1);
+      assertTrue(output.contains("cID"));
     } catch (Exception e) {
       fail();
     }

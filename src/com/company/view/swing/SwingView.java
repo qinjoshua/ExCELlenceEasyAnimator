@@ -47,16 +47,13 @@ public class SwingView implements VisualView {
     JFrame frame = new JFrame("Excellence");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     AnimationPanel panel = new AnimationPanel(this.model);
-    // TODO uncomment this because it isn't in my code
-    // panel.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
+    panel.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
     frame.getContentPane().add(panel, BorderLayout.CENTER);
     frame.pack();
     final int delay = SwingView.getDelay(this.fps);
-    // the current time of the animation
-    final double timeDelta = delay / 1000.0;
     ActionListener painter = evt -> {
       panel.repaint();
-      panel.addTimeDelta(timeDelta);
+      panel.addTimeDelta(1);
     };
     frame.setVisible(true);
     new Timer(delay, painter).start();

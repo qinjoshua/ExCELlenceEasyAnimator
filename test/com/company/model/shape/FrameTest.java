@@ -15,25 +15,25 @@ import static org.junit.Assert.assertEquals;
  * Tests for implementations of Frame.
  */
 public class FrameTest {
-  Frame testFrame = new FrameImpl(3, new Ellipse(new PosnCart(15, 25), 10, 15, Color.RED));
-  Frame testFrame2 = new FrameImpl(1, new Rectangle(new PosnCart(20, 20), 20, 20, Color.BLUE));
-  Frame testFrame3 = new FrameImpl(5, new Rectangle(new PosnCart(17, 13), 12, 14, Color.GREEN));
-  Frame testFrame4 = new FrameImpl(5, new Ellipse(new PosnCart(20, 30), 13, 17, Color.RED));
+  Frame testFrame = new FrameImpl(3, new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED));
+  Frame testFrame2 = new FrameImpl(1, new Rectangle(new PosnImpl(20, 20), 20, 20, Color.BLUE));
+  Frame testFrame3 = new FrameImpl(5, new Rectangle(new PosnImpl(17, 13), 12, 14, Color.GREEN));
+  Frame testFrame4 = new FrameImpl(5, new Ellipse(new PosnImpl(20, 30), 13, 17, Color.RED));
 
   // Test that frame implementation will initialize with expected parameters
   @Test
   public void testInitializeFrameImpl() {
-    Frame frame = new FrameImpl(1, new Ellipse(new PosnCart(20, 20), 20, 20, Color.BLUE));
+    Frame frame = new FrameImpl(1, new Ellipse(new PosnImpl(20, 20), 20, 20, Color.BLUE));
 
     // Some basic sanity checks to ensure that it initialized properly
     assertEquals(1.0, frame.getTime(), 0.01);
-    assertEquals(new PosnCart(20, 20), frame.getShape().getPosition());
+    assertEquals(new PosnImpl(20, 20), frame.getShape().getPosition());
   }
 
   // Test that frame throws an error when given negative time
   @Test(expected = IllegalArgumentException.class)
   public void testInitializeFrameImplNegativeTime() {
-    Frame frame = new FrameImpl(-1, new Ellipse(new PosnCart(20, 20), 20, 20, Color.BLUE));
+    Frame frame = new FrameImpl(-1, new Ellipse(new PosnImpl(20, 20), 20, 20, Color.BLUE));
   }
 
   // Test get time
@@ -46,8 +46,8 @@ public class FrameTest {
   // Test get shape
   @Test
   public void testGetShape() {
-    assertEquals(new Ellipse(new PosnCart(15, 25), 10, 15, Color.RED), testFrame.getShape());
-    assertEquals(new Ellipse(new PosnCart(15, 25), 10, 15, Color.RED), testFrame.getShape());
+    assertEquals(new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED), testFrame.getShape());
+    assertEquals(new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED), testFrame.getShape());
   }
 
   // Test compareTo
@@ -69,10 +69,10 @@ public class FrameTest {
     assertEquals(testFrame3.getShape(), testFrame2.interpolateShape(testFrame3, 1));
 
     // Tests correct interpolation of rectangles, going from
-    assertEquals(new Rectangle(new PosnCart(18.5, 16.5), 16, 17, new Color(0, 128, 128)),
+    assertEquals(new Rectangle(new PosnImpl(18.5, 16.5), 16, 17, new Color(0, 128, 128)),
         testFrame2.interpolateShape(testFrame3, 0.5));
 
-    assertEquals(new Ellipse(new PosnCart(18.5, 28.5), 12.1, 16.4, new Color(255, 0, 0)),
+    assertEquals(new Ellipse(new PosnImpl(18.5, 28.5), 12.1, 16.4, new Color(255, 0, 0)),
         testFrame.interpolateShape(testFrame4, 0.7));
   }
 

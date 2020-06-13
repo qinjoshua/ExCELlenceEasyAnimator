@@ -17,14 +17,14 @@ public class TextViewTest {
   AnimatorModel testRectangleMove = new AnimatorModelImpl();
 
   private void initTests() {
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(10, 10), 10, 20, new Color(0, 144,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(10, 10), 10, 20, new Color(0, 144,
             144)), 10);
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(20, 20), 15, 15, new Color(144,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(20, 20), 15, 15, new Color(144,
             150, 150)), 20);
-    testModel.createKeyframe("E", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("E", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
             200, 200)), 27);
 
-    testModel.createKeyframe("R", new Ellipse(new PosnCart(131, 20), 21, 34, new Color(200,
+    testModel.createKeyframe("R", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
             200, 200)), 10);
   }
 
