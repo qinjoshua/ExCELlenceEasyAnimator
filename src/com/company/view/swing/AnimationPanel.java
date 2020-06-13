@@ -3,11 +3,14 @@ package com.company.view.swing;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Posn;
 import com.company.model.shape.Shape;
+import com.company.model.shape.ShapeType;
+import com.company.view.swing.SwingShape.Ellipse2D;
+import com.company.view.swing.SwingShape.Rectangle2D;
+import com.company.view.swing.SwingShape.SwingShape;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
@@ -22,6 +25,8 @@ public class AnimationPanel extends JPanel {
   private final ReadOnlyAnimatorModel model;
   // The time t to render, in seconds.
   private double t;
+  // A map from the shape types to the SwingShapes they represent
+  private final Map<ShapeType, SwingShape> swingShapeMap;
 
   /**
    * Initializes the panel given a model. Sets the time t to 0 to it starts at the beginning.
@@ -35,6 +40,9 @@ public class AnimationPanel extends JPanel {
     }
     this.model = model;
     this.t = 0;
+    this.swingShapeMap = new HashMap<>();
+    this.swingShapeMap.put(ShapeType.Rectangle, new Rectangle2D());
+    this.swingShapeMap.put(ShapeType.Ellipse, new Ellipse2D());
   }
 
   /**
@@ -64,14 +72,12 @@ public class AnimationPanel extends JPanel {
     Posn posn = modelShape.getPosition();
     double width = modelShape.getWidth();
     double height = modelShape.getHeight();
+    ShapeType type = modelShape.getShapeType();
 
-    switch (modelShape.getShapeType()) {
-      case Rectangle:
-        return new Rectangle2D.Double(posn.getX(), posn.getY(), width, height);
-      case Ellipse:
-        return new Ellipse2D.Double(posn.getX(), posn.getY(), width, height);
-      default:
-        throw new IllegalArgumentException("Shape type cannot be recognized");
+    if (swingShapeMap.containsKey(type)) {
+      return swingShapeMap.get(type).createShape(posn.getX(), posn.getY(), width, height);
+    } else {
+      throw new IllegalArgumentException("Invalid shape type");
     }
   }
 
@@ -104,10 +110,12 @@ public class AnimationPanel extends JPanel {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
     AffineTransform oldAT = g2.getTransform();
+    // TODO add this in
+    // g2.translate(model.getCanvasX(), model.getCanvasY());
     // convert from Cartesian to image coordinates: shift the y-axis to the top and then scale
     // the y-axis by -1
-    g2.translate(0, this.getHeight());
-    g2.scale(1, -1);
+    // g2.translate(0, model.getCanvasHeight());
+    // g2.scale(1, -1);
     Map<String, Shape> shapes = model.shapesAt(t);
     for (Shape shape : shapes.values()) {
       this.drawModelShape(g2, shape);

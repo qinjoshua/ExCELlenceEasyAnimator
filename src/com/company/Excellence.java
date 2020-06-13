@@ -21,17 +21,17 @@ public class Excellence {
             new Color(0, 144, 144)), 0);
     model.createKeyframe("E",
         new Ellipse(new PosnCart(200, 200), 15, 15,
-            new Color(255, 150, 150)), 50);
+            new Color(255, 150, 150)), 5);
     model.createKeyframe("R",
-        new Rectangle(new PosnCart(0, 0), 21, 34,
+        new Rectangle(new PosnCart(0, 34), 21, 34,
             new Color(200, 200, 200)), 0);
     model.createKeyframe("R",
-        new Rectangle(new PosnCart(590, 380), 50, 20,
-            new Color(100, 100, 255)), 500);
+        new Rectangle(new PosnCart(590, 400), 50, 20,
+            new Color(100, 100, 255)), 5);
     model.createKeyframe("R",
-        new Rectangle(new PosnCart(590, 380), 50, 20,
+        new Rectangle(new PosnCart(590, 400), 50, 20,
             new Color(100, 100, 255)), 100);
-    VisualView visualView = new SwingView(model, 640, 400, 0, 0, 30);
+    VisualView visualView = new SwingView(model, 30);
     visualView.renderVisual();
   }
 }
