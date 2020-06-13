@@ -25,21 +25,35 @@ public class SVGViewImpl implements SVGView {
   private final int height;
 
   /**
-   * Creates a new SVG animator view with a default of one frame per second, and with the given read
-   * only model, width, and height of the animation.
+   * Creates a new SVG animator view that initializes all of the fields.
    *
    * @param model a read-only animator model for the view to read from.
+   * @param width width of the canvas
+   * @param height height of the canvas
+   * @param fps frames per second that the animation runs at
    */
-  public SVGViewImpl(ReadOnlyAnimatorModel model, int width, int height) {
+  public SVGViewImpl(ReadOnlyAnimatorModel model, int width, int height, int fps) {
     this.model = model;
     this.width = width;
     this.height = height;
-    this.speed = 1;
+    this.speed = fps;
 
     svgShapes = new HashMap<>();
 
     svgShapes.put(ShapeType.Rectangle, new SVGRectangle());
     svgShapes.put(ShapeType.Ellipse, new SVGEllipse());
+  }
+
+  /**
+   * Creates a new SVG animator view with a default of one frame per second, and with the given read
+   * only model, width, and height of the animation.
+   *
+   * @param model a read-only animator model for the view to read from.
+   * @param width width of the canvas
+   * @param height height of the canvas
+   */
+  public SVGViewImpl(ReadOnlyAnimatorModel model, int width, int height) {
+    this(model, width, height, 1);
   }
 
   @Override

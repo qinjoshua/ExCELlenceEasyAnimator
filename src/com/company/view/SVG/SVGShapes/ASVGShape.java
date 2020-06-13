@@ -8,6 +8,9 @@ import com.company.view.SVG.SVGTagAttribute;
 
 import java.awt.*;
 
+/**
+ * Abstract class representing some of the most common operations for an SVG shape.
+ */
 public abstract class ASVGShape implements SVGShape {
 
   @Override

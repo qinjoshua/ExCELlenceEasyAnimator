@@ -32,20 +32,6 @@ public class AnimatorModelImplTest {
   }
 
   @Test
-  public void testModelRenderString() {
-    this.initTests();
-
-    String result = "shape E ellipse\n" +
-        "motion\tE\t10\t10\t10\t10\t20\t0\t144\t144\t\tE\t20\t20\t20\t15\t15\t144\t150\t150\n" +
-        "motion\tE\t20\t20\t20\t15\t15\t144\t150\t150\t\tE\t27\t131\t20\t21\t34\t200\t200\t" +
-        "200\n\n" +
-        "shape R ellipse\n" +
-        "motion\tR\t10\t131\t20\t21\t34\t200\t200\t200";
-
-//    assertEquals(result, testModel.renderShapes());
-  }
-
-  @Test
   public void testCreateKeyframe() {
     // test that creating a keyframe over an existing keyframe overwrites it
     this.initTests();

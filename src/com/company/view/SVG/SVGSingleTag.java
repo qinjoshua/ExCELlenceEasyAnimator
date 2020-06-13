@@ -2,6 +2,13 @@ package com.company.view.SVG;
 
 // TODO refactor with composition rather than inheritance
 public class SVGSingleTag extends SVGTag {
+
+  /**
+   * Represents a single tag
+   *
+   * @param name
+   * @param attributes
+   */
   public SVGSingleTag(String name, SVGTagAttribute... attributes) {
     super(name, attributes);
   }

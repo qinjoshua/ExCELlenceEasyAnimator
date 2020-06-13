@@ -1,7 +1,8 @@
-package com.company.view;
+package com.company.view.text;
 
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
+import com.company.view.TextView;
 
 import java.io.IOException;
 import java.util.Map;

@@ -5,6 +5,9 @@ import com.company.model.shape.Shape;
 import com.company.view.SVG.SVGTag;
 import com.company.view.SVG.SVGTagAttribute;
 
+/**
+ * Represents a series of behaviors that show how ellipses should be converted into SVGs.
+ */
 public class SVGEllipse extends ASVGShape implements SVGShape {
   @Override
   public SVGTag getShapeTag(String shapeName, Shape shape) {
