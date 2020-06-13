@@ -8,7 +8,7 @@ import com.company.model.shape.shapes.Rectangle;
 import org.junit.Test;
 
 import java.awt.Color;
-import java.util.SortedMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -95,7 +95,7 @@ public class AnimatorModelImplTest {
   @Test
   public void shapesAt_happyPath() {
     this.initTests();
-    SortedMap<String, Shape> shapes12 = testModel.shapesAt(12);
+    Map<String, Shape> shapes12 = testModel.shapesAt(12);
     assertEquals(2, shapes12.entrySet().size());
     Shape e12 = shapes12.get("E");
     Shape r12 = shapes12.get("R");

@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -33,8 +33,8 @@ public abstract class AShape implements Shape {
   /**
    * Interpolates between the given from and to numbers, with the given progress.
    *
-   * @param from the start number
-   * @param to the end number
+   * @param from     the start number
+   * @param to       the end number
    * @param progress the weight to assign to the end number in the weighted average
    * @return a weighted average, {@code (1 - progress) * from + progress * to}
    */
