@@ -2,7 +2,7 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.SortedSet;
 
 /**
@@ -17,7 +17,7 @@ public interface ReadOnlyAnimatorModel {
    * @return A map of the names and shapes representing the contents of a scene
    * @throws IllegalArgumentException if the time is negative
    */
-  SortedMap<String, Shape> shapesAt(double time) throws IllegalArgumentException;
+  Map<String, Shape> shapesAt(double time) throws IllegalArgumentException;
 
   /**
    * Returns a sorted map of all the keyframes of every shape in order, representing the overall
@@ -25,5 +25,5 @@ public interface ReadOnlyAnimatorModel {
    *
    * @return Sorted map that maps shape names and their keyframes, in order as they appear on screen
    */
-  SortedMap<String, SortedSet<Frame>> getKeyframes();
+  Map<String, SortedSet<Frame>> getKeyframes();
 }

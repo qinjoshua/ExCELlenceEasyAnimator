@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Represents a shape in the animator with a position, width, height, and color.

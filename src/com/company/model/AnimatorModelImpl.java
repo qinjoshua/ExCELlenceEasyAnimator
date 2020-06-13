@@ -2,10 +2,9 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -13,13 +12,13 @@ import java.util.TreeSet;
  * interpolation of keyframes.
  */
 public class AnimatorModelImpl implements AnimatorModel {
-  private final SortedMap<String, SortedSet<Frame>> timelines;
+  private final Map<String, SortedSet<Frame>> timelines;
 
   /**
    * Default constructor that does not initialize any shapes.
    */
   public AnimatorModelImpl() {
-    this.timelines = new TreeMap<>();
+    this.timelines = new LinkedHashMap<>();
   }
 
   // Returns the latest keyframe whose time is strictly less than the given time
@@ -48,9 +47,12 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   @Override
-  public SortedMap<String, Shape> shapesAt(double time) {
+  public Map<String, Shape> shapesAt(double time) {
+    if (time < 0) {
+      throw new IllegalArgumentException("Time cannot be negative");
+    }
 
-    SortedMap<String, Shape> shapes = new TreeMap<>();
+    Map<String, Shape> shapes = new LinkedHashMap<>();
 
     for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
       if (time >= frame.getValue().last().getTime()) {
@@ -69,8 +71,8 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   @Override
-  public SortedMap<String, SortedSet<Frame>> getKeyframes() {
-    return new TreeMap<String, SortedSet<Frame>>(this.timelines);
+  public Map<String, SortedSet<Frame>> getKeyframes() {
+    return new LinkedHashMap<>(this.timelines);
   }
 
   /**

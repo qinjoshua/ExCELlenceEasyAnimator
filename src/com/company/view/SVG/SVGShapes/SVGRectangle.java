@@ -12,9 +12,9 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
     SVGTag shapeTag = super.getShapeTag(shapeName, shape);
 
     shapeTag.addAttribute(new SVGTagAttribute("x",
-                    Double.toString(shape.getPosition().getX())));
+        Double.toString(shape.getPosition().getX())));
     shapeTag.addAttribute(new SVGTagAttribute("y",
-                    Double.toString(shape.getPosition().getY())));
+        Double.toString(shape.getPosition().getY())));
 
     shapeTag.addAttribute(new SVGTagAttribute("width", Double.toString(shape.getWidth())));
     shapeTag.addAttribute(new SVGTagAttribute("height", Double.toString(shape.getHeight())));
@@ -29,28 +29,28 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
 
     if (frame1Shape.getPosition().getX() != frame2Shape.getPosition().getX()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "x",
-              Double.toString(frame1.getShape().getPosition().getX()),
-              Double.toString(frame2.getShape().getPosition().getX()), fps));
+          Double.toString(frame1.getShape().getPosition().getX()),
+          Double.toString(frame2.getShape().getPosition().getX()), fps));
     }
     if (frame1Shape.getPosition().getY() != frame2Shape.getPosition().getY()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "y",
-              Double.toString(frame1.getShape().getPosition().getY()),
-              Double.toString(frame2.getShape().getPosition().getY()), fps));
+          Double.toString(frame1.getShape().getPosition().getY()),
+          Double.toString(frame2.getShape().getPosition().getY()), fps));
     }
     if (frame1Shape.getWidth() != frame2Shape.getWidth()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "width",
-              Double.toString(frame1.getShape().getWidth()),
-              Double.toString(frame2.getShape().getWidth()), fps));
+          Double.toString(frame1.getShape().getWidth()),
+          Double.toString(frame2.getShape().getWidth()), fps));
     }
     if (frame1Shape.getHeight() != frame2Shape.getHeight()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "height",
-              Double.toString(frame1.getShape().getHeight()),
-              Double.toString(frame2.getShape().getHeight()), fps));
+          Double.toString(frame1.getShape().getHeight()),
+          Double.toString(frame2.getShape().getHeight()), fps));
     }
     if (frame1Shape.getColor() != frame2Shape.getColor()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "fill",
-              colorToRGBString(frame1.getShape().getColor()),
-              colorToRGBString(frame2.getShape().getColor()), fps));
+          colorToRGBString(frame1.getShape().getColor()),
+          colorToRGBString(frame2.getShape().getColor()), fps));
     }
   }
 }

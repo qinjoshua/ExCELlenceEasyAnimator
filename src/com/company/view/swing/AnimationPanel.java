@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.util.SortedMap;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -90,6 +90,10 @@ public class AnimationPanel extends JPanel {
     }
   }
 
+  public void setTime(double t) {
+    this.t = t;
+  }
+
   /**
    * Paints this object's animation model at this object's time in seconds to the given graphics
    * object.
@@ -104,7 +108,7 @@ public class AnimationPanel extends JPanel {
     // the y-axis by -1
     g2.translate(0, this.getHeight());
     g2.scale(1, -1);
-    SortedMap<String, Shape> shapes = model.shapesAt(t);
+    Map<String, Shape> shapes = model.shapesAt(t);
     for (Shape shape : shapes.values()) {
       this.drawModelShape(g2, shape);
     }

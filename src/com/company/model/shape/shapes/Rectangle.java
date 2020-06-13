@@ -4,7 +4,7 @@ import com.company.model.shape.AShape;
 import com.company.model.shape.Posn;
 import com.company.model.shape.ShapeType;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * A rectangle with a width, height, color, and position, describing the location of the rectangle's
