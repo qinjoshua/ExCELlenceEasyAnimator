@@ -16,9 +16,11 @@ public interface SVGShape {
    *
    * @param shapeName the name of the shape to create the tag for.
    * @param shape     the shape to get the shape tag from.
+   * @param canvasX   the x coordinate for the origin on the canvas
+   * @param canvasY   the y coordinate for the origin on the canvas
    * @return an SVG tag that draws the shape with its position, color, and size.
    */
-  SVGTag getShapeTag(String shapeName, Shape shape);
+  SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY);
 
   /**
    * Adds all the relevant animate tags to the given shape in order to move between frame1 and
@@ -27,7 +29,10 @@ public interface SVGShape {
    * @param frame1   starting frame
    * @param frame2   ending frame
    * @param fps      frames per second, the speed at which the animation is running
-   * @param shapeTag the tag for the shape that is being animated on.
+   * @param shapeTag the tag for the shape that is being animated on
+   * @param canvasX  the x coordinate for the origin on the canvas
+   * @param canvasY  the y coordinate for the origin on the canvas
    */
-  void addMotionTags(Frame frame1, Frame frame2, SVGTag shapeTag, int fps);
+  void addMotionTags(Frame frame1, Frame frame2, SVGTag shapeTag,
+                     int fps, int canvasX, int canvasY);
 }

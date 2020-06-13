@@ -21,21 +21,15 @@ public class SVGViewImpl implements SVGView {
 
   private final ReadOnlyAnimatorModel model;
   private final int speed;
-  private final int width;
-  private final int height;
 
   /**
    * Creates a new SVG animator view that initializes all of the fields.
    *
    * @param model a read-only animator model for the view to read from.
-   * @param width width of the canvas
-   * @param height height of the canvas
-   * @param fps frames per second that the animation runs at
+   * @param fps   frames per second that the animation runs at
    */
-  public SVGViewImpl(ReadOnlyAnimatorModel model, int width, int height, int fps) {
+  public SVGViewImpl(ReadOnlyAnimatorModel model, int fps) {
     this.model = model;
-    this.width = width;
-    this.height = height;
     this.speed = fps;
 
     svgShapes = new HashMap<>();
@@ -46,14 +40,12 @@ public class SVGViewImpl implements SVGView {
 
   /**
    * Creates a new SVG animator view with a default of one frame per second, and with the given read
-   * only model, width, and height of the animation.
+   * only model of the animation.
    *
    * @param model a read-only animator model for the view to read from.
-   * @param width width of the canvas
-   * @param height height of the canvas
    */
-  public SVGViewImpl(ReadOnlyAnimatorModel model, int width, int height) {
-    this(model, width, height, 1);
+  public SVGViewImpl(ReadOnlyAnimatorModel model) {
+    this(model, 1);
   }
 
   @Override
@@ -68,10 +60,10 @@ public class SVGViewImpl implements SVGView {
    */
   private String createSVGDocument() {
     SVGTag svg = new SVGTag("svg",
-        new SVGTagAttribute("width", Integer.toString(this.width)),
-        new SVGTagAttribute("height", Integer.toString(this.height)),
-        new SVGTagAttribute("version", "1.1"),
-        new SVGTagAttribute("xmlns", "http://www.w3.org/2000/svg"));
+            new SVGTagAttribute("width", Integer.toString(this.model.getCanvasWidth())),
+            new SVGTagAttribute("height", Integer.toString(this.model.getCanvasHeight())),
+            new SVGTagAttribute("version", "1.1"),
+            new SVGTagAttribute("xmlns", "http://www.w3.org/2000/svg"));
 
     Map<String, SortedSet<Frame>> keyframes = model.getKeyframes();
 
@@ -95,7 +87,8 @@ public class SVGViewImpl implements SVGView {
     SVGShape svgShape = this.svgShapes.get(frames.first().getShape().getShapeType());
 
     // Creates the shape tag to be animated
-    SVGTag shapeTag = svgShape.getShapeTag(shapeName, frames.first().getShape());
+    SVGTag shapeTag = svgShape.getShapeTag(shapeName, frames.first().getShape(),
+            this.model.getCanvasX(), this.model.getCanvasY());
 
     // Add the internal animation tags
     Frame prevFrame = null;
@@ -104,7 +97,8 @@ public class SVGViewImpl implements SVGView {
     }
     for (Frame frame : frames) {
       if (prevFrame != null) {
-        svgShape.addMotionTags(prevFrame, frame, shapeTag, this.speed);
+        svgShape.addMotionTags(prevFrame, frame, shapeTag, this.speed,
+                this.model.getCanvasX(), this.model.getCanvasY());
       }
       prevFrame = frame;
     }

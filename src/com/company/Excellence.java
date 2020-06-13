@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * The main class that runs the program.
  */
-public class Excellence {
+public final class Excellence {
   public static void main(String[] args) {
     AnimatorModel model = new AnimatorModelImpl();
     model.createKeyframe("E",

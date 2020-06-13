@@ -1,7 +1,12 @@
 package com.company.model;
 
+import com.company.model.shape.PosnCart;
 import com.company.model.shape.Shape;
+import com.company.model.shape.ShapeType;
+import com.company.util.AnimationBuilder;
 
+import java.awt.*;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
@@ -14,11 +19,23 @@ import java.util.TreeSet;
 public class AnimatorModelImpl implements AnimatorModel {
   private final Map<String, SortedSet<Frame>> timelines;
 
+  private int canvasWidth;
+  private int canvasHeight;
+
+  private int canvasX;
+  private int canvasY;
+
   /**
    * Default constructor that does not initialize any shapes.
    */
   public AnimatorModelImpl() {
     this.timelines = new LinkedHashMap<>();
+
+    this.canvasWidth = 640;
+    this.canvasHeight = 400;
+
+    this.canvasX = 0;
+    this.canvasY = 0;
   }
 
   // Returns the latest keyframe whose time is strictly less than the given time
@@ -106,6 +123,93 @@ public class AnimatorModelImpl implements AnimatorModel {
       newFrames.add(new FrameImpl(time, shape));
 
       this.timelines.put(shapeName, newFrames);
+    }
+  }
+
+  @Override
+  public int getCanvasWidth() {
+    return canvasWidth;
+  }
+
+  @Override
+  public void setCanvasWidth(int canvasWidth) {
+    this.canvasWidth = canvasWidth;
+  }
+
+  @Override
+  public int getCanvasHeight() {
+    return canvasHeight;
+  }
+
+  @Override
+  public void setCanvasHeight(int canvasHeight) {
+    this.canvasHeight = canvasHeight;
+  }
+
+  @Override
+  public int getCanvasX() {
+    return canvasX;
+  }
+
+  @Override
+  public void setCanvasX(int canvasX) {
+    this.canvasX = canvasX;
+  }
+
+  @Override
+  public int getCanvasY() {
+    return canvasY;
+  }
+
+  @Override
+  public void setCanvasY(int canvasY) {
+    this.canvasY = canvasY;
+  }
+
+  public static final class Builder implements AnimationBuilder<AnimatorModel> {
+    private final AnimatorModel model;
+    private final Map<String, ShapeType> shapeTypes;
+
+    public Builder() {
+      this.model = new AnimatorModelImpl();
+      this.shapeTypes = new HashMap<>();
+    }
+
+    @Override
+    public AnimatorModel build() {
+      return this.model;
+    }
+
+    @Override
+    public AnimationBuilder<AnimatorModel> setBounds(int x, int y, int width, int height) {
+      model.setCanvasX(x);
+      model.setCanvasY(y);
+      model.setCanvasWidth(width);
+      model.setCanvasHeight(height);
+
+      return this;
+    }
+
+    @Override
+    public AnimationBuilder<AnimatorModel> declareShape(String name, String type) {
+      this.shapeTypes.put(name, ShapeType.getShapeTypeFromString(type));
+      return this;
+    }
+
+    @Override
+    public AnimationBuilder<AnimatorModel> addMotion(
+            String name, int t1, int x1, int y1, int w1, int h1, int r1, int g1, int b1, int t2,
+            int x2, int y2, int w2, int h2, int r2, int g2, int b2) {
+      return addKeyframe(name, t1, x1, y1, w1, h1, r1, g1, b1)
+              .addKeyframe(name, t2, x2, y2, w2, h2, r2, g2, b2);
+    }
+
+    @Override
+    public AnimationBuilder<AnimatorModel> addKeyframe(
+            String name, int t, int x, int y, int w, int h, int r, int g, int b) {
+      Shape newShape = shapeTypes.get(name).getShape(new PosnCart(x, y), w, h, new Color(r, g, b));
+      this.model.createKeyframe(name, newShape, t);
+      return this;
     }
   }
 }

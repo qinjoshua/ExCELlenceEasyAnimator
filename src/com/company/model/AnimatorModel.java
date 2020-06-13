@@ -17,4 +17,32 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    *                                  as the other keyframes for this shape name
    */
   void createKeyframe(String shapeName, Shape shape, double time) throws IllegalArgumentException;
+
+  /**
+   * Sets the width of the canvas.
+   *
+   * @param canvasWidth width of the canvas to be set
+   */
+  void setCanvasWidth(int canvasWidth);
+
+  /**
+   * Sets the height of the canvas.
+   *
+   * @param canvasHeight height of the canvas to be set
+   */
+  void setCanvasHeight(int canvasHeight);
+
+  /**
+   * Sets the x coordinate of the origin.
+   *
+   * @param canvasX x coordinate of the origin to be set
+   */
+  void setCanvasX(int canvasX);
+
+  /**
+   * Sets the y coordinate of the origin.
+   *
+   * @param canvasY y coordinate of the origin to be set
+   */
+  void setCanvasY(int canvasY);
 }

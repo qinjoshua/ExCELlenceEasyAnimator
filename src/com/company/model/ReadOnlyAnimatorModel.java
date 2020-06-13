@@ -26,4 +26,32 @@ public interface ReadOnlyAnimatorModel {
    * @return Sorted map that maps shape names and their keyframes, in order as they appear on screen
    */
   Map<String, SortedSet<Frame>> getKeyframes();
+
+  /**
+   * Gets the height of the canvas.
+   *
+   * @return the canvas height as an integer
+   */
+  int getCanvasHeight();
+
+  /**
+   * Gets the width of the canvas.
+   *
+   * @return the canvas width as an integer
+   */
+  int getCanvasWidth();
+
+  /**
+   * Gets the x coordinate of the canvas origin.
+   *
+   * @return the x coodinate of the canvas origin.
+   */
+  int getCanvasX();
+
+  /**
+   * Gets the y coordinate of the canvas origin.
+   *
+   * @return the y coodinate of the canvas origin.
+   */
+  int getCanvasY();
 }

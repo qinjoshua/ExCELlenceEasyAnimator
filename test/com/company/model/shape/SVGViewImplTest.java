@@ -2,6 +2,7 @@ package com.company.model.shape;
 
 import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
+import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.shapes.Rectangle;
 import com.company.view.SVG.SVGViewImpl;
 import com.company.view.SVGView;
@@ -53,7 +54,7 @@ public class SVGViewImplTest {
   @Test
   public void testSVGAnimatorViewOutputProperties() {
     this.initTests();
-    SVGView view = new SVGViewImpl(this.model, 500, 500);
+    SVGView view = new SVGViewImpl(this.model);
     try {
       Appendable appendable = new StringBuilder();
       view.outputSVG(appendable);
@@ -80,7 +81,7 @@ public class SVGViewImplTest {
   @Test
   public void testSVGAnimatorViewTestCustomSpeed() {
     this.initTests();
-    SVGView view = new SVGViewImpl(this.model, 500, 500, 10);
+    SVGView view = new SVGViewImpl(this.model, 10);
     try {
       Appendable appendable = new StringBuilder();
       view.outputSVG(appendable);
@@ -105,19 +106,19 @@ public class SVGViewImplTest {
   @Test
   public void testSVGAnimatorViewOutputOne() {
     this.initTests();
-    SVGView view = new SVGViewImpl(this.smallModelManyAnimations, 500, 500);
+    SVGView view = new SVGViewImpl(this.smallModelManyAnimations);
     try {
       Appendable appendable = new StringBuilder();
       view.outputSVG(appendable);
 
-      String expectedOutput = "<svg width=\"500\" height=\"500\" version=\"1.1\" " +
+      String expectedOutput = "<svg width=\"640\" height=\"400\" version=\"1.1\" " +
               "xmlns=\"http://www.w3.org/2000/svg\">\n" +
               "<rect id=\"c\" fill=\"rgb(377, 0, 0)\" visibility=\"visible\" x=\"100.0\" y=\"100" +
               ".0\" width=\"150.0\" height=\"150.0\">\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"x\" from=\"100.0\" to=\"120.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
-              "attributeName=\"y\" from=\"100.0\" to=\"130.0\" fill=\"freeze\" />\n" +
+              "attributeName=\"y\" from=\"100.0\" to=\"130.00\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"width\" from=\"150.0\" to=\"100.0\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
@@ -139,12 +140,12 @@ public class SVGViewImplTest {
   @Test
   public void testSVGAnimatorViewOutputTwo() {
     this.initTests();
-    SVGView view = new SVGViewImpl(this.smallModelManyShapes, 500, 500);
+    SVGView view = new SVGViewImpl(this.smallModelManyShapes);
     try {
       Appendable appendable = new StringBuilder();
       view.outputSVG(appendable);
 
-      String expectedOutput = "<svg width=\"500\" height=\"500\" version=\"1.1\" " +
+      String expectedOutput = "<svg width=\"640\" height=\"400\" version=\"1.1\" " +
               "xmlns=\"http://www.w3.org/2000/svg\">\n" +
               "<rect id=\"c\" fill=\"rgb(377, 0, 0)\" visibility=\"visible\" x=\"100.0\" y=\"100" +
               ".0\" width=\"150.0\" height=\"150.0\">\n" +
@@ -160,7 +161,7 @@ public class SVGViewImplTest {
               "<rect id=\"a\" fill=\"rgb(0, 377, 0)\" visibility=\"visible\" x=\"50.0\" y=\"10" +
               ".0\" width=\"211.0\" height=\"250.0\">\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
-              "attributeName=\"y\" from=\"10.0\" to=\"100.0\" fill=\"freeze\" />\n" +
+              "attributeName=\"y\" from=\"10.0\" to=\"100.00\" fill=\"freeze\" />\n" +
               "<animate attributeType=\"xml\" begin=\"0.0ms\" dur=\"20000.0ms\" " +
               "attributeName=\"height\" from=\"250.0\" to=\"350.0\" fill=\"freeze\" />\n" +
               "</rect>\n" +
@@ -175,13 +176,39 @@ public class SVGViewImplTest {
   }
 
   @Test
+  public void testCustomCanvasSize() {
+    ReadOnlyAnimatorModel testModel =
+            new AnimatorModelImpl.Builder().setBounds(0,0,500, 500).build();
+    SVGView view = new SVGViewImpl(testModel);
+    try {
+      Appendable appendable = new StringBuilder();
+      view.outputSVG(appendable);
+
+      String output = appendable.toString();
+      String[] outputLines = output.split("\n");
+
+      // Check that nothing else has changed
+      assertEquals(5, output.split("animate", -1).length - 1);
+      assertEquals("</svg>", outputLines[outputLines.length - 1]);
+      assertEquals(2, output.split("rect", -1).length - 1);
+
+      // Check that the durations match the 10 fps
+      assertEquals(5, output.split("1000.0ms", -1).length - 1);
+      assertEquals(2, output.split("2000.0ms", -1).length - 1);
+
+    } catch (Exception e) {
+      fail();
+    }
+  }
+
+  @Test
   public void testSVGAnimatorViewOutputCorrectOrder() {
 
     // tests that the d comes before the a before the c, in the correct order that they were
     // inputed in the model
 
     this.initTests();
-    SVGView view = new SVGViewImpl(this.model2, 500, 500);
+    SVGView view = new SVGViewImpl(this.model2);
     try {
       Appendable appendable = new StringBuilder();
       view.outputSVG(appendable);

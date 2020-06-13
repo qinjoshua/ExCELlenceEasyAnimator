@@ -11,13 +11,13 @@ import com.company.view.SVG.SVGTagAttribute;
 public class SVGRectangle extends ASVGShape implements SVGShape {
 
   @Override
-  public SVGTag getShapeTag(String shapeName, Shape shape) {
-    SVGTag shapeTag = super.getShapeTag(shapeName, shape);
+  public SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY) {
+    SVGTag shapeTag = super.getShapeTag(shapeName, shape, canvasX, canvasY);
 
     shapeTag.addAttribute(new SVGTagAttribute("x",
-        Double.toString(shape.getPosition().getX())));
+            Double.toString(shape.getPosition().getX() + canvasX)));
     shapeTag.addAttribute(new SVGTagAttribute("y",
-        Double.toString(shape.getPosition().getY())));
+            Double.toString(shape.getPosition().getY() + canvasY)));
 
     shapeTag.addAttribute(new SVGTagAttribute("width", Double.toString(shape.getWidth())));
     shapeTag.addAttribute(new SVGTagAttribute("height", Double.toString(shape.getHeight())));
@@ -26,19 +26,20 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
   }
 
   @Override
-  public void addMotionTags(Frame frame1, Frame frame2, SVGTag shapeTag, int fps) {
+  public void addMotionTags(
+          Frame frame1, Frame frame2, SVGTag shapeTag, int fps, int canvasX, int canvasY) {
     Shape frame1Shape = frame1.getShape();
     Shape frame2Shape = frame2.getShape();
 
     if (frame1Shape.getPosition().getX() != frame2Shape.getPosition().getX()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "x",
-          Double.toString(frame1.getShape().getPosition().getX()),
-          Double.toString(frame2.getShape().getPosition().getX()), fps));
+              Double.toString(frame1.getShape().getPosition().getX() + canvasX),
+              Double.toString(frame2.getShape().getPosition().getX() + canvasY), fps));
     }
     if (frame1Shape.getPosition().getY() != frame2Shape.getPosition().getY()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "y",
-          Double.toString(frame1.getShape().getPosition().getY()),
-          Double.toString(frame2.getShape().getPosition().getY()), fps));
+              Double.toString(frame1.getShape().getPosition().getY() + canvasX),
+              Double.toString(frame2.getShape().getPosition().getY()) + canvasY, fps));
     }
     if (frame1Shape.getWidth() != frame2Shape.getWidth()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "width",

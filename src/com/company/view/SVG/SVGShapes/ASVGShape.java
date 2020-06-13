@@ -14,16 +14,17 @@ import java.awt.*;
 public abstract class ASVGShape implements SVGShape {
 
   @Override
-  public SVGTag getShapeTag(String shapeName, Shape shape) {
+  public SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY) {
 
     return new SVGTag(shape.getShapeType().SVGname(),
-        new SVGTagAttribute("id", shapeName),
-        new SVGTagAttribute("fill", colorToRGBString(shape.getColor())),
-        new SVGTagAttribute("visibility", "visible"));
+            new SVGTagAttribute("id", shapeName),
+            new SVGTagAttribute("fill", colorToRGBString(shape.getColor())),
+            new SVGTagAttribute("visibility", "visible"));
   }
 
   @Override
-  public abstract void addMotionTags(Frame frame1, Frame frame2, SVGTag shapeTag, int fps);
+  public abstract void addMotionTags(Frame frame1, Frame frame2, SVGTag shapeTag,
+                                     int fps, int canvasX, int canvasY);
 
   /**
    * Helper method for creating the animate tag.
