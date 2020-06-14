@@ -3,7 +3,7 @@ package com.company.model.shape;
 import com.company.model.shape.shapes.Ellipse;
 import com.company.model.shape.shapes.Rectangle;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * An enumeration representing all the different types of shapes, along with associated data

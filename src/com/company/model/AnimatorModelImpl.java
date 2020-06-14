@@ -5,7 +5,7 @@ import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
 import com.company.util.AnimationBuilder;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;

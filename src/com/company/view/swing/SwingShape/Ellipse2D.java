@@ -1,6 +1,6 @@
 package com.company.view.swing.SwingShape;
 
-import java.awt.*;
+import java.awt.Shape;
 
 /**
  * Represents a 2D ellipse using the Swing {@link java.awt.geom.Ellipse2D.Double} class.

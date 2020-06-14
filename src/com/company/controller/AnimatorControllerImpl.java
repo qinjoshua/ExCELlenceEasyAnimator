@@ -1,7 +1,5 @@
 package com.company.controller;
 
-import com.company.model.AnimatorModel;
-
 /**
  * Implementation of the animator controller that begins the animation.
  */

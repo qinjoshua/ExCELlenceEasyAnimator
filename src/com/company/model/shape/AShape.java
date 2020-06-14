@@ -1,6 +1,6 @@
 package com.company.model.shape;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 
 /**

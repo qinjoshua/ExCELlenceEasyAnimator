@@ -8,7 +8,7 @@ import com.company.view.swing.SwingShape.Ellipse2D;
 import com.company.view.swing.SwingShape.Rectangle2D;
 import com.company.view.swing.SwingShape.SwingShape;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;

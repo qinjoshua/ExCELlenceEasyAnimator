@@ -2,7 +2,7 @@ package com.company.view.swing;
 
 import com.company.model.ReadOnlyAnimatorModel;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;

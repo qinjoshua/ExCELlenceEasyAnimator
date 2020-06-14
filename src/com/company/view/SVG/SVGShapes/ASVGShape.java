@@ -6,7 +6,7 @@ import com.company.view.SVG.SVGSingleTag;
 import com.company.view.SVG.SVGTag;
 import com.company.view.SVG.SVGTagAttribute;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Abstract class representing some of the most common operations for an SVG shape.

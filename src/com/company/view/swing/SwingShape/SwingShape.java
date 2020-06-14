@@ -1,6 +1,7 @@
 package com.company.view.swing.SwingShape;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Shape;
 
 /**
  * Represents a specific way of creating Swing graphics modeling a specific kind of shape.

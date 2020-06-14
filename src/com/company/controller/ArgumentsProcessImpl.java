@@ -12,6 +12,8 @@ import com.company.view.text.TextAnimatorView;
 import com.company.view.text.TextView;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,6 +32,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
   private Integer fps;
   private Appendable out;
   private Readable in;
+  private boolean closable;
 
   /**
    * Default constructor that sets up known arguments and initializes all other fields to null.
@@ -38,6 +41,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     fps = 1;
     out = System.out;
     in = null;
+    closable = false;
 
     knownArguments = new HashMap<>();
 
@@ -81,7 +85,8 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     @Override
     public Void apply(String s) {
       try {
-        out = Files.newBufferedWriter(Paths.get(s));
+        out = new FileWriter(s);
+        closable = true;
       } catch (IOException e) {
         throw new IllegalStateException("The output file path was not able to be written to.");
       }
@@ -129,6 +134,15 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
       } else {
         throw new IllegalStateException("The type of view was not recognized.");
       }
+
+      if (closable) {
+        try {
+          ((Closeable) out).close();
+        } catch (IOException e) {
+          System.out.println("Ran into an error with the output file.");
+        }
+      }
+
       return null;
     }
   }
