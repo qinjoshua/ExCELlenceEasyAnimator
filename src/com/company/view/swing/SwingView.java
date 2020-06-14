@@ -1,7 +1,6 @@
 package com.company.view.swing;
 
 import com.company.model.ReadOnlyAnimatorModel;
-import com.company.view.VisualView;
 
 import java.awt.*;
 import java.awt.event.ActionListener;

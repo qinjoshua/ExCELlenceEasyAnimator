@@ -6,7 +6,6 @@ import com.company.model.shape.ShapeType;
 import com.company.view.SVG.SVGShapes.SVGEllipse;
 import com.company.view.SVG.SVGShapes.SVGRectangle;
 import com.company.view.SVG.SVGShapes.SVGShape;
-import com.company.view.SVGView;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -14,12 +14,14 @@ public class SVGEllipse extends ASVGShape implements SVGShape {
     SVGTag shapeTag = super.getShapeTag(shapeName, shape, canvasX, canvasY);
 
     shapeTag.addAttribute(new SVGTagAttribute("cx",
-        Double.toString(shape.getPosition().getX() - canvasX)));
+            Double.toString(shape.getPosition().getX() - canvasX)));
     shapeTag.addAttribute(new SVGTagAttribute("cy",
-        Double.toString(shape.getPosition().getY() - canvasY)));
+            Double.toString(shape.getPosition().getY() - canvasY)));
 
-    shapeTag.addAttribute(new SVGTagAttribute("rx", Double.toString(shape.getWidth())));
-    shapeTag.addAttribute(new SVGTagAttribute("ry", Double.toString(shape.getHeight())));
+    shapeTag.addAttribute(new SVGTagAttribute("rx",
+            Double.toString(shape.getWidth() / 2)));
+    shapeTag.addAttribute(new SVGTagAttribute("ry",
+            Double.toString(shape.getHeight() / 2)));
 
     return shapeTag;
   }

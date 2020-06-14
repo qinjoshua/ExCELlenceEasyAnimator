@@ -5,7 +5,7 @@ import com.company.model.AnimatorModelImpl;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.shapes.Rectangle;
 import com.company.view.SVG.SVGViewImpl;
-import com.company.view.SVGView;
+import com.company.view.SVG.SVGView;
 
 import org.junit.Test;
 
@@ -69,8 +69,7 @@ public class SVGViewImplTest {
       // Check that the rect is only referenced twice
       assertEquals(2, output.split("rect", -1).length - 1);
       // Check that the durations fit the 1 second per frame
-      assertEquals(5, output.split("10000.0ms", -1).length - 1);
-      assertEquals(2, output.split("20000.0ms", -1).length - 1);
+      assertEquals(7, output.split("10000.0ms", -1).length - 1);
     } catch (Exception e) {
       fail();
     }
@@ -93,8 +92,7 @@ public class SVGViewImplTest {
       assertEquals(2, output.split("rect", -1).length - 1);
 
       // Check that the durations match the 10 fps
-      assertEquals(5, output.split("1000.0ms", -1).length - 1);
-      assertEquals(2, output.split("2000.0ms", -1).length - 1);
+      assertEquals(7, output.split("1000.0ms", -1).length - 1);
 
     } catch (Exception e) {
       fail();

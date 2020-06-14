@@ -43,12 +43,18 @@ public abstract class ASVGShape implements SVGShape {
 
     return new SVGSingleTag("animate",
         new SVGTagAttribute("attributeType", "xml"),
-        new SVGTagAttribute("begin", frame1.getTime() / fps * 1000 + "ms"),
-        new SVGTagAttribute("dur", frame2.getTime() / fps * 1000 + "ms"),
+        new SVGTagAttribute("begin",
+                this.convertUsingFPS(frame1.getTime(), fps) + "ms"),
+        new SVGTagAttribute("dur",
+                this.convertUsingFPS(frame2.getTime() - frame1.getTime(), fps) + "ms"),
         new SVGTagAttribute("attributeName", attributeName),
         new SVGTagAttribute("from", from),
         new SVGTagAttribute("to", to),
         new SVGTagAttribute("fill", "freeze"));
+  }
+
+  private static double convertUsingFPS(double time, int fps) {
+    return time/fps*1000;
   }
 
   /**

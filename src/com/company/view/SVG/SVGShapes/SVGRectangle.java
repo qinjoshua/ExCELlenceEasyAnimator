@@ -34,11 +34,11 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
     if (frame1Shape.getPosition().getX() != frame2Shape.getPosition().getX()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "x",
           Double.toString(frame1.getShape().getPosition().getX() - canvasX),
-          Double.toString(frame2.getShape().getPosition().getX() - canvasY), fps));
+          Double.toString(frame2.getShape().getPosition().getX() - canvasX), fps));
     }
     if (frame1Shape.getPosition().getY() != frame2Shape.getPosition().getY()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "y",
-          Double.toString(frame1.getShape().getPosition().getY() - canvasX),
+          Double.toString(frame1.getShape().getPosition().getY() - canvasY),
           Double.toString(frame2.getShape().getPosition().getY() - canvasY), fps));
     }
     if (frame1Shape.getWidth() != frame2Shape.getWidth()) {

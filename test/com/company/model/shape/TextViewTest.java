@@ -26,6 +26,10 @@ public class TextViewTest {
 
     testModel.createKeyframe("R", new Ellipse(new PosnImpl(131, 20), 21, 34, new Color(200,
             200, 200)), 10);
+    testModel.setCanvasWidth(500);
+    testModel.setCanvasHeight(500);
+    testModel.setCanvasX(100);
+    testModel.setCanvasY(100);
   }
 
   @Test
@@ -43,7 +47,7 @@ public class TextViewTest {
     Appendable output = new StringBuilder();
 
     try {
-      new TextAnimatorView(testModel, 500, 500, 100, 100).outputText(output);
+      new TextAnimatorView(testModel).outputText(output);
       assertEquals(result, output.toString());
     }
     catch(Exception e) {

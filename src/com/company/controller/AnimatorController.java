@@ -7,9 +7,7 @@ import com.company.model.AnimatorModel;
  */
 public interface AnimatorController {
   /**
-   * Plays the animation.
-   *
-   * @param m An animator model that this controller is controlling.
+   * Provides the options to select the view and the input file for the animation.
    */
-  void playAnimation(AnimatorModel m);
+  void run();
 }
