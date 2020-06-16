@@ -4,7 +4,7 @@ import com.company.model.shape.Shape;
 
 /**
  * This interface represents a keyframe in an animation. It keeps track of the time the frame is on
- * and the state of the shape at that time. TODO this probably won't exist
+ * and the state of the shape at that time.
  */
 public interface Frame extends Comparable<Frame> {
 

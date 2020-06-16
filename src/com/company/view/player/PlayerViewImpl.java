@@ -1,5 +1,7 @@
 package com.company.view.player;
 
+import com.company.controller.viewactions.playeractions.DecreaseSpeed;
+import com.company.controller.viewactions.playeractions.IncreaseSpeed;
 import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.controller.viewactions.playeractions.Restart;
 import com.company.controller.viewactions.playeractions.ToggleLoop;
@@ -10,16 +12,27 @@ import com.company.view.swing.AnimationPanel;
 import com.company.view.swing.SwingView;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
@@ -29,11 +42,14 @@ import javax.swing.Timer;
  */
 public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   private final AnimationPanel playArea;
+  private final JPanel buttonPanel;
+  private Map<String, AbstractButton> buttons;
   private int fps;
   private boolean isLooping;
   private boolean isPlaying;
   private Consumer<PlayerAction> callback;
-  KeyComponent keyComponent;
+  private KeyComponent keyComponent;
+  private final Timer mainLoop;
 
   /**
    * Initializes the player to take in a read only model that can be played.
@@ -52,11 +68,35 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.isPlaying = true;
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setLayout(new BorderLayout());
 
     playArea = new AnimationPanel(model);
     playArea.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
-    this.getContentPane().add(playArea, BorderLayout.CENTER);
-    this.pack();
+    this.getContentPane().add(playArea, BorderLayout.NORTH);
+
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new FlowLayout());
+
+
+    JButton restartButton = new JButton("Restart");
+    JToggleButton playButton = new JToggleButton("❚❚");
+    JToggleButton loopButton = new JToggleButton("\uD83D\uDD02");
+    JButton slowDownButton = new JButton("Slow Down");
+    JButton speedUpButton = new JButton("Speed Up");
+
+    buttons = new HashMap<>();
+    buttons.put("restart", restartButton);
+    buttons.put("play", playButton);
+    buttons.put("loop", loopButton);
+    buttons.put("slowDown", slowDownButton);
+    buttons.put("speedUp", speedUpButton);
+
+    buttonPanel.add(restartButton);
+    buttonPanel.add(playButton);
+    buttonPanel.add(loopButton);
+    buttonPanel.add(slowDownButton);
+    buttonPanel.add(speedUpButton);
+
 
     this.callback = null;
 
@@ -87,14 +127,56 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       }
     };
 
+    final Action SLOW_DOWN = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null) {
+          callback.accept(new DecreaseSpeed());
+        }
+      }
+    };
+
+    final Action SPEED_UP = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null) {
+          callback.accept(new IncreaseSpeed());
+        }
+      }
+    };
+
 
     this.keyComponent = new KeyComponent();
 
     this.keyComponent.setCommand(KeyStroke.getKeyStroke('r'), "restart", RESTART);
     this.keyComponent.setCommand(KeyStroke.getKeyStroke('p'), "togglePlay", TOGGLE_PLAY);
     this.keyComponent.setCommand(KeyStroke.getKeyStroke('l'), "toggleLoop", TOGGLE_LOOP);
+    this.keyComponent.setCommand(KeyStroke.getKeyStroke("LEFT"), "slowDown", SLOW_DOWN);
+    this.keyComponent.setCommand(KeyStroke.getKeyStroke("RIGHT"), "speedUp", SPEED_UP);
+
+    restartButton.addActionListener(RESTART);
+    playButton.addActionListener(TOGGLE_PLAY);
+    loopButton.addActionListener(TOGGLE_LOOP);
+    slowDownButton.addActionListener(SLOW_DOWN);
+    speedUpButton.addActionListener(SPEED_UP);
+
 
     this.add(keyComponent);
+    this.add(buttonPanel, BorderLayout.SOUTH);
+
+    ActionListener painter = evt -> {
+      this.playArea.repaint();
+      if (isLooping && playArea.onLastFrame()) {
+        playArea.setTick(0);
+      }
+
+      if (isPlaying) {
+        this.playArea.nextTick();
+      }
+    };
+    mainLoop = new Timer(PlayerViewImpl.getDelay(fps), painter);
+
+    this.pack();
   }
 
   // Given a frames-per-second, gets the delay in milliseconds between draws needed to produce
@@ -105,27 +187,19 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
 
   @Override
   public void renderVisual() {
-    final int delay = PlayerViewImpl.getDelay(fps);
-
-    ActionListener painter = evt -> {
-      this.playArea.repaint();
-      if (isLooping && playArea.onLastFrame()) {
-        // TODO is this OK? do we need a controller? some other kind of ActionListener?
-        playArea.setTick(0);
-      }
-
-      if (isPlaying) {
-        this.playArea.nextTick();
-      }
-    };
-
     this.setVisible(true);
-    new Timer(delay, painter).start();
+    mainLoop.start();
   }
 
   @Override
   public void togglePlay() {
     isPlaying = !isPlaying;
+    AbstractButton playButton = buttons.get("play");
+    if (playButton.getText().equals("❚❚")) {
+      playButton.setText("▶");
+    } else {
+      playButton.setText("❚❚");
+    }
   }
 
   @Override
@@ -137,6 +211,9 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   public void setSpeed(int speed) {
     if (speed < 0) {
       throw new IllegalArgumentException("Speed cannot be negative");
+    } else {
+      this.fps = speed;
+      mainLoop.setDelay(PlayerViewImpl.getDelay(fps));
     }
   }
 
@@ -155,7 +232,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.callback = callback;
   }
 
-  private class KeyComponent extends JPanel {
+  private static class KeyComponent extends JPanel {
     /**
      * Sets the given keystroke to the given action with the given name.
      *

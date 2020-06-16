@@ -11,6 +11,7 @@ import com.company.view.VisualView;
 import com.company.view.player.PlayerView;
 import com.company.view.player.PlayerViewImpl;
 
+import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ public final class Excellence {
    * @param args list of input arguments for the animator
    */
   public static void main(String[] args) throws IOException {
-    BufferedReader input = Files.newBufferedReader(Paths.get("smalldemo.txt"));
+    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
     AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
     AnimatorModel model = AnimationReader.parseFile(input, builder);
 

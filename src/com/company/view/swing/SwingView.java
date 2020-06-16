@@ -10,8 +10,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-/** // TODO JAVA DOCS!!!
- * Implementation of {@link VisualView} that renders the animation to the Java Swing GUI framework.
+/**
+ * Implementation of {@link VisualView} that renders the animation using the Java Swing GUI
+ * framework.
  */
 public class SwingView implements VisualView {
   // The animator model to use for the animation. Doesn't support mutation because that's not in
@@ -21,18 +22,19 @@ public class SwingView implements VisualView {
   private final int fps;
 
   /**
-   * Initializes a SwingView with the given animation and a default FPS of 30. Note that the frame
+   * Initializes a SwingView with the given animation and frames per second Note that the frame
    * border and title bar aren't part of the canvas, and so the actual window will be larger than
    * the width and height that are given.
    *
    * @param model the model representing the animation
    * @param fps   the FPS of the animation
-   * @throws IllegalArgumentException if the input model is null or either width and height are
-   *                                  negative
+   * @throws IllegalArgumentException if the input model is null or the speed is negative
    */
   public SwingView(ReadOnlyAnimatorModel model, int fps) {
     if (model == null) {
       throw new IllegalArgumentException("Null model is invalid");
+    } else if (fps < 0) {
+      throw new IllegalArgumentException("Speed is negative");
     }
     this.model = model;
     this.fps = fps;
