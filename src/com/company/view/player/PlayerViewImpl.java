@@ -9,27 +9,20 @@ import com.company.controller.viewactions.playeractions.TogglePlay;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.view.VisualView;
 import com.company.view.swing.AnimationPanel;
-import com.company.view.swing.SwingView;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -43,12 +36,12 @@ import javax.swing.Timer;
 public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   private final AnimationPanel playArea;
   private final JPanel buttonPanel;
-  private Map<String, AbstractButton> buttons;
+  private final Map<String, AbstractButton> buttons;
   private int fps;
   private boolean isLooping;
   private boolean isPlaying;
   private Consumer<PlayerAction> callback;
-  private KeyComponent keyComponent;
+  private final KeyComponent keyComponent;
   private final Timer mainLoop;
 
   /**
@@ -236,8 +229,8 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     /**
      * Sets the given keystroke to the given action with the given name.
      *
-     * @param key the key used to start the action
-     * @param name the name used for the action
+     * @param key    the key used to start the action
+     * @param name   the name used for the action
      * @param action the action itself
      */
     public void setCommand(KeyStroke key, String name, Action action) {

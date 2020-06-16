@@ -1,6 +1,7 @@
 package com.company.view.svg;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,16 +15,14 @@ public class SVGTag {
   /**
    * Creates a new SVG tag with the given name and list of attributes.
    *
-   * @param name name of the tag
+   * @param name       name of the tag
    * @param attributes the attributes that go into the tag
    */
   public SVGTag(String name, SVGTagAttribute... attributes) {
     this.name = name;
-    this.attributes = new ArrayList<SVGTagAttribute>();
+    this.attributes = new ArrayList<>();
 
-    for (SVGTagAttribute attribute : attributes) {
-      this.attributes.add(attribute);
-    }
+    this.attributes.addAll(Arrays.asList(attributes));
 
     this.innerSVGTags = new ArrayList<>();
   }

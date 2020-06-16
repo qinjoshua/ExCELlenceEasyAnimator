@@ -7,8 +7,10 @@ import com.company.view.player.PlayerView;
  */
 public class DecreaseSpeed implements PlayerAction {
   private static final double DECREASE_MULTIPLIER = 0.8;
+
   /**
    * Decreases the speed of the given player view by a specific proportion.
+   *
    * @param view the editor view to be acted on
    */
   @Override

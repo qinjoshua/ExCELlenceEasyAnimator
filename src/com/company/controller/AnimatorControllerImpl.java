@@ -1,6 +1,5 @@
 package com.company.controller;
 
-import com.company.controller.AnimatorController;
 import com.company.controller.console.ArgumentsProcessImpl;
 import com.company.controller.console.ArgumentsProcessor;
 

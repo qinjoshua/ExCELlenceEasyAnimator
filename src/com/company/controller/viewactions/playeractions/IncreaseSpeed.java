@@ -7,8 +7,10 @@ import com.company.view.player.PlayerView;
  */
 public class IncreaseSpeed implements PlayerAction {
   private static final double INCREASE_MULTIPLIER = 1.2;
+
   /**
    * Increases the speed of the given player view by a specific proportion.
+   *
    * @param view the editor view to be acted on
    */
   @Override

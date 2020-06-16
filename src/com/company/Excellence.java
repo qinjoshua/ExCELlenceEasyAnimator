@@ -7,11 +7,9 @@ import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
 import com.company.util.AnimationBuilder;
 import com.company.util.AnimationReader;
-import com.company.view.VisualView;
 import com.company.view.player.PlayerView;
 import com.company.view.player.PlayerViewImpl;
 
-import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;

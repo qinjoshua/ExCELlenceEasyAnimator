@@ -21,7 +21,7 @@ public class CreateKeyframe extends AShapeModifier implements AnimatorAction {
   public void actOn(AnimatorModel model) throws IllegalStateException {
     try {
       model.createKeyframe(this.shapeName, model.shapesAt(this.tick).get(this.shapeName),
-              this.tick);
+          this.tick);
     } catch (IllegalArgumentException e) {
       throw new IllegalStateException("Creating keyframe failed: " + e.getMessage());
     }

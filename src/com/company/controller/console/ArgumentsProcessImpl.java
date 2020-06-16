@@ -4,10 +4,10 @@ import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
 import com.company.util.AnimationBuilder;
 import com.company.util.AnimationReader;
+import com.company.view.VisualView;
 import com.company.view.svg.SVGView;
 import com.company.view.svg.SVGViewImpl;
 import com.company.view.swing.SwingView;
-import com.company.view.VisualView;
 import com.company.view.text.TextAnimatorView;
 import com.company.view.text.TextView;
 
@@ -23,9 +23,9 @@ import java.util.Scanner;
 import java.util.function.Function;
 
 /**
- * Implementation of the argument processor that stores all of the necessary arguments as fields.
- * In order to run correctly, this argument processor must be asked to process view after all the
- * other arguments have been processed.
+ * Implementation of the argument processor that stores all of the necessary arguments as fields. In
+ * order to run correctly, this argument processor must be asked to process view after all the other
+ * arguments have been processed.
  */
 public class ArgumentsProcessImpl implements ArgumentsProcessor {
   Map<String, Function<String, Void>> knownArguments;
@@ -72,8 +72,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     @Override
     public Void apply(String s) {
       try {
-        BufferedReader input = Files.newBufferedReader(Paths.get(s));
-        in = input;
+        in = Files.newBufferedReader(Paths.get(s));
       } catch (IOException e) {
         throw new IllegalStateException("The input file was not able to be processed.");
       }
