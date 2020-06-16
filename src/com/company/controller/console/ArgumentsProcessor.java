@@ -1,4 +1,4 @@
-package com.company.controller;
+package com.company.controller.console;
 
 /**
  * Represents a tool that processes arguments.

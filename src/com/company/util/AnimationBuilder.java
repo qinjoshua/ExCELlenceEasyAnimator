@@ -1,5 +1,10 @@
 package com.company.util;
 
+/**
+ * Builder interface for different kind of animations.
+ *
+ * @param <Doc> the type that represents an animation
+ */
 public interface AnimationBuilder<Doc> {
   /**
    * Constructs a final document.

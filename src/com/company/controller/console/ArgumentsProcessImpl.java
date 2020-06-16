@@ -1,13 +1,13 @@
-package com.company.controller;
+package com.company.controller.console;
 
 import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
 import com.company.util.AnimationBuilder;
 import com.company.util.AnimationReader;
-import com.company.view.SVG.SVGView;
-import com.company.view.SVG.SVGViewImpl;
+import com.company.view.svg.SVGView;
+import com.company.view.svg.SVGViewImpl;
 import com.company.view.swing.SwingView;
-import com.company.view.swing.VisualView;
+import com.company.view.VisualView;
 import com.company.view.text.TextAnimatorView;
 import com.company.view.text.TextView;
 
@@ -45,10 +45,10 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
 
     knownArguments = new HashMap<>();
 
-    knownArguments.put("in", new inputFunction());
-    knownArguments.put("out", new outputFunction());
-    knownArguments.put("speed", new fpsFunction());
-    knownArguments.put("view", new viewFunction());
+    knownArguments.put("in", new InputFunction());
+    knownArguments.put("out", new OutputFunction());
+    knownArguments.put("speed", new FpsFunction());
+    knownArguments.put("view", new ViewFunction());
   }
 
   @Override
@@ -68,7 +68,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     }
   }
 
-  private class inputFunction implements Function<String, Void> {
+  private class InputFunction implements Function<String, Void> {
     @Override
     public Void apply(String s) {
       try {
@@ -81,7 +81,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     }
   }
 
-  private class outputFunction implements Function<String, Void> {
+  private class OutputFunction implements Function<String, Void> {
     @Override
     public Void apply(String s) {
       try {
@@ -94,7 +94,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     }
   }
 
-  private class fpsFunction implements Function<String, Void> {
+  private class FpsFunction implements Function<String, Void> {
     @Override
     public Void apply(String s) {
       fps = Integer.parseInt(s);
@@ -102,7 +102,7 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     }
   }
 
-  private class viewFunction implements Function<String, Void> {
+  private class ViewFunction implements Function<String, Void> {
     @Override
     public Void apply(String s) {
       AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();

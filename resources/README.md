@@ -22,6 +22,11 @@ of errors considerably without making the code any more error-prone at any other
 to keyframes: a motion is just two keyframes. On the other hand, going from keyframes to motions isn't easy, and so we
 think our choice to use keyframes made writing the code for this part significantly easier.
 
+This is also why there is no `removeKeyframe` method: it breaks this "illegal states are unrepresentable" property that
+makes the model so nice to work with. Removing keyframes allows shapes to exist in the map without any actual referents.
+In our current model, shape names are created exactly when their first keyframe is initialized, and in this way it's
+impossible to have shapes that don't have any keyframes associated with them.
+
 The model interface also includes getters and setters for the canvas origin X and Y coordinate, the canvas width, and
 the canvas height. The speed is considered a view-specific detail.
 #### `ReadOnlyAnimatorModel`
@@ -67,7 +72,17 @@ implementations:
 This is the textual view as done in Assignment 5 and refined in this submission. There isn't really much to comment on
 here, as it was basically completely specified.
 #### `SVGView` and `SVGViewImpl`
-TODO Joshua you got this
+The `SVGView` interface represents a view that outputs SVG-formatted text from the given model
+. The SVG View will produce the resulting SVG with no indentations of the tags. In order to
+interpret the model shapes into shapes that are understood by the SVG, we used a command-design
+strategy by mapping model shape types to utility functions of type `SVGShape` in the svgshapes 
+package, which corresponded with model shapes. Each `SVGShape` is able to interpret a model shape 
+and create the relevant SVG view from it, and the use of the command design pattern allows future 
+shape support to be easily added with minimal changes to the SVGView class.
+
+'SVGView' also takes advantage of `SVGTag` and `SVGTagAttribute`, which are data representations 
+of individual components within an SVG. Using these data representations allow us to easily build 
+an SVG document.
 #### `VisualView` and `SwingView`
 This is the Swing visual view. `VisualView` is the interface (with a single `void` method that runs the program), and
 `SwingView` is the current only implementation of this interface. To translate between the model's idea of shapes, as
@@ -76,4 +91,18 @@ each `ShapeType` maps to a command that can constitute a collection of shapes or
 has rectangles and ellipses, there's no need for this, but the command design pattern gives us the flexibility to do
 this if future shape types required it.)
 ### Controller
-TODO when we figure this out
+The controller is the class that is run in the main method, and acts as an entry point for the 
+application. It processes the arguments that the user passes in to the program, and runs the 
+program with those settings. The flags that the controller looks for include in, whose value 
+should be the file from which the animator should read from, out, which indicates the file that 
+the program should write the output to, speed, which tells the program what the speed of the
+animation should be in frames per second, and view, which tells the program which view to run the
+application in. Arguments that do not meet the specified formats will result in the program 
+terminating with a one-sentence error message being printed out into the console.
+## Changes
+ - Moved the old `renderShapes` text view method to an actual view object, away from the model
+ - Added `ReadOnlyAnimatorModel` as a way of separating functionality between the model and view and enhancing coherence
+ - Moved away from Cartesian coordinates (`PosnCart` -> `PosnImpl`, etc.)
+ - Added `CanvasX`, `CanvasY`, `CanvasWidth`, and `CanvasHeight` into the model
+ - Added some methods to the `ShapeType` `enum` to make converting to SVG easier
+ - Added all of the new functionality, as described above

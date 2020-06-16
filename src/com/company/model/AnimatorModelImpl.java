@@ -38,46 +38,44 @@ public class AnimatorModelImpl implements AnimatorModel {
     this.canvasY = 0;
   }
 
-  // Returns the latest keyframe whose time is strictly less than the given time
-  private static Frame previousKeyframe(double time, SortedSet<Frame> frames) {
+  // Returns the latest keyframe whose tick is strictly less than the given tick
+  private static Frame previousKeyframe(int tick, SortedSet<Frame> frames) {
     Frame closestFrame = frames.first();
 
     for (Frame frame : frames) {
-      if (frame.getTime() >= time) {
+      if (frame.getTime() >= tick) {
         return closestFrame;
       }
       closestFrame = frame;
     }
-
     return frames.last();
   }
 
-  // Returns the earliest keyframe whose time is greater or equal to the given time
-  private static Frame nextKeyframe(double time, SortedSet<Frame> frames) {
+  // Returns the earliest keyframe whose tick is greater or equal to the given tick
+  private static Frame nextKeyframe(int tick, SortedSet<Frame> frames) {
     for (Frame frame : frames) {
-      if (frame.getTime() >= time) {
+      if (frame.getTime() >= tick) {
         return frame;
       }
     }
-
     return frames.last();
   }
 
   @Override
-  public Map<String, Shape> shapesAt(double time) {
-    if (time < 0) {
+  public Map<String, Shape> shapesAt(int tick) {
+    if (tick < 0) {
       throw new IllegalArgumentException("Time cannot be negative");
     }
 
     Map<String, Shape> shapes = new LinkedHashMap<>();
 
     for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
-      if (time >= frame.getValue().last().getTime()) {
+      if (tick >= frame.getValue().last().getTime()) {
         shapes.put(frame.getKey(), frame.getValue().last().getShape());
-      } else if (time > frame.getValue().first().getTime()) {
-        Frame prev = previousKeyframe(time, frame.getValue());
-        Frame next = nextKeyframe(time, frame.getValue());
-        double progress = (time - prev.getTime()) / (next.getTime() - prev.getTime());
+      } else if (tick > frame.getValue().first().getTime()) {
+        Frame prev = previousKeyframe(tick, frame.getValue());
+        Frame next = nextKeyframe(tick, frame.getValue());
+        double progress = (tick - prev.getTime()) / (next.getTime() - prev.getTime());
 
         shapes.put(frame.getKey(), prev.interpolateShape(next, progress));
       }
@@ -99,11 +97,11 @@ public class AnimatorModelImpl implements AnimatorModel {
    *
    * @param shapeName The name of the shape for which the keyframe is being created for
    * @param shape     The shape in the keyframe
-   * @param time      The time the keyframe is at
+   * @param tick      The time the keyframe is at
    */
   @Override
-  public void createKeyframe(String shapeName, Shape shape, double time) {
-    if (time < 0) {
+  public void createKeyframe(String shapeName, Shape shape, int tick) {
+    if (tick < 0) {
       throw new IllegalArgumentException("Time cannot be negative");
     }
 
@@ -115,12 +113,12 @@ public class AnimatorModelImpl implements AnimatorModel {
         throw new IllegalArgumentException("Shape is not the same type as other keyframes.");
       }
 
-      timeline.removeIf(frame -> Math.abs(frame.getTime() - time) < 1e-9);
+      timeline.removeIf(frame -> Math.abs(frame.getTime() - tick) < 1e-9);
 
-      this.timelines.get(shapeName).add(new FrameImpl(time, shape));
+      this.timelines.get(shapeName).add(new FrameImpl(tick, shape));
     } else {
       TreeSet<Frame> newFrames = new TreeSet<>();
-      newFrames.add(new FrameImpl(time, shape));
+      newFrames.add(new FrameImpl(tick, shape));
 
       this.timelines.put(shapeName, newFrames);
     }
@@ -166,10 +164,16 @@ public class AnimatorModelImpl implements AnimatorModel {
     this.canvasY = canvasY;
   }
 
+  /**
+   * Inner class that allows you to build an animator model implementation.
+   */
   public static final class Builder implements AnimationBuilder<AnimatorModel> {
     private final AnimatorModel model;
     private final Map<String, ShapeType> shapeTypes;
 
+    /**
+     * Creates a new builder with a default empty model.
+     */
     public Builder() {
       this.model = new AnimatorModelImpl();
       this.shapeTypes = new HashMap<>();

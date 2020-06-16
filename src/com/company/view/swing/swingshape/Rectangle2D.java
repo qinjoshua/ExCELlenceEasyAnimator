@@ -1,6 +1,6 @@
-package com.company.view.swing.SwingShape;
+package com.company.view.swing.swingshape;
 
-import java.awt.Color;
+import java.awt.Shape;
 
 /**
  * Represents a 2D Rectangle using the Swing {@link java.awt.geom.Rectangle2D.Double} class.

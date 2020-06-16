@@ -2,7 +2,19 @@ package com.company;
 
 import com.company.controller.AnimatorController;
 import com.company.controller.AnimatorControllerImpl;
+import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
+import com.company.model.AnimatorModel;
+import com.company.model.AnimatorModelImpl;
+import com.company.util.AnimationBuilder;
+import com.company.util.AnimationReader;
+import com.company.view.VisualView;
+import com.company.view.player.PlayerView;
+import com.company.view.player.PlayerViewImpl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +28,24 @@ public final class Excellence {
    *
    * @param args list of input arguments for the animator
    */
-  public static void main(String[] args) {
+  public static void oldMain(String[] args) {
     AnimatorController controller = new AnimatorControllerImpl(formatArgs(args));
     controller.run();
+  }
+
+  /**
+   * Main entry point for the application.
+   *
+   * @param args list of input arguments for the animator
+   */
+  public static void main(String[] args) throws IOException {
+    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
+    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
+    AnimatorModel model = AnimationReader.parseFile(input, builder);
+
+    PlayerView view = new PlayerViewImpl(model, 20);
+    view.setCallback(new PlayerActionConsumerImpl(view));
+    view.renderVisual();
   }
 
   /**

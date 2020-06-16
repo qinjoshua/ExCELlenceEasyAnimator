@@ -1,4 +1,4 @@
-package com.company.view.SVG;
+package com.company.view.svg;
 
 
 import java.io.IOException;

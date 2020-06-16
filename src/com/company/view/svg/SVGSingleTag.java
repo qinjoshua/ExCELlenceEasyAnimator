@@ -1,4 +1,4 @@
-package com.company.view.SVG;
+package com.company.view.svg;
 
 /**
  * Represents a single svg tag, with no closing tag.

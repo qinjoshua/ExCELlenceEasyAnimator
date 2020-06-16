@@ -12,11 +12,11 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    *
    * @param shapeName The name of the shape for which the keyframe is being created for
    * @param shape     The shape in the keyframe
-   * @param time      The time the keyframe is at
-   * @throws IllegalArgumentException if the time is negative, or if the shape is not the same type
+   * @param tick      The tick the keyframe is at
+   * @throws IllegalArgumentException if the tick is negative, or if the shape is not the same type
    *                                  as the other keyframes for this shape name
    */
-  void createKeyframe(String shapeName, Shape shape, double time) throws IllegalArgumentException;
+  void createKeyframe(String shapeName, Shape shape, int tick) throws IllegalArgumentException;
 
   /**
    * Sets the width of the canvas.

@@ -4,8 +4,8 @@ import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.shapes.Rectangle;
-import com.company.view.SVG.SVGViewImpl;
-import com.company.view.SVG.SVGView;
+import com.company.view.svg.SVGViewImpl;
+import com.company.view.svg.SVGView;
 
 import org.junit.Test;
 
@@ -15,6 +15,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * Test for SVG view.
+ */
 public class SVGViewImplTest {
   AnimatorModel model = new AnimatorModelImpl();
   AnimatorModel model2 = new AnimatorModelImpl();

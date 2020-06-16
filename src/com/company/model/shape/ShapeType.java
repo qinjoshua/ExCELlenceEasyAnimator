@@ -33,7 +33,7 @@ public enum ShapeType {
    * @return string of the name of this shape when represented in an SVG.
    */
   // CHANGELOG: Added public method SVGname in order to obtain the SVG name name for this shape
-  public String SVGname() {
+  public String svgName() {
     return this.svgName;
   }
 

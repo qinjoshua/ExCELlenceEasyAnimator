@@ -11,13 +11,13 @@ import java.util.SortedSet;
  */
 public interface ReadOnlyAnimatorModel {
   /**
-   * Gets the state of each shape at a given time, excluding the ones that have not been drawn yet.
+   * Gets the state of each shape at a given tick, excluding the ones that have not been drawn yet.
    *
-   * @param time time in seconds of the desired scene
+   * @param tick tick of the desired scene
    * @return A map of the names and shapes representing the contents of a scene
-   * @throws IllegalArgumentException if the time is negative
+   * @throws IllegalArgumentException if the tick is negative
    */
-  Map<String, Shape> shapesAt(double time) throws IllegalArgumentException;
+  Map<String, Shape> shapesAt(int tick) throws IllegalArgumentException;
 
   /**
    * Returns a sorted map of all the keyframes of every shape in order, representing the overall

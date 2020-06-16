@@ -1,8 +1,8 @@
-package com.company.view.SVG.SVGShapes;
+package com.company.view.svg.svgshapes;
 
 import com.company.model.Frame;
 import com.company.model.shape.Shape;
-import com.company.view.SVG.SVGTag;
+import com.company.view.svg.SVGTag;
 
 /**
  * An SVGShape is a class that supports operations for converting shapes and their behaviors to work

@@ -4,16 +4,18 @@ import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Posn;
 import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
-import com.company.view.swing.SwingShape.Ellipse2D;
-import com.company.view.swing.SwingShape.Rectangle2D;
-import com.company.view.swing.SwingShape.SwingShape;
+import com.company.view.swing.swingshape.Ellipse2D;
+import com.company.view.swing.swingshape.Rectangle2D;
+import com.company.view.swing.swingshape.SwingShape;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  * Represents a class that extends JPanel to draw the shapes from a given animation model to the
@@ -24,7 +26,7 @@ public class AnimationPanel extends JPanel {
   // The animation model, used to get the shapes to draw.
   private final ReadOnlyAnimatorModel model;
   // The time t to render, in seconds.
-  private double t;
+  private int t;
   // A map from the shape types to the SwingShapes they represent
   private final Map<ShapeType, SwingShape> swingShapeMap;
 
@@ -88,7 +90,7 @@ public class AnimationPanel extends JPanel {
    * @param delta the time delta to add in seconds
    * @throws IllegalArgumentException if the delta is negative
    */
-  public void addTimeDelta(double delta) {
+  public void addTimeDelta(int delta) {
     if (delta < 0) {
       throw new IllegalArgumentException("Time delta cannot be negative");
     } else {
@@ -96,7 +98,16 @@ public class AnimationPanel extends JPanel {
     }
   }
 
-  public void setTime(double t) {
+  /**
+   * Sets the tick for the animation to start playing from to the given tick.
+   *
+   * @param t the tick that the animation should start playing from
+   * @throws IllegalArgumentException if the given tick is less than zero
+   */
+  public void setTick(int t) {
+    if (t < 0) {
+      throw new IllegalArgumentException("Tick was set to less than zero");
+    }
     this.t = t;
   }
 
@@ -112,9 +123,11 @@ public class AnimationPanel extends JPanel {
     AffineTransform oldAT = g2.getTransform();
     g2.translate(-model.getCanvasX(), -model.getCanvasY());
     Map<String, Shape> shapes = model.shapesAt(t);
+
     for (Shape shape : shapes.values()) {
       this.drawModelShape(g2, shape);
     }
+
     // restore old affine transform
     g2.setTransform(oldAT);
   }

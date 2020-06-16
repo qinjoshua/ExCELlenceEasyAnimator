@@ -1,13 +1,22 @@
-package com.company.view.SVG;
+package com.company.view.svg;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a tag in an SVG file.
+ */
 public class SVGTag {
   String name;
   List<SVGTagAttribute> attributes;
   List<SVGTag> innerSVGTags;
 
+  /**
+   * Creates a new SVG tag with the given name and list of attributes.
+   *
+   * @param name name of the tag
+   * @param attributes the attributes that go into the tag
+   */
   public SVGTag(String name, SVGTagAttribute... attributes) {
     this.name = name;
     this.attributes = new ArrayList<SVGTagAttribute>();

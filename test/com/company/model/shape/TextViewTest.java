@@ -12,6 +12,10 @@ import java.awt.Color;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * Test for text view.
+ *
+ */
 public class TextViewTest {
   AnimatorModel testModel = new AnimatorModelImpl();
   AnimatorModel testRectangleMove = new AnimatorModelImpl();
@@ -50,7 +54,7 @@ public class TextViewTest {
       new TextAnimatorView(testModel).outputText(output);
       assertEquals(result, output.toString());
     }
-    catch(Exception e) {
+    catch (Exception e) {
       fail();
     }
   }

@@ -1,10 +1,10 @@
-package com.company.view.SVG.SVGShapes;
+package com.company.view.svg.svgshapes;
 
 import com.company.model.Frame;
 import com.company.model.shape.Shape;
-import com.company.view.SVG.SVGSingleTag;
-import com.company.view.SVG.SVGTag;
-import com.company.view.SVG.SVGTagAttribute;
+import com.company.view.svg.SVGSingleTag;
+import com.company.view.svg.SVGTag;
+import com.company.view.svg.SVGTagAttribute;
 
 import java.awt.Color;
 
@@ -16,7 +16,7 @@ public abstract class ASVGShape implements SVGShape {
   @Override
   public SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY) {
 
-    return new SVGTag(shape.getShapeType().SVGname(),
+    return new SVGTag(shape.getShapeType().svgName(),
         new SVGTagAttribute("id", shapeName),
         new SVGTagAttribute("fill", colorToRGBString(shape.getColor())),
         new SVGTagAttribute("visibility", "visible"));
@@ -54,7 +54,7 @@ public abstract class ASVGShape implements SVGShape {
   }
 
   private static double convertUsingFPS(double time, int fps) {
-    return time/fps*1000;
+    return time / fps * 1000;
   }
 
   /**

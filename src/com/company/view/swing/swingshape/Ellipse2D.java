@@ -1,4 +1,4 @@
-package com.company.view.swing.SwingShape;
+package com.company.view.swing.swingshape;
 
 import java.awt.Shape;
 

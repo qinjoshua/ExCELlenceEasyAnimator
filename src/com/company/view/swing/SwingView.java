@@ -1,13 +1,16 @@
 package com.company.view.swing;
 
 import com.company.model.ReadOnlyAnimatorModel;
+import com.company.view.VisualView;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.Timer;
 
-/**
+/** // TODO JAVA DOCS!!!
  * Implementation of {@link VisualView} that renders the animation to the Java Swing GUI framework.
  */
 public class SwingView implements VisualView {
@@ -50,10 +53,12 @@ public class SwingView implements VisualView {
     frame.getContentPane().add(panel, BorderLayout.CENTER);
     frame.pack();
     final int delay = SwingView.getDelay(this.fps);
+
     ActionListener painter = evt -> {
       panel.repaint();
       panel.addTimeDelta(1);
     };
+
     frame.setVisible(true);
     new Timer(delay, painter).start();
   }

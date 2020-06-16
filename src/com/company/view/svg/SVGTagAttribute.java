@@ -1,4 +1,4 @@
-package com.company.view.SVG;
+package com.company.view.svg;
 
 /**
  * Represents an attribute of a tag in an SVG file.

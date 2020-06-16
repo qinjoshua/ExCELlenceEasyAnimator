@@ -1,11 +1,11 @@
-package com.company.view.SVG;
+package com.company.view.svg;
 
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
-import com.company.view.SVG.SVGShapes.SVGEllipse;
-import com.company.view.SVG.SVGShapes.SVGRectangle;
-import com.company.view.SVG.SVGShapes.SVGShape;
+import com.company.view.svg.svgshapes.SVGEllipse;
+import com.company.view.svg.svgshapes.SVGRectangle;
+import com.company.view.svg.svgshapes.SVGShape;
 
 import java.io.IOException;
 import java.util.HashMap;

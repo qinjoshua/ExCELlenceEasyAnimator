@@ -1,7 +1,5 @@
 package com.company.controller;
 
-import com.company.model.AnimatorModel;
-
 /**
  * Interface representing a controller for an animation.
  */

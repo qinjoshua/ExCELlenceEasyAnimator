@@ -1,4 +1,4 @@
-package com.company.view.swing;
+package com.company.view;
 
 /**
  * A view that renders the animation to the screen.
