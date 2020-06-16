@@ -56,7 +56,7 @@ public class SwingView implements VisualView {
 
     ActionListener painter = evt -> {
       panel.repaint();
-      panel.addTimeDelta(1);
+      panel.nextTick();
     };
 
     frame.setVisible(true);

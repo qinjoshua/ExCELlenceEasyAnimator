@@ -2,6 +2,8 @@ package com.company.view.player;
 
 import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.controller.viewactions.playeractions.Restart;
+import com.company.controller.viewactions.playeractions.ToggleLoop;
+import com.company.controller.viewactions.playeractions.TogglePlay;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.view.VisualView;
 import com.company.view.swing.AnimationPanel;
@@ -12,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -27,6 +30,8 @@ import javax.swing.Timer;
 public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   private final AnimationPanel playArea;
   private int fps;
+  private boolean isLooping;
+  private boolean isPlaying;
   private Consumer<PlayerAction> callback;
   KeyComponent keyComponent;
 
@@ -38,6 +43,14 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
    */
   public PlayerViewImpl(ReadOnlyAnimatorModel model, int fps) {
     super("Excellence Player");
+
+    if (fps < 0) {
+      throw new IllegalArgumentException("Speed cannot be less than zero");
+    }
+    this.fps = fps;
+    this.isLooping = false;
+    this.isPlaying = true;
+
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     playArea = new AnimationPanel(model);
@@ -45,24 +58,42 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.getContentPane().add(playArea, BorderLayout.CENTER);
     this.pack();
 
-    if (fps > 0) {
-      this.fps = fps;
-    } else {
-      throw new IllegalArgumentException("Speed cannot be less than zero");
-    }
-
     this.callback = null;
 
-    this.keyComponent = new KeyComponent();
-    this.keyComponent.setHotkey(KeyStroke.getKeyStroke('r'), "restart");
-    this.keyComponent.getActionMap().put("restart", new AbstractAction() {
+    final Action RESTART = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
           callback.accept(new Restart());
         }
       }
-    });
+    };
+
+    final Action TOGGLE_PLAY = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null) {
+          callback.accept(new TogglePlay());
+        }
+      }
+    };
+
+    final Action TOGGLE_LOOP = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null) {
+          callback.accept(new ToggleLoop());
+        }
+      }
+    };
+
+
+    this.keyComponent = new KeyComponent();
+
+    this.keyComponent.setCommand(KeyStroke.getKeyStroke('r'), "restart", RESTART);
+    this.keyComponent.setCommand(KeyStroke.getKeyStroke('p'), "togglePlay", TOGGLE_PLAY);
+    this.keyComponent.setCommand(KeyStroke.getKeyStroke('l'), "toggleLoop", TOGGLE_LOOP);
+
     this.add(keyComponent);
   }
 
@@ -78,7 +109,14 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
 
     ActionListener painter = evt -> {
       this.playArea.repaint();
-      this.playArea.addTimeDelta(1); //TODO nicholas refactor this
+      if (isLooping && playArea.onLastFrame()) {
+        // TODO is this OK? do we need a controller? some other kind of ActionListener?
+        playArea.setTick(0);
+      }
+
+      if (isPlaying) {
+        this.playArea.nextTick();
+      }
     };
 
     this.setVisible(true);
@@ -87,7 +125,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
 
   @Override
   public void togglePlay() {
-
+    isPlaying = !isPlaying;
   }
 
   @Override
@@ -97,17 +135,19 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
 
   @Override
   public void setSpeed(int speed) {
-
+    if (speed < 0) {
+      throw new IllegalArgumentException("Speed cannot be negative");
+    }
   }
 
   @Override
   public int getSpeed() {
-    return 0;
+    return this.fps;
   }
 
   @Override
-  public void toggleLooping() {
-
+  public void toggleLoop() {
+    isLooping = !isLooping;
   }
 
   @Override
@@ -116,8 +156,16 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   }
 
   private class KeyComponent extends JPanel {
-    public void setHotkey(KeyStroke key, String name) {
+    /**
+     * Sets the given keystroke to the given action with the given name.
+     *
+     * @param key the key used to start the action
+     * @param name the name used for the action
+     * @param action the action itself
+     */
+    public void setCommand(KeyStroke key, String name, Action action) {
       this.getInputMap().put(key, name);
+      this.getActionMap().put(name, action);
     }
   }
 }

@@ -39,7 +39,7 @@ public final class Excellence {
    * @param args list of input arguments for the animator
    */
   public static void main(String[] args) throws IOException {
-    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
+    BufferedReader input = Files.newBufferedReader(Paths.get("smalldemo.txt"));
     AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
     AnimatorModel model = AnimationReader.parseFile(input, builder);
 
@@ -55,7 +55,7 @@ public final class Excellence {
    * @return the array of formatted arguments
    */
   private static String[] formatArgs(String[] args) {
-    List<String> arguments = new ArrayList<String>();
+    List<String> arguments = new ArrayList<>();
     boolean flag = true;
     for (String arg : args) {
       if (flag) {

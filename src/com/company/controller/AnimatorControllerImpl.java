@@ -10,7 +10,7 @@ import com.company.controller.console.ArgumentsProcessor;
 public class AnimatorControllerImpl implements AnimatorController {
   private final String[] arguments;
 
-  private ArgumentsProcessor processor;
+  private final ArgumentsProcessor processor;
 
   /**
    * Creates this controller with the given set of arguments.

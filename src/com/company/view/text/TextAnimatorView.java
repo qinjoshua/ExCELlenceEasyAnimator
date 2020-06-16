@@ -31,7 +31,7 @@ public class TextAnimatorView implements TextView {
 
     renderString.append(String.format("canvas %d %d %d %d\n",
         this.model.getCanvasWidth(), this.model.getCanvasHeight(), this.model.getCanvasX(),
-            this.model.getCanvasY()));
+        this.model.getCanvasY()));
     for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
       renderString.append("shape ").append(timeline.getKey()).append(" ").
           append(timeline.getValue().first().getShape().getShapeType()).append("\n");

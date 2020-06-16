@@ -38,7 +38,7 @@ public interface PlayerView extends VisualView {
   /**
    * Toggles whether or not the animation loops.
    */
-  void toggleLooping();
+  void toggleLoop();
 
   /**
    * Sets where player actions are handled.

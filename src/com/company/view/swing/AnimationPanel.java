@@ -1,5 +1,6 @@
 package com.company.view.swing;
 
+import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Posn;
 import com.company.model.shape.Shape;
@@ -14,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
 
 import javax.swing.JPanel;
 
@@ -84,18 +86,10 @@ public class AnimationPanel extends JPanel {
   }
 
   /**
-   * Adds the given delta, in seconds, to the time that determines what part of the animation is
-   * drawn next time paint() is called.
-   *
-   * @param delta the time delta to add in seconds
-   * @throws IllegalArgumentException if the delta is negative
+   * Increments the tick rendered to the screen by 1.
    */
-  public void addTimeDelta(int delta) {
-    if (delta < 0) {
-      throw new IllegalArgumentException("Time delta cannot be negative");
-    } else {
-      this.t += delta;
-    }
+  public void nextTick() {
+    this.t += 1;
   }
 
   /**
@@ -109,6 +103,23 @@ public class AnimationPanel extends JPanel {
       throw new IllegalArgumentException("Tick was set to less than zero");
     }
     this.t = t;
+  }
+
+  /**
+   * Returns whether the current animation tick is past the last keyframe in the animation: i.e.,
+   * the animation is over.
+   *
+   * @return whether the animation is on its last frame
+   */
+  public boolean onLastFrame() {
+    for (SortedSet<Frame> frames : model.getKeyframes().values()) {
+      for (Frame frame : frames) {
+        if (frame.getTime() > t) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   /**
