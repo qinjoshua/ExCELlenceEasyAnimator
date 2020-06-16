@@ -1,6 +1,6 @@
 package com.company.controller.viewactions.playeractions;
 
-import com.company.view.player.PlayerView;
+import com.company.view.swing.player.PlayerView;
 
 import java.util.function.Consumer;
 

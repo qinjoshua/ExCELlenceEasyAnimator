@@ -1,4 +1,4 @@
-package com.company.view.player;
+package com.company.view.swing.player;
 
 import com.company.controller.viewactions.playeractions.DecreaseSpeed;
 import com.company.controller.viewactions.playeractions.IncreaseSpeed;
@@ -11,6 +11,7 @@ import com.company.view.VisualView;
 import com.company.view.swing.AnimationPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -63,13 +64,15 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLayout(new BorderLayout());
 
+    // Sets the play area to an instance of the animation panel
     playArea = new AnimationPanel(model);
+    playArea.setBackground(Color.WHITE);
     playArea.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
     this.getContentPane().add(playArea, BorderLayout.NORTH);
 
+    // Creates the button controls on the bottom of the screen
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new FlowLayout());
-
 
     JButton restartButton = new JButton("Restart");
     JToggleButton playButton = new JToggleButton("❚❚");
@@ -152,7 +155,6 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     loopButton.addActionListener(TOGGLE_LOOP);
     slowDownButton.addActionListener(SLOW_DOWN);
     speedUpButton.addActionListener(SPEED_UP);
-
 
     this.add(keyComponent);
     this.add(buttonPanel, BorderLayout.SOUTH);

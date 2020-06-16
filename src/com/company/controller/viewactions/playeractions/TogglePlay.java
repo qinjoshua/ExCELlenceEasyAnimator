@@ -1,6 +1,6 @@
 package com.company.controller.viewactions.playeractions;
 
-import com.company.view.player.PlayerView;
+import com.company.view.swing.player.PlayerView;
 
 /**
  * Action that plays if the animation is currently paused or pauses if the animation is currently

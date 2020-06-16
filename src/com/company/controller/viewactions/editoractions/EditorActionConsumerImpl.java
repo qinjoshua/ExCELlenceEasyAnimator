@@ -1,6 +1,6 @@
 package com.company.controller.viewactions.editoractions;
 
-import com.company.view.editor.EditorView;
+import com.company.view.swing.editor.EditorView;
 
 import java.util.function.Consumer;
 

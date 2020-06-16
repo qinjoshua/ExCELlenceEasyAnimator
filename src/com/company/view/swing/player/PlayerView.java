@@ -1,4 +1,4 @@
-package com.company.view.player;
+package com.company.view.swing.player;
 
 import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.view.VisualView;
