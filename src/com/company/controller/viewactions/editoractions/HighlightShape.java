@@ -16,6 +16,7 @@ public class HighlightShape implements EditorAction {
 
   @Override
   public void actOn(EditorView view) {
-
+    view.highlightShape(this.toBeHighlighted);
+    view.updateBoundingBox();
   }
 }

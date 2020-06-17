@@ -1,9 +1,9 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.viewactions.editoractions.EditorAction;
-import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.view.VisualView;
 
+import java.awt.Shape;
 import java.util.function.Consumer;
 
 /**
@@ -19,7 +19,7 @@ public interface EditorView extends VisualView {
   /**
    * Shows that a given shape is selected, showing the bounding box around the shape.
    */
-  void highlightShape();
+  void highlightShape(Shape toBeHighlighted);
 
   /**
    * Sets where editor actions are handled.
@@ -27,4 +27,16 @@ public interface EditorView extends VisualView {
    * @param callback where editor actions are handled
    */
   void setCallback(Consumer<EditorAction> callback);
+
+  /**
+   * Updates the bounding box to where it's supposed to be.
+   */
+  void updateBoundingBox();
+
+  /**
+   * Returns the currently highlighted shape on the canvas of this editor.
+   *
+   * @return the currently highlighted shape
+   */
+  Shape getHighlightedShape();
 }

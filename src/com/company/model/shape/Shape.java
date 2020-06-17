@@ -42,6 +42,16 @@ public interface Shape {
    */
   ShapeType getShapeType();
 
+  void setPosn(Posn posn);
+
+  void setWidth(double width);
+
+  void setHeight(double height);
+
+  void setColor(Color color);
+
+  void setShapeType(ShapeType shapeType);
+
   /**
    * Gets the interpolated shape between this shape and the given shape, at the given progress.
    *

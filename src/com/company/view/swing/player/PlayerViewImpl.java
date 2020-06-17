@@ -156,6 +156,8 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     slowDownButton.addActionListener(SLOW_DOWN);
     speedUpButton.addActionListener(SPEED_UP);
 
+    //buttonPanel
+
     this.add(keyComponent);
     this.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -189,7 +191,10 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   @Override
   public void togglePlay() {
     isPlaying = !isPlaying;
-    AbstractButton playButton = buttons.get("play");
+    JToggleButton playButton = (JToggleButton) buttons.get("play");
+
+    playButton.setSelected(!isPlaying);
+
     if (playButton.getText().equals("❚❚")) {
       playButton.setText("▶");
     } else {
@@ -220,6 +225,8 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   @Override
   public void toggleLoop() {
     isLooping = !isLooping;
+    JToggleButton loopButton = (JToggleButton) buttons.get("loop");
+    loopButton.setSelected(isLooping);
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.controller.AnimatorController;
 import com.company.controller.AnimatorControllerImpl;
+import com.company.controller.animatoractions.AnimatorActionConsumerImpl;
 import com.company.controller.viewactions.editoractions.EditorActionConsumerImpl;
 import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
 import com.company.model.AnimatorModel;
@@ -40,7 +41,7 @@ public final class Excellence {
    *
    * @param args list of input arguments for the animator
    */
-  public static void main(String[] args) throws IOException {
+  public static void oldMain(String[] args) throws IOException {
     BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
     AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
     AnimatorModel model = AnimationReader.parseFile(input, builder);
@@ -50,20 +51,20 @@ public final class Excellence {
     view.renderVisual();
   }
 
-//  /**
-//   * Main entry point for the application.
-//   *
-//   * @param args list of input arguments for the animator
-//   */
-//  public static void main(String[] args) throws IOException {
-//    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
-//    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
-//    AnimatorModel model = AnimationReader.parseFile(input, builder);
-//
-//    EditorView view = new EditorViewImpl(model, 20);
-//    view.setCallback(new EditorActionConsumerImpl(view));
-//    view.renderVisual();
-//  }
+  /**
+   * Main entry point for the application.
+   *
+   * @param args list of input arguments for the animator
+   */
+  public static void main(String[] args) throws IOException {
+    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
+    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
+    AnimatorModel model = AnimationReader.parseFile(input, builder);
+
+    EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
+    view.setCallback(new EditorActionConsumerImpl(view));
+    view.renderVisual();
+  }
 
   /**
    * Private helper method for formatting arguments into an acceptable format.

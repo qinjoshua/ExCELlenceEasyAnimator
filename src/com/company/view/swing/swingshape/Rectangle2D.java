@@ -6,6 +6,18 @@ import java.awt.Shape;
  * Represents a 2D Rectangle using the Swing {@link java.awt.geom.Rectangle2D.Double} class.
  */
 public class Rectangle2D implements SwingShape {
+  private final int x;
+  private final int y;
+
+  /**
+   * @param x
+   * @param y
+   */
+  public Rectangle2D(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
   /**
    * Creates a new rectangle with the given values in Cartesian coordinates.
    *
@@ -19,6 +31,7 @@ public class Rectangle2D implements SwingShape {
   public Shape createShape(double x, double y, double width, double height) {
     // subtract the y given by the height to account for the fact that it's given in Cartesian
     // coordinates
-    return new java.awt.geom.Rectangle2D.Double(x, y, width, height);
+    return new java.awt.geom.Rectangle2D.Double(
+            x - this.x, y - this.y, width, height);
   }
 }

@@ -1,24 +1,14 @@
 package com.company.view.swing.editor;
 
+import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.viewactions.editoractions.EditorAction;
-import com.company.controller.viewactions.editoractions.HighlightShape;
-import com.company.controller.viewactions.playeractions.PlayerAction;
-import com.company.controller.viewactions.playeractions.Restart;
 import com.company.model.ReadOnlyAnimatorModel;
-import com.company.view.swing.AShapesPanel;
-import com.company.view.swing.player.PlayerViewImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -34,15 +24,20 @@ public class EditorViewImpl extends JFrame implements EditorView {
   // TODO: Seems to have a lot of commonalities with player view implementation. Abstract class?
 
   private Consumer<EditorAction> callback;
+  private final Consumer<AnimatorAction> modelCallback;
   private final CanvasPanel canvas;
   private final KeyComponent keyComponent;
 
   private Point mouseClickedPoint;
 
-  public EditorViewImpl(ReadOnlyAnimatorModel model, int fps) {
+  public EditorViewImpl(
+          ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
     super("Excellence Editor");
 
-    this.canvas = new CanvasPanel(model, this);
+    this.modelCallback = modelCallback;
+
+    this.canvas = new CanvasPanel(model, this.modelCallback);
+    this.canvas.setTick(25);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
@@ -67,13 +62,24 @@ public class EditorViewImpl extends JFrame implements EditorView {
   }
 
   @Override
-  public void highlightShape() {
-
+  public void highlightShape(java.awt.Shape toBeHighlighted) {
+    this.canvas.highlightShape(toBeHighlighted);
   }
 
   @Override
   public void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
+    this.canvas.setCallback(this.callback);
+  }
+
+  @Override
+  public void updateBoundingBox() {
+    this.canvas.updateBoundingBox();
+  }
+
+  @Override
+  public java.awt.Shape getHighlightedShape() {
+    return this.canvas.getHighlightedShape();
   }
 
   private static class KeyComponent extends JPanel {

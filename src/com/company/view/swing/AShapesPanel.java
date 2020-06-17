@@ -11,7 +11,6 @@ import com.company.view.swing.swingshape.SwingShape;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,8 +43,10 @@ public abstract class AShapesPanel extends JPanel {
     this.model = model;
     this.t = 0;
     this.swingShapeMap = new LinkedHashMap<>();
-    this.swingShapeMap.put(ShapeType.Rectangle, new Rectangle2D());
-    this.swingShapeMap.put(ShapeType.Ellipse, new Ellipse2D());
+    this.swingShapeMap.put(
+            ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));
+    this.swingShapeMap.put(
+            ShapeType.Ellipse, new Ellipse2D(model.getCanvasX(), model.getCanvasY()));
   }
 
   /**
@@ -61,7 +62,7 @@ public abstract class AShapesPanel extends JPanel {
     g.setColor(shape.getColor());
     java.awt.Shape newShape = this.toSwingShape(shape);
 
-    //this.shapes.put(shapeName, new ColoredShape(shape.getColor(), newShape));
+    this.shapes.put(shapeName, new ColoredShape(shape.getColor(), newShape));
     g.fill(newShape);
     // restore previous fill color
     g.setColor(oldColor);
@@ -96,17 +97,12 @@ public abstract class AShapesPanel extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
-    AffineTransform oldAT = g2.getTransform();
-    g2.translate(-model.getCanvasX(), -model.getCanvasY());
     Map<String, Shape> shapes = model.shapesAt(t);
 
     this.shapes = new LinkedHashMap<>();
     for (Map.Entry<String, Shape> shape : shapes.entrySet()) {
       this.drawModelShape(g2, shape.getValue(), shape.getKey());
     }
-
-    // restore old affine transform
-    g2.setTransform(oldAT);
   }
 
   /**
@@ -121,5 +117,18 @@ public abstract class AShapesPanel extends JPanel {
       this.color = color;
       this.shape = shape;
     }
+  }
+
+  /**
+   * Sets the tick for the animation to start playing from to the given tick.
+   *
+   * @param t the tick that the animation should start playing from
+   * @throws IllegalArgumentException if the given tick is less than zero
+   */
+  public void setTick(int t) {
+    if (t < 0) {
+      throw new IllegalArgumentException("Tick was set to less than zero");
+    }
+    this.t = t;
   }
 }

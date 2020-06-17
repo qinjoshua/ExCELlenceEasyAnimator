@@ -2,6 +2,7 @@ package com.company.view.swing;
 
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
+
 import java.util.SortedSet;
 
 /**
@@ -26,19 +27,6 @@ public class AnimationPanel extends AShapesPanel {
    */
   public void nextTick() {
     this.t += 1;
-  }
-
-  /**
-   * Sets the tick for the animation to start playing from to the given tick.
-   *
-   * @param t the tick that the animation should start playing from
-   * @throws IllegalArgumentException if the given tick is less than zero
-   */
-  public void setTick(int t) {
-    if (t < 0) {
-      throw new IllegalArgumentException("Tick was set to less than zero");
-    }
-    this.t = t;
   }
 
   /**

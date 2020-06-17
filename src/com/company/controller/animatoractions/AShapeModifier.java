@@ -24,7 +24,18 @@ public abstract class AShapeModifier implements AnimatorAction {
   }
 
   @Override
-  public abstract void actOn(AnimatorModel model) throws IllegalStateException;
+  public void actOn(AnimatorModel model) throws IllegalStateException {
+//    if(!this.checkValidKeyframe(model)) {
+//      throw new IllegalStateException("Attempted to modify invalid keyframe.");
+//    }
+    try {
+      this.actOnUnchecked(model);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalStateException("Editor action failed: " + e.getMessage());
+    }
+  }
+
+  protected abstract void actOnUnchecked(AnimatorModel model) throws IllegalArgumentException;
 
   /**
    * Checks to see if this action's shape name and tick contain a valid keyframe.

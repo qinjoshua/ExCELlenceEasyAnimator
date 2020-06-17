@@ -7,11 +7,11 @@ import java.util.Objects;
  * Abstract class that represents a shape, tracking position, width, height, and color.
  */
 public abstract class AShape implements Shape {
-  private final Posn posn;
-  private final double width;
-  private final double height;
-  private final Color color;
-  private final ShapeType shapeType;
+  private Posn posn;
+  private double width;
+  private double height;
+  private Color color;
+  private ShapeType shapeType;
 
   /**
    * Constructor that initializes all the fields for this shape.
@@ -65,6 +65,31 @@ public abstract class AShape implements Shape {
   @Override
   public ShapeType getShapeType() {
     return this.shapeType;
+  }
+
+  @Override
+  public void setPosn(Posn posn) {
+    this.posn = posn;
+  }
+
+  @Override
+  public void setWidth(double width) {
+    this.width = width;
+  }
+
+  @Override
+  public void setHeight(double height) {
+    this.height = height;
+  }
+
+  @Override
+  public void setColor(Color color) {
+    this.color = color;
+  }
+
+  @Override
+  public void setShapeType(ShapeType shapeType) {
+    this.shapeType = shapeType;
   }
 
   @Override
