@@ -47,23 +47,25 @@ public abstract class AShapesPanel extends JPanel {
             ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));
     this.swingShapeMap.put(
             ShapeType.Ellipse, new Ellipse2D(model.getCanvasX(), model.getCanvasY()));
+
+    // Initializes the shapes
+    Map<String, Shape> modelShapes = model.shapesAt(t);
+
+    this.shapes = new LinkedHashMap<>();
+    for (Map.Entry<String, Shape> shape : modelShapes.entrySet()) {
+      java.awt.Shape newShape = this.toSwingShape(shape.getValue());
+      this.shapes.put(shape.getKey(), new ColoredShape(shape.getValue().getColor(), newShape));
+    }
   }
 
-  /**
-   * Draws the given shape (the model's version of Shape, not Swing's) using the given Graphics2D
-   * object. Updates the shapes map to include the shape being drawn.
-   *
-   * @param g     the graphics object to use to draw the shape
-   * @param shape the shape as represented by the animation, including the color
-   */
-  private void drawModelShape(Graphics2D g, Shape shape, String shapeName) {
+  private void drawModelShape(Graphics2D g) {
     Color oldColor = g.getColor();
 
-    g.setColor(shape.getColor());
-    java.awt.Shape newShape = this.toSwingShape(shape);
+    for (ColoredShape coloredShape : shapes.values()) {
+      g.setColor(coloredShape.color);
+      g.fill(coloredShape.shape);
+    }
 
-    this.shapes.put(shapeName, new ColoredShape(shape.getColor(), newShape));
-    g.fill(newShape);
     // restore previous fill color
     g.setColor(oldColor);
   }
@@ -99,10 +101,12 @@ public abstract class AShapesPanel extends JPanel {
     Graphics2D g2 = (Graphics2D) g;
     Map<String, Shape> shapes = model.shapesAt(t);
 
-    this.shapes = new LinkedHashMap<>();
     for (Map.Entry<String, Shape> shape : shapes.entrySet()) {
-      this.drawModelShape(g2, shape.getValue(), shape.getKey());
+      this.shapes.get(shape.getKey()).color = shape.getValue().getColor();
+      this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
     }
+
+    this.drawModelShape((Graphics2D)g);
   }
 
   /**

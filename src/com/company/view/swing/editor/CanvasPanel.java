@@ -7,18 +7,25 @@ import com.company.controller.animatoractions.ChangeX;
 import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
+import com.company.controller.viewactions.playeractions.ToggleLoop;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.view.swing.AShapesPanel;
 import com.company.view.swing.editor.boundingbox.Anchor;
 import com.company.view.swing.editor.boundingbox.BoundingBox;
 
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
 /**
  * Represents the canvas portion of the editor, the main area where the animation can be modified
@@ -47,11 +54,75 @@ public class CanvasPanel extends AShapesPanel {
     this.modelCallback = modelCallback;
     this.highlightedShape = null;
     this.highlightedShapeName = null;
-    this.addMouseListener(new ClickMouseAdapter());
+
     MouseAdapter resizer = new ResizeMouseAdapter();
     this.addMouseListener(resizer);
     this.addMouseMotionListener(resizer);
     boundingBox = null;
+
+    MouseAdapter mover = new MoveMouseAdapter();
+    this.addMouseListener(mover);
+    this.addMouseMotionListener(mover);
+
+    MouseAdapter cursor = new CursorMouseAdapter();
+    this.addMouseMotionListener(cursor);
+
+    this.addMouseListener(new ClickMouseAdapter());
+
+    final Action MOVE_UP = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null && boundingBox != null) {
+          modelCallback.accept(new ChangeY(highlightedShapeName, t, -1));
+          updateBoundingBox();
+        }
+      }
+    };
+    final Action MOVE_DOWN = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null && boundingBox != null) {
+          modelCallback.accept(new ChangeY(highlightedShapeName, t, 1));
+          updateBoundingBox();
+        }
+      }
+    };
+    final Action MOVE_LEFT = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null && boundingBox != null) {
+          modelCallback.accept(new ChangeX(highlightedShapeName, t, -1));
+          updateBoundingBox();
+        }
+      }
+    };
+    final Action MOVE_RIGHT = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (callback != null && boundingBox != null) {
+          modelCallback.accept(new ChangeX(highlightedShapeName, t, 1));
+          updateBoundingBox();
+        }
+      }
+    };
+
+    this.setCommand(KeyStroke.getKeyStroke("UP"), "moveUp", MOVE_UP);
+    this.setCommand(KeyStroke.getKeyStroke("DOWN"), "moveDown", MOVE_DOWN);
+    this.setCommand(KeyStroke.getKeyStroke("LEFT"), "moveLeft", MOVE_LEFT);
+    this.setCommand(KeyStroke.getKeyStroke("RIGHT"), "moveRight", MOVE_RIGHT);
+
+  }
+
+  /**
+   * Sets the given keystroke to the given action with the given name.
+   *
+   * @param key    the key used to start the action
+   * @param name   the name used for the action
+   * @param action the action itself
+   */
+  private void setCommand(KeyStroke key, String name, Action action) {
+    this.getInputMap().put(key, name);
+    this.getActionMap().put(name, action);
   }
 
   @Override
@@ -79,6 +150,12 @@ public class CanvasPanel extends AShapesPanel {
    *                                  currently on the canvas
    */
   void highlightShape(Shape toBeHighlighted) {
+    if (toBeHighlighted == null) {
+      this.highlightedShape = null;
+      this.boundingBox = null;
+      this.highlightedShapeName = null;
+      return;
+    }
     for (Map.Entry<String, ColoredShape> coloredShape : shapes.entrySet()) {
       // We use reference equality to determine that the shape is the same shape in memory as the
       // one on screen
@@ -95,8 +172,10 @@ public class CanvasPanel extends AShapesPanel {
    * Updates the bounding box to where it's supposed to be.
    */
   void updateBoundingBox() {
-    this.boundingBox = new BoundingBox(this.highlightedShape);
-    this.repaint();
+    if (highlightedShape != null) {
+      this.boundingBox = new BoundingBox(this.highlightedShape);
+      this.repaint();
+    }
   }
 
   /**
@@ -108,6 +187,9 @@ public class CanvasPanel extends AShapesPanel {
     this.callback = callback;
   }
 
+  /**
+   * Represents the mouse adapter that will allow users to highlight shapes.
+   */
   private class ClickMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -123,6 +205,9 @@ public class CanvasPanel extends AShapesPanel {
     }
   }
 
+  /**
+   * Represents a mouse adapter that will allow the user to resize shapes.
+   */
   private class ResizeMouseAdapter extends MouseAdapter {
     private Anchor anchor;
     private int lastX;
@@ -175,6 +260,66 @@ public class CanvasPanel extends AShapesPanel {
 
         repaint();
         this.anchor = null;
+      }
+    }
+  }
+
+  /**
+   * Represents a mouse adapter that will allow the user to move shapes across the canvas.
+   */
+  private class MoveMouseAdapter extends MouseAdapter {
+    private int lastX;
+    private int lastY;
+    private boolean editing;
+
+    private int oldX;
+    private int oldY;
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+      if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null) {
+        this.oldX = boundingBox.getX();
+        this.oldY = boundingBox.getY();
+
+        lastX = e.getX();
+        lastY = e.getY();
+        editing = true;
+      }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+      if (boundingBox != null && editing) {
+        boundingBox.translate(e.getX() - lastX, e.getY() - lastY);
+        lastX = e.getX();
+        lastY = e.getY();
+        repaint();
+      }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+      if (this.editing) {
+        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - this.oldX));
+        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - this.oldY));
+        this.editing = false;
+        repaint();
+      }
+    }
+  }
+
+  private class CursorMouseAdapter extends MouseAdapter {
+    @Override
+    public void mouseMoved(MouseEvent e) {
+      if (boundingBox != null) {
+        Anchor anchor = boundingBox.getAnchorAtPoint(e.getX(), e.getY());
+        if (anchor != null) {
+          setCursor(new Cursor(anchor.getType().getCursor()));
+        } else if (boundingBox.contains(e.getX(), e.getY())) {
+          setCursor(new Cursor(Cursor.MOVE_CURSOR));
+        } else {
+          setCursor(Cursor.getDefaultCursor());
+        }
       }
     }
   }

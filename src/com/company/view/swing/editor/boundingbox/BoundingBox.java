@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoundingBox implements Shape {
+/**
+ * Represents a box that bounds a bounds a shape
+ */
+public class BoundingBox {
   private final Shape highlightedShape;
   private final Rectangle boundingBox;
   private List<Anchor> anchorPoints;
@@ -24,56 +23,6 @@ public class BoundingBox implements Shape {
     for (AnchorType type : AnchorType.values()) {
       anchorPoints.add(new Anchor(type, this.boundingBox));
     }
-  }
-
-  @Override
-  public java.awt.Rectangle getBounds() {
-    return this.boundingBox.getBounds();
-  }
-
-  @Override
-  public Rectangle2D getBounds2D() {
-    return this.boundingBox.getBounds2D();
-  }
-
-  @Override
-  public boolean contains(double x, double y) {
-    return this.boundingBox.contains(x, y);
-  }
-
-  @Override
-  public boolean contains(Point2D p) {
-    return this.boundingBox.contains(p);
-  }
-
-  @Override
-  public boolean intersects(double x, double y, double w, double h) {
-    return this.boundingBox.intersects(x, y, w, h);
-  }
-
-  @Override
-  public boolean intersects(Rectangle2D r) {
-    return this.boundingBox.intersects(r);
-  }
-
-  @Override
-  public boolean contains(double x, double y, double w, double h) {
-    return this.boundingBox.contains(x, y, w, h);
-  }
-
-  @Override
-  public boolean contains(Rectangle2D r) {
-    return this.boundingBox.contains(r);
-  }
-
-  @Override
-  public PathIterator getPathIterator(AffineTransform at) {
-    return this.boundingBox.getPathIterator(at);
-  }
-
-  @Override
-  public PathIterator getPathIterator(AffineTransform at, double flatness) {
-    return this.boundingBox.getPathIterator(at, flatness);
   }
 
   /**
@@ -90,7 +39,7 @@ public class BoundingBox implements Shape {
   public void renderTo(Graphics2D g) {
     Color originalColor = g.getColor();
 
-    g.setColor(Color.CYAN);
+    g.setColor(Color.LIGHT_GRAY);
     g.draw(this.boundingBox);
 
     for (Anchor anchor : anchorPoints) {
@@ -108,17 +57,24 @@ public class BoundingBox implements Shape {
   }
 
   public void growFromAnchor(AnchorType type, int dx, int dy) {
-    int widthChange = dx * type.x;
-    int heightChange = dy * type.y;
+    int widthChange = dx * type.getX();
+    int heightChange = dy * type.getY();
 
     this.boundingBox.width += widthChange;
     this.boundingBox.height += heightChange;
 
-    if (type.x < 0 || type.y < 0) {
-      this.translate(dx * Math.abs(type.x), dy * Math.abs(type.y));
+    if (type.getX() < 0) {
+      this.translate(dx * Math.abs(type.getX()), 0);
+    }
+    if(type.getY() < 0) {
+      this.translate(0,dy * Math.abs(type.getY()));
     }
 
     this.recomputeAnchors();
+  }
+
+  public boolean contains(int x, int y) {
+    return this.boundingBox.contains(x, y);
   }
 
   /**
