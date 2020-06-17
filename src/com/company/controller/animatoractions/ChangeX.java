@@ -5,7 +5,7 @@ import com.company.model.shape.PosnImpl;
 import com.company.model.shape.Shape;
 
 public class ChangeX extends AShapeModifier {
-  private final int x;
+  private final double x;
 
   /**
    * Constructor that sets the shape name and tick for any action that modifies shapes.
@@ -13,7 +13,7 @@ public class ChangeX extends AShapeModifier {
    * @param shapeName the name of the shape to be modified
    * @param tick      the tick at which the shape to be modified should be modified
    */
-  public ChangeX(String shapeName, int tick, int x) {
+  public ChangeX(String shapeName, int tick, double x) {
     super(shapeName, tick);
     this.x = x;
   }

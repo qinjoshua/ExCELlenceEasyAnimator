@@ -26,6 +26,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private Consumer<EditorAction> callback;
   private final Consumer<AnimatorAction> modelCallback;
   private final CanvasPanel canvas;
+  private final PropertyPanel properties;
   private final KeyComponent keyComponent;
 
   private Point mouseClickedPoint;
@@ -37,11 +38,15 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
-    this.canvas.setTick(25);
+    this.canvas.setTick(1);
+
+    this.properties = new PropertyPanel("disk1", 1, modelCallback, model, null);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
+    properties.setPreferredSize(new Dimension(300, model.getCanvasHeight()));
     this.getContentPane().add(canvas, BorderLayout.CENTER);
+    this.getContentPane().add(properties, BorderLayout.EAST);
 
     this.callback = null;
 
@@ -69,7 +74,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
   @Override
   public void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
-    this.canvas.setCallback(this.callback);
+    this.canvas.setCallback(callback);
+    this.properties.setViewCallback(callback);
   }
 
   @Override
