@@ -114,8 +114,11 @@ public class BoundingBox implements Shape {
     this.boundingBox.width += widthChange;
     this.boundingBox.height += heightChange;
 
-    if (type.x < 0 || type.y < 0) {
-      this.translate(dx * Math.abs(type.x), dy * Math.abs(type.y));
+    if (type.x < 0) {
+      this.translate(dx * Math.abs(type.x), 0);
+    }
+    if (type.y < 0) {
+      this.translate(0, dy * Math.abs(type.y));
     }
 
     this.recomputeAnchors();
