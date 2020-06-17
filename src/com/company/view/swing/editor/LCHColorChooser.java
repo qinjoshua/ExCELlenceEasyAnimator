@@ -28,7 +28,7 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
   public LCHColorChooser(Color oldColor) {
     LCHColor lch = new LCHColor(oldColor);
-    lSpinner = new JSpinner(new SpinnerNumberModel(lch.l, 0, 100, 1));
+    lSpinner = new JSpinner(new SpinnerNumberModel((int)lch.l, 0, 100, 1));
     cSpinner = new JSpinner(new SpinnerNumberModel(lch.c, 0, 100, 1));
     hSpinner = new JSpinner(new SpinnerNumberModel(lch.h, -Math.PI, Math.PI, 0.01));
 
@@ -42,7 +42,7 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   public void updateChooser() {
     iterativelyUpdate = false;
     LCHColor newLCH = new LCHColor(getColorFromModel());
-    lSpinner.setValue(newLCH.l);
+    lSpinner.setValue((int)newLCH.l);
     cSpinner.setValue(newLCH.c);
     hSpinner.setValue(newLCH.h);
     iterativelyUpdate = true;
@@ -73,8 +73,8 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   @Override
   public void stateChanged(ChangeEvent e) {
     if (iterativelyUpdate) {
-      LCHColor newLCH = new LCHColor(
-          (double) lSpinner.getValue(), (double) cSpinner.getValue(), (double) hSpinner.getValue());
+      LCHColor newLCH = new LCHColor((int)lSpinner.getValue(), (double) cSpinner.getValue(),
+          (double) hSpinner.getValue());
       getColorSelectionModel().setSelectedColor(newLCH.toRGB());
     }
   }
@@ -97,7 +97,7 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
           int yCart = im.getHeight() / 2 - y;
           double c = Math.hypot(xCart, yCart);
           double h = Math.atan2(yCart, xCart);
-          LCHColor newColor = new LCHColor(lch.l, c, h);
+          LCHColor newColor = new LCHColor((int)lch.l, c, h);
           model.setSelectedColor(newColor.toRGB());
         }
       });
@@ -139,7 +139,7 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   /**
    * A color in the CIE LCH color space, a cylindrical transformation of CIELAB.
    */
-  static class LCHColor {
+  public static class LCHColor {
     public double l;
     public double c;
     public double h;
@@ -163,12 +163,17 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
     public Color toRGB() {
       return new XYZColor(this).toRGB();
     }
+
+    @Override
+    public String toString() {
+      return String.format("LCH(l = %.02f, c = %.02f, h = %.02f)", l, c, h);
+    }
   }
 
   /**
    * A color in the CIE XYZ color space, the master space for CIE.
    */
-  static class XYZColor {
+  public static class XYZColor {
     public double x;
     public double y;
     public double z;
@@ -186,9 +191,14 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
      * @param z the z value
      */
     public XYZColor(double x, double y, double z) {
-      this.x = x;
-      this.y = y;
-      this.z = z;
+      this.x = x * X65;
+      this.y = y * Y65;
+      this.z = z * Z65;
+    }
+
+    @Override
+    public String toString() {
+      return String.format("XYZ(x = %.02f, y = %.02f, z = %.02f)", x, y, z);
     }
 
     /**
@@ -214,9 +224,9 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       double b = invGamma.apply(bLin);
 
       // essentially an inverse matrix multiplication
-      x = 0.4123 * r + 0.3576 * g + 0.1805 * b;
-      y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      z = 0.0193 * r + 0.1192 * g + 0.9505 * b;
+      x = 0.4124564 * r + 0.3575761 * g + 0.1804375 * b;
+      y = 0.2126729 * r + 0.7151522 * g + 0.0721750 * b;
+      z = 0.0193339 * r + 0.1191920 * g + 0.9503041 * b;
 
       // use white point and 100 base
       x *= X65;
@@ -236,15 +246,15 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
       Function<Double, Double> invF = t -> {
         if (t <= DELTA) {
-          return 3 * DELTA * DELTA * (t - DELTA * 2 / 3);
+          return 3 * DELTA * DELTA * (t - 4 / 29.0);
         } else {
           return Math.pow(t, 3);
         }
       };
 
       x = X65 * invF.apply((lch.l + 16) / 116 + a / 500);
-      y = Y65 * invF.apply((lch.l + 16) / 116);
-      z = Z65 * invF.apply((lch.l + 16) / 116 - b / 200);
+      y = X65 * invF.apply((lch.l + 16) / 116);
+      z = X65 * invF.apply((lch.l + 16) / 116 - b / 200);
     }
 
     /**
@@ -256,16 +266,16 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       // https://www.wikiwand.com/en/CIELAB_color_space#/CIELAB%E2%80%93CIEXYZ_conversions
       Function<Double, Double> f = t -> {
         if (t <= Math.pow(DELTA, 3)) {
-          return t / (3 * DELTA * DELTA) + DELTA * 2 / 3;
+          return t / (3 * DELTA * DELTA) + 4 / 29.0;
         } else {
           return Math.cbrt(t);
         }
       };
 
-      // converting with illuminant d65
+      // converting with illuminant d50
       double xRel = x / X65;
-      double yRel = y / Y65;
-      double zRel = z / Z65;
+      double yRel = y / X65;
+      double zRel = z / X65;
 
       double l = 116 * f.apply(yRel) - 16;
       double a = 500 * (f.apply(xRel) - f.apply(yRel));
@@ -286,14 +296,14 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
       // https://www.wikiwand.com/en/SRGB#/Specification_of_the_transformation
 
-      double x65 = x / 100;
-      double y65 = y / 100;
-      double z65 = z / 100;
+      double x65 = x / X65;
+      double y65 = y / Y65;
+      double z65 = z / Z65;
 
       // this is basically a matrix multiplication
-      double rLin = +3.241 * x65 - 1.537 * y65 - 0.499 * z65;
-      double gLin = -0.969 * x65 + 1.876 * y65 + 0.042 * z65;
-      double bLin = +0.056 * x65 - 0.204 * y65 + 1.057 * z65;
+      double rLin = +3.2404542 * x65 - 1.5371385 * y65 - 0.4985314 * z65;
+      double gLin = -0.9692660 * x65 + 1.8760108 * y65 + 0.0415560 * z65;
+      double bLin = +0.0556434 * x65 - 0.2040259 * y65 + 1.0572252 * z65;
 
       Function<Double, Double> gammaCorrect = u -> {
         if (u <= 0.0031308) {
