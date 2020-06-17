@@ -280,7 +280,8 @@ public class CanvasPanel extends AShapesPanel {
 
     @Override
     public void mousePressed(MouseEvent e) {
-      if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null) {
+      if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null
+              && boundingBox.contains(e.getX(), e.getY())) {
         this.oldX = boundingBox.getX();
         this.oldY = boundingBox.getY();
 
