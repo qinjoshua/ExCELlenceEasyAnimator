@@ -37,7 +37,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
-    this.canvas.setTick(25);
+    this.canvas.setTick(1);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));

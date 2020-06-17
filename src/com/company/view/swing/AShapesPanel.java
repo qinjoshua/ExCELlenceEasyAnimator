@@ -41,7 +41,7 @@ public abstract class AShapesPanel extends JPanel {
       throw new IllegalArgumentException("Null model not allowed");
     }
     this.model = model;
-    this.t = 0;
+    this.t = 1;
     this.swingShapeMap = new LinkedHashMap<>();
     this.swingShapeMap.put(
             ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));

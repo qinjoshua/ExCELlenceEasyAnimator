@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -17,7 +18,7 @@ import java.util.TreeSet;
  * interpolation of keyframes.
  */
 public class AnimatorModelImpl implements AnimatorModel {
-  private final Map<String, SortedSet<Frame>> timelines;
+  private final Map<String, NavigableSet<Frame>> timelines;
 
   private int canvasWidth;
   private int canvasHeight;
@@ -38,29 +39,6 @@ public class AnimatorModelImpl implements AnimatorModel {
     this.canvasY = 0;
   }
 
-  // Returns the latest keyframe whose tick is strictly less than the given tick
-  private static Frame previousKeyframe(int tick, SortedSet<Frame> frames) {
-    Frame closestFrame = frames.first();
-
-    for (Frame frame : frames) {
-      if (frame.getTime() >= tick) {
-        return closestFrame;
-      }
-      closestFrame = frame;
-    }
-    return frames.last();
-  }
-
-  // Returns the earliest keyframe whose tick is greater or equal to the given tick
-  private static Frame nextKeyframe(int tick, SortedSet<Frame> frames) {
-    for (Frame frame : frames) {
-      if (frame.getTime() >= tick) {
-        return frame;
-      }
-    }
-    return frames.last();
-  }
-
   @Override
   public Map<String, Shape> shapesAt(int tick) {
     if (tick < 0) {
@@ -69,15 +47,16 @@ public class AnimatorModelImpl implements AnimatorModel {
 
     Map<String, Shape> shapes = new LinkedHashMap<>();
 
-    for (Map.Entry<String, SortedSet<Frame>> frame : timelines.entrySet()) {
-      if (tick >= frame.getValue().last().getTime()) {
-        shapes.put(frame.getKey(), frame.getValue().last().getShape());
-      } else if (tick > frame.getValue().first().getTime()) {
-        Frame prev = previousKeyframe(tick, frame.getValue());
-        Frame next = nextKeyframe(tick, frame.getValue());
-        double progress = (tick - prev.getTime()) / (next.getTime() - prev.getTime());
-
-        shapes.put(frame.getKey(), prev.interpolateShape(next, progress));
+    for (Map.Entry<String, NavigableSet<Frame>> frame : timelines.entrySet()) {
+      Frame prevFrame = frame.getValue().floor(new FrameImpl(tick, null));
+      Frame nextFrame = frame.getValue().higher(new FrameImpl(tick, null));
+      if (prevFrame != null && nextFrame == null) {
+        // no frame after this time, use latest frame
+        shapes.put(frame.getKey(), prevFrame.getShape());
+      } else if (prevFrame != null) {
+        // both frames exist, interpolate
+        shapes.put(frame.getKey(), prevFrame.interpolateShape(
+            nextFrame, (tick - prevFrame.getTime()) / (nextFrame.getTime() - prevFrame.getTime())));
       }
       // If the time is before the first keyframe for this shape, don't draw the shape
     }
