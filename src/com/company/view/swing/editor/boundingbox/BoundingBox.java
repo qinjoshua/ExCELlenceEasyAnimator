@@ -66,8 +66,8 @@ public class BoundingBox {
     if (type.getX() < 0) {
       this.translate(dx * Math.abs(type.getX()), 0);
     }
-    if(type.getY() < 0) {
-      this.translate(0,dy * Math.abs(type.getY()));
+    if (type.getY() < 0) {
+      this.translate(0, dy * Math.abs(type.getY()));
     }
 
     this.recomputeAnchors();

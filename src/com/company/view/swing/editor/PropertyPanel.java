@@ -12,7 +12,6 @@ import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Shape;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.function.Consumer;
 
 import javax.swing.JColorChooser;
@@ -22,8 +21,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  * A panel to edit the properties of a specific shape in an animation at a specific time.
@@ -44,11 +41,11 @@ public class PropertyPanel extends JPanel {
    * Constructs a property panel to edit a specific shape at a specific time on a given model,
    * sending any edits to a specific callback.
    *
-   * @param shapeName the name of the shape being edited
-   * @param tick the tick at which the shape is being edited*
+   * @param shapeName     the name of the shape being edited
+   * @param tick          the tick at which the shape is being edited*
    * @param modelCallback the callback to use for editing the model
-   * @param model the read-only view model
-   * @param viewCallback the callback to use for editing the view
+   * @param model         the read-only view model
+   * @param viewCallback  the callback to use for editing the view
    */
   public PropertyPanel(String shapeName, int tick, Consumer<AnimatorAction> modelCallback,
                        ReadOnlyAnimatorModel model, Consumer<EditorAction> viewCallback) {
@@ -87,33 +84,33 @@ public class PropertyPanel extends JPanel {
 
     xField.addChangeListener(e -> {
       Shape currShape = model.shapesAt(tick).get(shapeName);
-      SpinnerNumberModel source = (SpinnerNumberModel)e.getSource();
+      SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
       modelCallback.accept(new ChangeX(shapeName, tick,
-          (double)source.getNumber() - currShape.getPosition().getX()));
+          (double) source.getNumber() - currShape.getPosition().getX()));
       this.getViewCallback().accept(new RefreshView());
     });
 
     yField.addChangeListener(e -> {
       Shape currShape = model.shapesAt(tick).get(shapeName);
-      SpinnerNumberModel source = (SpinnerNumberModel)e.getSource();
+      SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
       modelCallback.accept(new ChangeY(shapeName, tick,
-           (double)source.getNumber() - currShape.getPosition().getY()));
+          (double) source.getNumber() - currShape.getPosition().getY()));
       this.getViewCallback().accept(new RefreshView());
     });
 
     widthField.addChangeListener(e -> {
       Shape currShape = model.shapesAt(tick).get(shapeName);
-      SpinnerNumberModel source = (SpinnerNumberModel)e.getSource();
+      SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
       modelCallback.accept(new ChangeWidth(shapeName, tick,
-          (double)source.getNumber() - currShape.getWidth()));
+          (double) source.getNumber() - currShape.getWidth()));
       this.getViewCallback().accept(new RefreshView());
     });
 
     heightField.addChangeListener(e -> {
       Shape currShape = model.shapesAt(tick).get(shapeName);
-      SpinnerNumberModel source = (SpinnerNumberModel)e.getSource();
+      SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
       modelCallback.accept(new ChangeHeight(shapeName, tick,
-          (double)source.getNumber() - currShape.getHeight()));
+          (double) source.getNumber() - currShape.getHeight()));
       this.getViewCallback().accept(new RefreshView());
     });
 
@@ -123,15 +120,18 @@ public class PropertyPanel extends JPanel {
     this.addSpinner(heightField, "height");
 
     JColorChooser colorField = new JColorChooser(origShape.getColor());
+    AbstractColorChooserPanel lchPanel = new LCHColorChooser(origShape.getColor());
+    colorField.setChooserPanels(new AbstractColorChooserPanel[]{lchPanel});
+    LCHColorChooser.LCHPreviewPanel previewPanel = new LCHColorChooser.LCHPreviewPanel(
+        origShape.getColor(), colorField.getSelectionModel());
+
     colorField.getSelectionModel().addChangeListener(e -> {
       Color newColor = colorField.getColor();
+      previewPanel.updateRGB(newColor);
       modelCallback.accept(new ChangeColor(shapeName, tick, newColor));
       this.getViewCallback().accept(new RefreshView());
     });
-
-    AbstractColorChooserPanel lchPanel = new LCHColorChooser(origShape.getColor());
-    colorField.setChooserPanels(new AbstractColorChooserPanel[]{lchPanel});
-    colorField.setPreviewPanel(new JPanel());
+    colorField.setPreviewPanel(previewPanel);
 
     this.add(colorField);
   }
@@ -147,8 +147,9 @@ public class PropertyPanel extends JPanel {
 
   /**
    * Adds the spinner to the model, giving it a label to go along with it.
+   *
    * @param spinner the spinner to add
-   * @param label the name of the parameter to add
+   * @param label   the name of the parameter to add
    */
   private void addSpinner(SpinnerModel spinner, String label) {
     JLabel spinLabel = new JLabel(label);

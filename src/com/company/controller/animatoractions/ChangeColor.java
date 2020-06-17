@@ -12,12 +12,12 @@ public class ChangeColor extends AShapeModifier {
   Color newColor;
 
   /**
-   * Constructs a new action to change the color of the given shape at the given tick to the
-   * given color.
+   * Constructs a new action to change the color of the given shape at the given tick to the given
+   * color.
    *
    * @param shapeName the name of the shape to edit
-   * @param tick the time to edit the shape at
-   * @param newColor the new color to use
+   * @param tick      the time to edit the shape at
+   * @param newColor  the new color to use
    */
   public ChangeColor(String shapeName, int tick, Color newColor) {
     super(shapeName, tick);

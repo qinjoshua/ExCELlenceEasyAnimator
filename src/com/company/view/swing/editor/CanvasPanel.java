@@ -257,9 +257,9 @@ public class CanvasPanel extends AShapesPanel {
         modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - oldX));
         modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - oldY));
         modelCallback.accept(new ChangeWidth(highlightedShapeName, t,
-                boundingBox.getWidth() - oldWidth));
+            boundingBox.getWidth() - oldWidth));
         modelCallback.accept(new ChangeHeight(highlightedShapeName, t,
-                boundingBox.getHeight() - oldHeight));
+            boundingBox.getHeight() - oldHeight));
 
         repaint();
         this.anchor = null;

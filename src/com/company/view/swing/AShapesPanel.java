@@ -45,9 +45,9 @@ public abstract class AShapesPanel extends JPanel {
     this.t = 1;
     this.swingShapeMap = new LinkedHashMap<>();
     this.swingShapeMap.put(
-            ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));
+        ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));
     this.swingShapeMap.put(
-            ShapeType.Ellipse, new Ellipse2D(model.getCanvasX(), model.getCanvasY()));
+        ShapeType.Ellipse, new Ellipse2D(model.getCanvasX(), model.getCanvasY()));
 
     // Initializes the shapes
     Map<String, Shape> modelShapes = model.shapesAt(t);
@@ -107,7 +107,7 @@ public abstract class AShapesPanel extends JPanel {
       this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
     }
 
-    this.drawModelShape((Graphics2D)g);
+    this.drawModelShape((Graphics2D) g);
   }
 
   /**
