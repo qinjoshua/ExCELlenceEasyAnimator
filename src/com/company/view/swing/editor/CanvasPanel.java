@@ -7,7 +7,6 @@ import com.company.controller.animatoractions.ChangeX;
 import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
-import com.company.controller.viewactions.playeractions.ToggleLoop;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.view.swing.AShapesPanel;
 import com.company.view.swing.editor.boundingbox.Anchor;
@@ -33,7 +32,7 @@ import javax.swing.KeyStroke;
  * resized, and displays what any given keyframe looks like.
  */
 public class CanvasPanel extends AShapesPanel {
-  private Shape highlightedShape;
+  private ColoredShape highlightedShape;
   private String highlightedShapeName;
 
   private Consumer<EditorAction> callback;
@@ -74,7 +73,8 @@ public class CanvasPanel extends AShapesPanel {
       public void actionPerformed(ActionEvent e) {
         if (callback != null && boundingBox != null) {
           modelCallback.accept(new ChangeY(highlightedShapeName, t, -1));
-          updateBoundingBox();
+          boundingBox.translate(0, -1);
+          repaint();
         }
       }
     };
@@ -83,7 +83,8 @@ public class CanvasPanel extends AShapesPanel {
       public void actionPerformed(ActionEvent e) {
         if (callback != null && boundingBox != null) {
           modelCallback.accept(new ChangeY(highlightedShapeName, t, 1));
-          updateBoundingBox();
+          boundingBox.translate(0, 1);
+          repaint();
         }
       }
     };
@@ -92,7 +93,8 @@ public class CanvasPanel extends AShapesPanel {
       public void actionPerformed(ActionEvent e) {
         if (callback != null && boundingBox != null) {
           modelCallback.accept(new ChangeX(highlightedShapeName, t, -1));
-          updateBoundingBox();
+          boundingBox.translate(-1, 0);
+          repaint();
         }
       }
     };
@@ -101,7 +103,8 @@ public class CanvasPanel extends AShapesPanel {
       public void actionPerformed(ActionEvent e) {
         if (callback != null && boundingBox != null) {
           modelCallback.accept(new ChangeX(highlightedShapeName, t, 1));
-          updateBoundingBox();
+          boundingBox.translate(1, 0);
+          repaint();
         }
       }
     };
@@ -140,7 +143,7 @@ public class CanvasPanel extends AShapesPanel {
    * @return the highlighted shape
    */
   Shape getHighlightedShape() {
-    return this.highlightedShape;
+    return this.highlightedShape.shape;
   }
 
   /**
@@ -160,7 +163,7 @@ public class CanvasPanel extends AShapesPanel {
       // We use reference equality to determine that the shape is the same shape in memory as the
       // one on screen
       if (coloredShape.getValue().shape == toBeHighlighted) {
-        this.highlightedShape = coloredShape.getValue().shape;
+        this.highlightedShape = coloredShape.getValue();
         this.highlightedShapeName = coloredShape.getKey();
         return;
       }
@@ -173,7 +176,7 @@ public class CanvasPanel extends AShapesPanel {
    */
   void updateBoundingBox() {
     if (highlightedShape != null) {
-      this.boundingBox = new BoundingBox(this.highlightedShape);
+      this.boundingBox = new BoundingBox(this.highlightedShape.shape);
       this.repaint();
     }
   }
