@@ -1,8 +1,10 @@
 package com.company.view.swing.editor.boundingbox;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 
 public class Anchor {
@@ -11,8 +13,8 @@ public class Anchor {
   private final AnchorType type;
 
   public Anchor(AnchorType type, Rectangle boundingBox) {
-    double x = type.x * boundingBox.getWidth() / 2 + boundingBox.getCenterX() - RADIUS;
-    double y = type.y * boundingBox.getHeight() / 2 + boundingBox.getCenterY() - RADIUS;
+    double x = type.getX() * boundingBox.getWidth() / 2 + boundingBox.getCenterX() - RADIUS;
+    double y = type.getY() * boundingBox.getHeight() / 2 + boundingBox.getCenterY() - RADIUS;
     anchor = new Ellipse2D.Double(x, y, RADIUS * 2, RADIUS * 2);
     this.type = type;
   }
@@ -32,10 +34,13 @@ public class Anchor {
 
   public void renderTo(Graphics2D g) {
     Color oldColor = g.getColor();
+    Stroke oldStroke = g.getStroke();
+    g.setStroke(new BasicStroke(1.5f));
     g.setColor(new Color(240, 240, 240));
     g.fill(anchor);
-    g.setColor(new Color(40, 40, 40));
+    g.setColor(new Color(140, 140, 140));
     g.draw(anchor);
+    g.setStroke(oldStroke);
     g.setColor(oldColor);
   }
 }
