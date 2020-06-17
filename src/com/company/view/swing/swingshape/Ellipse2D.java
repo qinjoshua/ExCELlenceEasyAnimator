@@ -21,6 +21,6 @@ public class Ellipse2D implements SwingShape {
   @Override
   public Shape createShape(double x, double y, double width, double height) {
     return new java.awt.geom.Ellipse2D.Double(
-            x - this.x, y - this.y, width, height);
+        x - this.x, y - this.y, width, height);
   }
 }

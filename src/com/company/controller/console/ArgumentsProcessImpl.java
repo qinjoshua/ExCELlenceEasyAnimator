@@ -11,7 +11,6 @@ import com.company.view.swing.SwingView;
 import com.company.view.text.TextAnimatorView;
 import com.company.view.text.TextView;
 
-import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;

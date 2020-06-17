@@ -12,9 +12,9 @@ public enum AnchorType {
   BottomLeft(-1, 1, Cursor.SW_RESIZE_CURSOR),
   BottomRight(1, 1, Cursor.SE_RESIZE_CURSOR);
 
-  private int x;
-  private int y;
-  private int cursor;
+  private final int x;
+  private final int y;
+  private final int cursor;
 
   AnchorType(int x, int y, int cursor) {
     this.x = x;

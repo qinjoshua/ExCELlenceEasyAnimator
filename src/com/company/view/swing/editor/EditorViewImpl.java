@@ -26,27 +26,29 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private Consumer<EditorAction> callback;
   private final Consumer<AnimatorAction> modelCallback;
   private final CanvasPanel canvas;
-  private final PropertyPanel properties;
+  private PropertyPanel properties;
   private final KeyComponent keyComponent;
+  private final ReadOnlyAnimatorModel model;
 
   private Point mouseClickedPoint;
 
   public EditorViewImpl(
-          ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
+      ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
     super("Excellence Editor");
 
+    this.model = model;
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
     this.canvas.setTick(1);
 
-    this.properties = new PropertyPanel("disk1", 1, modelCallback, model, null);
+    this.properties = null;
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
-    properties.setPreferredSize(new Dimension(300, model.getCanvasHeight()));
+    // properties.setPreferredSize(new Dimension(300, model.getCanvasHeight()));
     this.getContentPane().add(canvas, BorderLayout.CENTER);
-    this.getContentPane().add(properties, BorderLayout.EAST);
+    // this.getContentPane().add(properties, BorderLayout.EAST);
 
     this.callback = null;
 
@@ -75,7 +77,10 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
     this.canvas.setCallback(callback);
-    this.properties.setViewCallback(callback);
+    this.properties = new PropertyPanel("disk1", 1, modelCallback, model, callback);
+    properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
+    this.getContentPane().add(properties, BorderLayout.EAST);
+    this.pack();
   }
 
   @Override

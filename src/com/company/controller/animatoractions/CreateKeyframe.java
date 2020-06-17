@@ -25,6 +25,6 @@ public class CreateKeyframe extends AShapeModifier implements AnimatorAction {
   @Override
   protected void actOnUnchecked(AnimatorModel model) throws IllegalArgumentException {
     model.createKeyframe(this.shapeName, model.shapesAt(this.tick).get(this.shapeName),
-            this.tick);
+        this.tick);
   }
 }

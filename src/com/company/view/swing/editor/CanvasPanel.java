@@ -7,7 +7,6 @@ import com.company.controller.animatoractions.ChangeX;
 import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
-import com.company.controller.viewactions.playeractions.ToggleLoop;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.view.swing.AShapesPanel;
 import com.company.view.swing.editor.boundingbox.Anchor;
@@ -254,9 +253,9 @@ public class CanvasPanel extends AShapesPanel {
         modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - oldX));
         modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - oldY));
         modelCallback.accept(new ChangeWidth(highlightedShapeName, t,
-                boundingBox.getWidth() - oldWidth));
+            boundingBox.getWidth() - oldWidth));
         modelCallback.accept(new ChangeHeight(highlightedShapeName, t,
-                boundingBox.getHeight() - oldHeight));
+            boundingBox.getHeight() - oldHeight));
 
         repaint();
         this.anchor = null;

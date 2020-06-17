@@ -32,6 +32,6 @@ public class Rectangle2D implements SwingShape {
     // subtract the y given by the height to account for the fact that it's given in Cartesian
     // coordinates
     return new java.awt.geom.Rectangle2D.Double(
-            x - this.x, y - this.y, width, height);
+        x - this.x, y - this.y, width, height);
   }
 }
