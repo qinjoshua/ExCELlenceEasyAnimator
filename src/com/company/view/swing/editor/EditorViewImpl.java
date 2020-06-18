@@ -15,7 +15,10 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * Provides a view for the main editor that allows animations to be made. This view provides an
@@ -33,6 +36,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private final CanvasPanel canvas;
   private PropertyPanel properties;
   private final ToolbarPanel toolbar;
+  private final TimelinePanel timeline;
 
   private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
@@ -47,9 +51,13 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
-    this.canvas.setTick(1);
 
     this.properties = null;
+
+    this.timeline = new TimelinePanel("disk1", model, modelCallback);
+    JScrollPane scrollPane = new JScrollPane(this.timeline);
+    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    this.getContentPane().add(scrollPane, BorderLayout.NORTH);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
@@ -63,6 +71,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.callback = null;
     this.keyComponent = new KeyComponent();
 
+    this.setTick(1);
     this.pack();
   }
 
@@ -96,10 +105,17 @@ public class EditorViewImpl extends JFrame implements EditorView {
   }
 
   @Override
+  public void setTick(int tick) {
+    this.canvas.setTick(tick);
+    this.timeline.setTick(tick);
+  }
+
+  @Override
   public void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
     this.canvas.setCallback(callback);
     this.toolbar.setCallback(callback);
+    this.timeline.setViewCallback(callback);
   }
 
   @Override
@@ -140,4 +156,5 @@ public class EditorViewImpl extends JFrame implements EditorView {
       this.getActionMap().put(name, action);
     }
   }
+
 }
