@@ -11,9 +11,11 @@ import com.company.util.AnimationBuilder;
 import com.company.util.AnimationReader;
 import com.company.view.swing.editor.EditorView;
 import com.company.view.swing.editor.EditorViewImpl;
+import com.company.view.swing.editor.LCHColorChooser;
 import com.company.view.swing.player.PlayerView;
 import com.company.view.swing.player.PlayerViewImpl;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,6 +66,19 @@ public final class Excellence {
     EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
     view.setCallback(new EditorActionConsumerImpl(view));
     view.renderVisual();
+  }
+
+  public static void testRGB(String[] args) {
+    LCHColorChooser.XYZColor xyz = new LCHColorChooser.XYZColor(0.2, 0.2, 0.5);
+    LCHColorChooser.LCHColor lch = xyz.toLCH();
+
+    System.out.println(lch);
+    System.out.println(xyz);
+    System.out.println(new LCHColorChooser.XYZColor(lch));
+    System.out.println("\n\n");
+    System.out.println(lch.toRGB());
+    System.out.println(xyz.toRGB());
+    System.out.println(new LCHColorChooser.LCHColor(lch.toRGB()));
   }
 
   /**
