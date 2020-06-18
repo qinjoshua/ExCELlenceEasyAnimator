@@ -166,21 +166,17 @@ public class CanvasPanel extends AShapesPanel {
    * @throws IllegalArgumentException if the given shapw does not exist in the map of shapes
    *                                  currently on the canvas
    */
-  void highlightShape(Shape toBeHighlighted) {
+  void highlightShape(String toBeHighlighted) {
     if (toBeHighlighted == null) {
       this.deselectAll();
       return;
     }
-    for (Map.Entry<String, ColoredShape> coloredShape : shapes.entrySet()) {
-      // We use reference equality to determine that the shape is the same shape in memory as the
-      // one on screen
-      if (coloredShape.getValue().shape == toBeHighlighted) {
-        this.highlightedShape = coloredShape.getValue();
-        this.highlightedShapeName = coloredShape.getKey();
-        return;
-      }
+    if (!shapes.containsKey(toBeHighlighted)) {
+      throw new IllegalArgumentException("Attempted to highlight a non-existent shape");
+    } else {
+      this.highlightedShapeName = toBeHighlighted;
+      this.highlightedShape = shapes.get(toBeHighlighted);
     }
-    throw new IllegalArgumentException("Attempted to highlight a non-existent shape");
   }
 
   /**
@@ -236,11 +232,11 @@ public class CanvasPanel extends AShapesPanel {
   private class ClickMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
-      Shape toBeHighlighted = null;
+      String toBeHighlighted = null;
 
-      for (AShapesPanel.ColoredShape coloredShape : shapes.values()) {
-        if (coloredShape.shape.contains(e.getPoint())) {
-          toBeHighlighted = coloredShape.shape;
+      for (Map.Entry<String, ColoredShape> coloredShape : shapes.entrySet()) {
+        if (coloredShape.getValue().shape.contains(e.getPoint())) {
+          toBeHighlighted = coloredShape.getKey();
         }
       }
 

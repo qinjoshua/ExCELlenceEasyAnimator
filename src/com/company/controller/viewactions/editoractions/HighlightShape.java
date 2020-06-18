@@ -8,9 +8,9 @@ import java.awt.Shape;
  * Action that tells an editor view to highlight the given shape.
  */
 public class HighlightShape implements EditorAction {
-  private final Shape toBeHighlighted;
+  private final String toBeHighlighted;
 
-  public HighlightShape(Shape toBeHighlighted) {
+  public HighlightShape(String toBeHighlighted) {
     this.toBeHighlighted = toBeHighlighted;
   }
 

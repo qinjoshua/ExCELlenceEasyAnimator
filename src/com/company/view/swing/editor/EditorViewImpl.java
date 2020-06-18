@@ -74,12 +74,23 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   @Override
   public void refreshView() {
-    this.canvas.repaint();
+    this.updateBoundingBox();
   }
 
   @Override
-  public void highlightShape(java.awt.Shape toBeHighlighted) {
+  public void highlightShape(String toBeHighlighted) {
     this.canvas.highlightShape(toBeHighlighted);
+
+    if (toBeHighlighted == null) {
+      this.getContentPane().remove(this.properties);
+      this.pack();
+    } else {
+      this.properties = new PropertyPanel(toBeHighlighted, 1, modelCallback, model,
+              callback);
+      properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
+      this.getContentPane().add(properties, BorderLayout.EAST);
+      this.pack();
+    }
   }
 
   @Override
@@ -87,10 +98,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.callback = callback;
     this.canvas.setCallback(callback);
     this.toolbar.setCallback(callback);
-    this.properties = new PropertyPanel("disk1", 1, modelCallback, model, callback);
-    properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
-    this.getContentPane().add(properties, BorderLayout.EAST);
-    this.pack();
   }
 
   @Override

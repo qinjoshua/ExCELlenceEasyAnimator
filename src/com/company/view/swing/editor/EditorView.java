@@ -19,8 +19,10 @@ public interface EditorView extends VisualView {
 
   /**
    * Shows that a given shape is selected, showing the bounding box around the shape.
+   *
+   * @param toBeHighlighted the name of the shape that is to be highlighted
    */
-  void highlightShape(Shape toBeHighlighted);
+  void highlightShape(String toBeHighlighted);
 
   /**
    * Sets where editor actions are handled.
