@@ -26,7 +26,7 @@ public class AnimationPanel extends AShapesPanel {
    * Increments the tick rendered to the screen by 1.
    */
   public void nextTick() {
-    this.t += 1;
+    this.setTick(this.t += 1);
   }
 
   /**

@@ -163,7 +163,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     ActionListener painter = evt -> {
       this.playArea.repaint();
       if (isLooping && playArea.onLastFrame()) {
-        playArea.setTick(0);
+        playArea.setTick(1);
       }
 
       if (isPlaying) {

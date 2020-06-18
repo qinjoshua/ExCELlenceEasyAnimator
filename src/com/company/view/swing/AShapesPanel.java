@@ -42,7 +42,7 @@ public abstract class AShapesPanel extends JPanel {
     }
     this.model = model;
 
-    this.t = 0;
+    this.t = 1;
     this.swingShapeMap = new LinkedHashMap<>();
     this.swingShapeMap.put(
         ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));
@@ -152,6 +152,12 @@ public abstract class AShapesPanel extends JPanel {
         java.awt.Shape newShape = this.toSwingShape(modelShape.getValue());
         this.shapes.put(modelShape.getKey(),
                 new ColoredShape(modelShape.getValue().getColor(), newShape));
+      }
+    }
+
+    for (Map.Entry<String, ColoredShape> shape : shapes.entrySet()) {
+      if (!modelShapes.containsKey(shape.getKey())) {
+        this.shapes.remove(shape.getKey());
       }
     }
   }
