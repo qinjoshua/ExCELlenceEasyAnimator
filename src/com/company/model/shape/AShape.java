@@ -53,28 +53,13 @@ public abstract class AShape implements Shape {
   }
 
   @Override
-  public double getHeight() {
-    return this.height;
-  }
-
-  @Override
-  public Color getColor() {
-    return this.color;
-  }
-
-  @Override
-  public ShapeType getShapeType() {
-    return this.shapeType;
-  }
-
-  @Override
-  public void setPosn(Posn posn) {
-    this.posn = posn;
-  }
-
-  @Override
   public void setWidth(double width) {
     this.width = width;
+  }
+
+  @Override
+  public double getHeight() {
+    return this.height;
   }
 
   @Override
@@ -83,13 +68,28 @@ public abstract class AShape implements Shape {
   }
 
   @Override
+  public Color getColor() {
+    return this.color;
+  }
+
+  @Override
   public void setColor(Color color) {
     this.color = color;
   }
 
   @Override
+  public ShapeType getShapeType() {
+    return this.shapeType;
+  }
+
+  @Override
   public void setShapeType(ShapeType shapeType) {
     this.shapeType = shapeType;
+  }
+
+  @Override
+  public void setPosn(Posn posn) {
+    this.posn = posn;
   }
 
   @Override

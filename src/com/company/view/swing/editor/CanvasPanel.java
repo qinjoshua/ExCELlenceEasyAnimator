@@ -8,7 +8,6 @@ import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.animatoractions.CreateNewShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
-import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
@@ -24,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
@@ -37,13 +35,11 @@ import javax.swing.KeyStroke;
  * resized, and displays what any given keyframe looks like.
  */
 public class CanvasPanel extends AShapesPanel {
+  private final Consumer<AnimatorAction> modelCallback;
   private ColoredShape highlightedShape;
   private String highlightedShapeName;
-
   private Consumer<EditorAction> callback;
   private BoundingBox boundingBox;
-  private final Consumer<AnimatorAction> modelCallback;
-
   private ShapeType toBeCreatedShape;
   private String toBeCreatedName;
   private Shape beingCreatedShape;
@@ -326,7 +322,7 @@ public class CanvasPanel extends AShapesPanel {
     public void mousePressed(MouseEvent e) {
       // Checks that bounding box exists, that we're not trying to resize a shape, and that
       if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null
-              && boundingBox.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
+          && boundingBox.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
         this.oldX = boundingBox.getX();
         this.oldY = boundingBox.getY();
 
@@ -370,7 +366,7 @@ public class CanvasPanel extends AShapesPanel {
         this.startX = e.getX();
         this.startY = e.getY();
         beingCreatedShape =
-                swingShapeMap.get(toBeCreatedShape).createShape(startX + model.getCanvasX(),
+            swingShapeMap.get(toBeCreatedShape).createShape(startX + model.getCanvasX(),
                 startY + model.getCanvasY(), 0, 0);
       }
     }
@@ -379,10 +375,10 @@ public class CanvasPanel extends AShapesPanel {
     public void mouseDragged(MouseEvent e) {
       if (editing) {
         beingCreatedShape =
-                swingShapeMap.get(toBeCreatedShape).createShape(
-                        startX + model.getCanvasX(),
-                        startY + model.getCanvasY(),
-                        e.getX()-startX, e.getY()-startY);
+            swingShapeMap.get(toBeCreatedShape).createShape(
+                startX + model.getCanvasX(),
+                startY + model.getCanvasY(),
+                e.getX() - startX, e.getY() - startY);
         repaint();
       }
     }
@@ -393,9 +389,9 @@ public class CanvasPanel extends AShapesPanel {
         editing = false;
 
         modelCallback.accept(new CreateNewShape(
-                toBeCreatedName, startX + model.getCanvasX(), startY + model.getCanvasY(),
-                e.getX() - startX, e.getY() - startY,
-                Color.GRAY, toBeCreatedShape, t));
+            toBeCreatedName, startX + model.getCanvasX(), startY + model.getCanvasY(),
+            e.getX() - startX, e.getY() - startY,
+            Color.GRAY, toBeCreatedShape, t));
 
         updateShapes();
         toBeCreatedShape = null;

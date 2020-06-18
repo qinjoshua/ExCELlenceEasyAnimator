@@ -84,10 +84,10 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   }
 
   static class LCHPreviewPanel extends JPanel {
-    private BufferedImage im;
-    private Color rgb;
     private static final int SIZE = 250;
     private static final double SCALE = 1.1;
+    private BufferedImage im;
+    private Color rgb;
 
     public LCHPreviewPanel(Color rgb, ColorSelectionModel model) {
       this.rgb = rgb;
@@ -111,10 +111,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       };
       this.addMouseListener(mouseAdapter);
       this.addMouseMotionListener(mouseAdapter);
-    }
-
-    private Color getRGB() {
-      return this.rgb;
     }
 
     private static LCHColor getLCHAt(int x, int y, double l) {
@@ -141,6 +137,10 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
         }
       }
       return im;
+    }
+
+    private Color getRGB() {
+      return this.rgb;
     }
 
     public void updateRGB(Color rgb) {
@@ -203,14 +203,13 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
    * A color in the CIE XYZ color space, the master space for CIE.
    */
   public static class XYZColor {
-    public double x;
-    public double y;
-    public double z;
-
     static final double X65 = 95.049;
     static final double Y65 = 100;
     static final double Z65 = 108.8840;
     static final double DELTA = 6 / 29.0;
+    public double x;
+    public double y;
+    public double z;
 
     /**
      * Creates a CIE XYZ color.
@@ -223,11 +222,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       this.x = x * X65;
       this.y = y * Y65;
       this.z = z * Z65;
-    }
-
-    @Override
-    public String toString() {
-      return String.format("XYZ(x = %.02f, y = %.02f, z = %.02f)", x, y, z);
     }
 
     /**
@@ -284,6 +278,11 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       x = X65 * invF.apply((lch.l + 16) / 116 + a / 500);
       y = X65 * invF.apply((lch.l + 16) / 116);
       z = X65 * invF.apply((lch.l + 16) / 116 - b / 200);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("XYZ(x = %.02f, y = %.02f, z = %.02f)", x, y, z);
     }
 
     /**
@@ -380,7 +379,7 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
      */
     public boolean isInGamut() {
       double[] rgb = this.toRGBUnclipped();
-      for (double comp: rgb) {
+      for (double comp : rgb) {
         if (comp < 0 || comp > 1) {
           return false;
         }

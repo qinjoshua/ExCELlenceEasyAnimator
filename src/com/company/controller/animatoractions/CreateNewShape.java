@@ -2,20 +2,19 @@ package com.company.controller.animatoractions;
 
 import com.company.model.AnimatorModel;
 import com.company.model.shape.PosnImpl;
-import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
 
 import java.awt.Color;
 
 public class CreateNewShape implements AnimatorAction {
-  private String name;
-  private int x;
-  private int y;
-  private double width;
-  private double height;
-  private Color color;
-  private ShapeType type;
-  private int tick;
+  private final String name;
+  private final int x;
+  private final int y;
+  private final double width;
+  private final double height;
+  private final Color color;
+  private final ShapeType type;
+  private final int tick;
 
   /**
    * Initializes all the properties that are useful for creating a new shape.
@@ -44,6 +43,6 @@ public class CreateNewShape implements AnimatorAction {
   @Override
   public void actOn(AnimatorModel model) throws IllegalStateException {
     model.createKeyframe(this.name, type.getShape(new PosnImpl(this.x, this.y), this.width,
-            this.height, this.color), this.tick);
+        this.height, this.color), this.tick);
   }
 }

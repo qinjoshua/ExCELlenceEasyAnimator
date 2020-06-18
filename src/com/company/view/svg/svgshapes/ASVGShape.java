@@ -13,6 +13,20 @@ import java.awt.Color;
  */
 public abstract class ASVGShape implements SVGShape {
 
+  private static double convertUsingFPS(double time, int fps) {
+    return time / fps * 1000;
+  }
+
+  /**
+   * Formats the given color into an rgb string.
+   *
+   * @param color color to be converted into an RGB string
+   * @return output formatted as rgb(value, value, value)
+   */
+  protected static String colorToRGBString(Color color) {
+    return String.format("rgb(%o, %o, %o)", color.getRed(), color.getGreen(), color.getBlue());
+  }
+
   @Override
   public SVGTag getShapeTag(String shapeName, Shape shape, int canvasX, int canvasY) {
 
@@ -51,19 +65,5 @@ public abstract class ASVGShape implements SVGShape {
         new SVGTagAttribute("from", from),
         new SVGTagAttribute("to", to),
         new SVGTagAttribute("fill", "freeze"));
-  }
-
-  private static double convertUsingFPS(double time, int fps) {
-    return time / fps * 1000;
-  }
-
-  /**
-   * Formats the given color into an rgb string.
-   *
-   * @param color color to be converted into an RGB string
-   * @return output formatted as rgb(value, value, value)
-   */
-  protected static String colorToRGBString(Color color) {
-    return String.format("rgb(%o, %o, %o)", color.getRed(), color.getGreen(), color.getBlue());
   }
 }

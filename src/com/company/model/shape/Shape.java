@@ -21,12 +21,16 @@ public interface Shape {
    */
   double getWidth();
 
+  void setWidth(double width);
+
   /**
    * Gets the height of this shape.
    *
    * @return the height of the shape as an integer
    */
   double getHeight();
+
+  void setHeight(double height);
 
   /**
    * Gets the color of this shape.
@@ -35,6 +39,8 @@ public interface Shape {
    */
   Color getColor();
 
+  void setColor(Color color);
+
   /**
    * Gets the shape type for this shape.
    *
@@ -42,15 +48,9 @@ public interface Shape {
    */
   ShapeType getShapeType();
 
-  void setPosn(Posn posn);
-
-  void setWidth(double width);
-
-  void setHeight(double height);
-
-  void setColor(Color color);
-
   void setShapeType(ShapeType shapeType);
+
+  void setPosn(Posn posn);
 
   /**
    * Gets the interpolated shape between this shape and the given shape, at the given progress.

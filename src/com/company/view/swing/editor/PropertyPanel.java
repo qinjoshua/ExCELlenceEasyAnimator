@@ -151,6 +151,15 @@ public class PropertyPanel extends JPanel {
   }
 
   /**
+   * Sets the editor view callback.
+   *
+   * @param viewCallback the callback for editor view modification
+   */
+  public void setViewCallback(Consumer<EditorAction> viewCallback) {
+    this.viewCallback = viewCallback;
+  }
+
+  /**
    * Adds the spinner to the model, giving it a label to go along with it.
    *
    * @param spinner the spinner to add
@@ -163,14 +172,5 @@ public class PropertyPanel extends JPanel {
     JSpinner spinComp = new JSpinner(spinner);
     spinLabel.setLabelFor(spinComp);
     this.add(spinComp);
-  }
-
-  /**
-   * Sets the editor view callback.
-   *
-   * @param viewCallback the callback for editor view modification
-   */
-  public void setViewCallback(Consumer<EditorAction> viewCallback) {
-    this.viewCallback = viewCallback;
   }
 }

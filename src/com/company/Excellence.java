@@ -15,7 +15,6 @@ import com.company.view.swing.editor.LCHColorChooser;
 import com.company.view.swing.player.PlayerView;
 import com.company.view.swing.player.PlayerViewImpl;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;

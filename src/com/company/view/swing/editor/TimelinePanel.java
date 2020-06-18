@@ -7,19 +7,15 @@ import com.company.controller.viewactions.editoractions.SetTick;
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.function.Consumer;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 
 /**
@@ -35,8 +31,8 @@ public class TimelinePanel extends JPanel {
   /**
    * Creates a panel for a specific shape, showing its keyframes over time in a timeline.
    *
-   * @param shapeName the shape name to make a timeline for
-   * @param model the underlying model to use
+   * @param shapeName     the shape name to make a timeline for
+   * @param model         the underlying model to use
    * @param modelCallback a callback for modifying the model
    */
   public TimelinePanel(String shapeName, ReadOnlyAnimatorModel model,
@@ -48,7 +44,7 @@ public class TimelinePanel extends JPanel {
     this.viewCallback = null;
 
     SortedSet<Frame> frames = this.model.getKeyframes().get(shapeName);
-    int lastTick = (int)frames.last().getTime();
+    int lastTick = (int) frames.last().getTime();
 
     buttons = new ArrayList<>();
 
@@ -60,7 +56,7 @@ public class TimelinePanel extends JPanel {
       tickBtn.setMaximumSize(new Dimension(20, 60));
       int finalTick = tick;
       tickBtn.addActionListener(e -> {
-        JToggleButton btn = (JToggleButton)e.getSource();
+        JToggleButton btn = (JToggleButton) e.getSource();
         if (btn.isSelected()) {
           modelCallback.accept(new CreateKeyframe(shapeName, finalTick));
           this.getViewCallback().accept(new SetTick(finalTick));
@@ -92,7 +88,7 @@ public class TimelinePanel extends JPanel {
 
     SortedSet<Frame> frames = this.model.getKeyframes().get(shapeName);
     for (Frame frame : frames) {
-      buttons.get((int)frame.getTime() - 1).setText("•");
+      buttons.get((int) frame.getTime() - 1).setText("•");
     }
   }
 
@@ -106,6 +102,7 @@ public class TimelinePanel extends JPanel {
 
   /**
    * Sets the timeline panel to the specified tick, untoggling all of the buttons besides this one.
+   *
    * @param tick the tick to set to
    */
   public void setTick(int tick) {

@@ -4,14 +4,11 @@ import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.OpenPreview;
 import com.company.controller.viewactions.editoractions.CreateShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
-import com.company.controller.viewactions.playeractions.Restart;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +31,9 @@ import javax.swing.SwingConstants;
  */
 public class ToolbarPanel extends JPanel {
   private final Map<String, AbstractButton> buttons;
-  private Consumer<EditorAction> callback;
-  private Consumer<AnimatorAction> modelCallback;
-
   private final ReadOnlyAnimatorModel model;
+  private Consumer<EditorAction> callback;
+  private final Consumer<AnimatorAction> modelCallback;
 
   public ToolbarPanel(Consumer<AnimatorAction> modelCallback, ReadOnlyAnimatorModel model) {
     this.buttons = new HashMap<>();
@@ -45,7 +41,7 @@ public class ToolbarPanel extends JPanel {
     this.model = model;
 
     this.modelCallback = modelCallback;
-    this.setLayout(new GridLayout(0,1));
+    this.setLayout(new GridLayout(0, 1));
 
     JButton previewButton = new JButton("▶");
     JButton exportButton = new JButton("⛏");
@@ -118,9 +114,9 @@ public class ToolbarPanel extends JPanel {
       } else {
         txtFieldName.setText("");
         JOptionPane.showMessageDialog(null,
-                "The name \"" + txtFieldName.getText() + "\" is already in" +
-                        " use. Please choose another name.",
-                "Excellence " +
+            "The name \"" + txtFieldName.getText() + "\" is already in" +
+                " use. Please choose another name.",
+            "Excellence " +
                 "Warning", JOptionPane.WARNING_MESSAGE);
       }
     });

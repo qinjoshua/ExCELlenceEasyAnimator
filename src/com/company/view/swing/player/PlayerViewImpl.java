@@ -38,12 +38,12 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   private final AnimationPanel playArea;
   private final JPanel buttonPanel;
   private final Map<String, AbstractButton> buttons;
+  private final KeyComponent keyComponent;
+  private final Timer mainLoop;
   private int fps;
   private boolean isLooping;
   private boolean isPlaying;
   private Consumer<PlayerAction> callback;
-  private final KeyComponent keyComponent;
-  private final Timer mainLoop;
 
   /**
    * Initializes the player to take in a read only model that can be played.
@@ -207,6 +207,11 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   }
 
   @Override
+  public int getSpeed() {
+    return this.fps;
+  }
+
+  @Override
   public void setSpeed(int speed) {
     if (speed < 0) {
       throw new IllegalArgumentException("Speed cannot be negative");
@@ -214,11 +219,6 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       this.fps = speed;
       mainLoop.setDelay(PlayerViewImpl.getDelay(fps));
     }
-  }
-
-  @Override
-  public int getSpeed() {
-    return this.fps;
   }
 
   @Override

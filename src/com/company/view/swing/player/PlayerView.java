@@ -22,18 +22,18 @@ public interface PlayerView extends VisualView {
   void setTick(int tick);
 
   /**
-   * Sets the speed that the animation will play at, in frames per second.
-   *
-   * @param speed the speed that the animation will play at, in frames per second
-   */
-  void setSpeed(int speed);
-
-  /**
    * Gets the speed that the animation is currently playing at.
    *
    * @return the speed of the animation playback, in frames per second
    */
   int getSpeed();
+
+  /**
+   * Sets the speed that the animation will play at, in frames per second.
+   *
+   * @param speed the speed that the animation will play at, in frames per second
+   */
+  void setSpeed(int speed);
 
   /**
    * Toggles whether or not the animation loops.
