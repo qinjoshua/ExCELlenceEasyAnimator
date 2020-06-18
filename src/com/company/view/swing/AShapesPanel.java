@@ -42,7 +42,7 @@ public abstract class AShapesPanel extends JPanel {
     }
     this.model = model;
 
-    this.t = 1;
+    this.t = 0;
     this.swingShapeMap = new LinkedHashMap<>();
     this.swingShapeMap.put(
         ShapeType.Rectangle, new Rectangle2D(model.getCanvasX(), model.getCanvasY()));

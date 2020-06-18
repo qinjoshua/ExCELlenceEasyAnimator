@@ -47,7 +47,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
-    this.canvas.setTick(1);
+    this.canvas.setTick(0);
 
     this.properties = null;
 
