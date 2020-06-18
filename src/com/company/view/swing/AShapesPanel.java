@@ -113,20 +113,6 @@ public abstract class AShapesPanel extends JPanel {
   }
 
   /**
-   * Struct-like class that stores a color associated with a shape, since Java's awt shapes don't
-   * have a color.
-   */
-  protected static class ColoredShape {
-    public Color color;
-    public java.awt.Shape shape;
-
-    public ColoredShape(Color color, java.awt.Shape shape) {
-      this.color = color;
-      this.shape = shape;
-    }
-  }
-
-  /**
    * Sets the tick for the animation to start playing from to the given tick.
    *
    * @param t the tick that the animation should start playing from
@@ -151,7 +137,7 @@ public abstract class AShapesPanel extends JPanel {
       if (!this.shapes.containsKey(modelShape.getKey())) {
         java.awt.Shape newShape = this.toSwingShape(modelShape.getValue());
         this.shapes.put(modelShape.getKey(),
-                new ColoredShape(modelShape.getValue().getColor(), newShape));
+            new ColoredShape(modelShape.getValue().getColor(), newShape));
       }
     }
 
@@ -159,6 +145,20 @@ public abstract class AShapesPanel extends JPanel {
       if (!modelShapes.containsKey(shape.getKey())) {
         this.shapes.remove(shape.getKey());
       }
+    }
+  }
+
+  /**
+   * Struct-like class that stores a color associated with a shape, since Java's awt shapes don't
+   * have a color.
+   */
+  protected static class ColoredShape {
+    public Color color;
+    public java.awt.Shape shape;
+
+    public ColoredShape(Color color, java.awt.Shape shape) {
+      this.color = color;
+      this.shape = shape;
     }
   }
 }

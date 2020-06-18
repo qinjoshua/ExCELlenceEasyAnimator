@@ -53,6 +53,7 @@ public interface EditorView extends VisualView {
 
   /**
    * Sets the editor view to be editing at the specified tick.
+   *
    * @param tick the tick to set the view to
    */
   void setTick(int tick);

@@ -3,15 +3,16 @@ package com.company.view.swing.editor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.function.Function;
 
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JSlider;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.colorchooser.ColorSelectionModel;
 import javax.swing.event.ChangeEvent;
@@ -21,38 +22,44 @@ import javax.swing.event.ChangeListener;
  * A CIELCH-based color chooser panel.
  */
 public class LCHColorChooser extends AbstractColorChooserPanel implements ChangeListener {
-  JSpinner lSpinner;
-  JSpinner cSpinner;
-  JSpinner hSpinner;
-  boolean iterativelyUpdate;
+  JSlider rSlider;
+  JSlider gSlider;
+  JSlider bSlider;
 
   public LCHColorChooser(Color oldColor) {
-    LCHColor lch = new LCHColor(oldColor);
-    lSpinner = new JSpinner(new SpinnerNumberModel((int)lch.l, 0, 100, 1));
-    cSpinner = new JSpinner(new SpinnerNumberModel(lch.c, 0, 100, 1));
-    hSpinner = new JSpinner(new SpinnerNumberModel(lch.h, -Math.PI, Math.PI, 0.01));
+    rSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getRed());
+    gSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getGreen());
+    bSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getBlue());
 
-    lSpinner.addChangeListener(this);
-    cSpinner.addChangeListener(this);
-    hSpinner.addChangeListener(this);
-    iterativelyUpdate = true;
+
+    rSlider.addChangeListener(this);
+    gSlider.addChangeListener(this);
+    bSlider.addChangeListener(this);
   }
 
   @Override
   public void updateChooser() {
-    iterativelyUpdate = false;
-    LCHColor newLCH = new LCHColor(getColorFromModel());
-    lSpinner.setValue((int)newLCH.l);
-    cSpinner.setValue(newLCH.c);
-    hSpinner.setValue(newLCH.h);
-    iterativelyUpdate = true;
+    Color newColor = getColorFromModel();
+    rSlider.setValue(newColor.getRed());
+    gSlider.setValue(newColor.getGreen());
+    bSlider.setValue(newColor.getBlue());
   }
 
   @Override
   protected void buildChooser() {
-    this.add(lSpinner);
-    this.add(cSpinner);
-    this.add(hSpinner);
+    this.setLayout(new GridLayout(0, 1));
+    JLabel rLabel = new JLabel("Red");
+    rLabel.setLabelFor(rSlider);
+    this.add(rLabel);
+    this.add(rSlider);
+    JLabel gLabel = new JLabel("Green");
+    gLabel.setLabelFor(gSlider);
+    this.add(gLabel);
+    this.add(gSlider);
+    JLabel bLabel = new JLabel("Blue");
+    bLabel.setLabelFor(bSlider);
+    this.add(bLabel);
+    this.add(bSlider);
   }
 
   @Override
@@ -72,62 +79,84 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
   @Override
   public void stateChanged(ChangeEvent e) {
-    if (iterativelyUpdate) {
-      LCHColor newLCH = new LCHColor((int)lSpinner.getValue(), (double) cSpinner.getValue(),
-          (double) hSpinner.getValue());
-      getColorSelectionModel().setSelectedColor(newLCH.toRGB());
-    }
+    Color newColor = new Color(rSlider.getValue(), gSlider.getValue(), bSlider.getValue());
+    getColorSelectionModel().setSelectedColor(newColor);
   }
 
   static class LCHPreviewPanel extends JPanel {
+    private static final int SIZE = 250;
+    private static final double SCALE = 1.1;
     private BufferedImage im;
-    private LCHColor lch;
+    private Color rgb;
 
     public LCHPreviewPanel(Color rgb, ColorSelectionModel model) {
-      lch = new LCHColor(rgb);
-      this.im = LCHPreviewPanel.makePreviewImage(lch);
-      this.setPreferredSize(new Dimension(140, 140));
-      this.addMouseListener(new MouseAdapter() {
+      this.rgb = rgb;
+      this.im = LCHPreviewPanel.makePreviewImage(rgb);
+      this.setPreferredSize(new Dimension(SIZE, SIZE));
+      MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
           super.mouseClicked(e);
-          int x = e.getX();
-          int y = e.getY();
-          int xCart = x - im.getWidth() / 2;
-          int yCart = im.getHeight() / 2 - y;
-          double c = Math.hypot(xCart, yCart);
-          double h = Math.atan2(yCart, xCart);
-          LCHColor newColor = new LCHColor((int)lch.l, c, h);
-          model.setSelectedColor(newColor.toRGB());
+          LCHColor lch = LCHPreviewPanel.getLCHAt(e.getX(), e.getY(), new LCHColor(getRGB()).l);
+          if (new XYZColor(lch).isInGamut()) {
+            model.setSelectedColor(lch.toRGB());
+          }
         }
-      });
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+          super.mouseDragged(e);
+          mouseClicked(e);
+        }
+      };
+      this.addMouseListener(mouseAdapter);
+      this.addMouseMotionListener(mouseAdapter);
     }
 
-    private static BufferedImage makePreviewImage(LCHColor lch) {
-      BufferedImage im = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
+    private static LCHColor getLCHAt(int x, int y, double l) {
+      double xCart = x - SIZE / 2.0;
+      double yCart = SIZE / 2.0 - y;
+      xCart /= SCALE;
+      yCart /= SCALE;
+      double c = Math.hypot(xCart, yCart);
+      double h = Math.atan2(yCart, xCart);
+      return new LCHColor(l, c, h);
+    }
+
+    private static BufferedImage makePreviewImage(Color rgb) {
+      LCHColor lch = new LCHColor(rgb);
+      BufferedImage im = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
       for (int y = 0; y < im.getHeight(); y++) {
         for (int x = 0; x < im.getWidth(); x++) {
-          int xCart = x - im.getWidth() / 2;
-          int yCart = im.getHeight() / 2 - y;
-          double c = Math.hypot(xCart, yCart);
-          double h = Math.atan2(yCart, xCart);
-          im.setRGB(x, y, new LCHColor(lch.l, c, h).toRGB().getRGB());
+          LCHColor newLCH = LCHPreviewPanel.getLCHAt(x, y, lch.l);
+          if (new XYZColor(newLCH).isInGamut()) {
+            im.setRGB(x, y, newLCH.toRGB().getRGB());
+          } else {
+            im.setRGB(x, y, new Color(255, 255, 255).getRGB());
+          }
         }
       }
       return im;
     }
 
+    private Color getRGB() {
+      return this.rgb;
+    }
+
     public void updateRGB(Color rgb) {
-      lch = new LCHColor(rgb);
-      im = LCHPreviewPanel.makePreviewImage(lch);
+      this.rgb = rgb;
+      im = LCHPreviewPanel.makePreviewImage(rgb);
       this.repaint();
     }
 
     @Override
     public void paint(Graphics g) {
       g.drawImage(this.im, 0, 0, null);
+      LCHColor lch = new LCHColor(rgb);
       double xCart = lch.c * Math.cos(lch.h);
       double yCart = lch.c * Math.sin(lch.h);
+      xCart *= SCALE;
+      yCart *= SCALE;
       int x = (int) Math.round(xCart + im.getWidth() / 2.0);
       int y = (int) Math.round(-yCart + im.getHeight() / 2.0);
       g.drawLine(0, y, im.getWidth() - 1, y);
@@ -174,14 +203,13 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
    * A color in the CIE XYZ color space, the master space for CIE.
    */
   public static class XYZColor {
-    public double x;
-    public double y;
-    public double z;
-
     static final double X65 = 95.049;
     static final double Y65 = 100;
     static final double Z65 = 108.8840;
     static final double DELTA = 6 / 29.0;
+    public double x;
+    public double y;
+    public double z;
 
     /**
      * Creates a CIE XYZ color.
@@ -194,11 +222,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       this.x = x * X65;
       this.y = y * Y65;
       this.z = z * Z65;
-    }
-
-    @Override
-    public String toString() {
-      return String.format("XYZ(x = %.02f, y = %.02f, z = %.02f)", x, y, z);
     }
 
     /**
@@ -257,6 +280,11 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       z = X65 * invF.apply((lch.l + 16) / 116 - b / 200);
     }
 
+    @Override
+    public String toString() {
+      return String.format("XYZ(x = %.02f, y = %.02f, z = %.02f)", x, y, z);
+    }
+
     /**
      * Converts this color to LCH.
      *
@@ -294,6 +322,31 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
      */
     public Color toRGB() {
 
+      Function<Double, Float> clip = u -> {
+        if (u < 0) {
+          return 0.0f;
+        } else if (u > 1) {
+          return 1.0f;
+        } else {
+          return (float) (double) u;
+        }
+      };
+
+      double[] rgb = this.toRGBUnclipped();
+
+      return new Color(
+          clip.apply(rgb[0]),
+          clip.apply(rgb[1]),
+          clip.apply(rgb[2]));
+    }
+
+    /**
+     * Returns the unclipped RGB values for this color.
+     *
+     * @return the unclipped RGB values as an array
+     */
+    private double[] toRGBUnclipped() {
+
       // https://www.wikiwand.com/en/SRGB#/Specification_of_the_transformation
 
       double x65 = x / X65;
@@ -313,20 +366,25 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
         }
       };
 
-      Function<Double, Float> clip = u -> {
-        if (u < 0) {
-          return 0.0f;
-        } else if (u > 1) {
-          return 1.0f;
-        } else {
-          return (float) (double) u;
-        }
-      };
+      return new double[]{
+          gammaCorrect.apply(rLin),
+          gammaCorrect.apply(gLin),
+          gammaCorrect.apply(bLin)};
+    }
 
-      return new Color(
-          clip.apply(gammaCorrect.apply(rLin)),
-          clip.apply(gammaCorrect.apply(gLin)),
-          clip.apply(gammaCorrect.apply(bLin)));
+    /**
+     * Returns true if this color is inside the sRGB gamut and false otherwise.
+     *
+     * @return whether this color is inside the sRGB gamut or not
+     */
+    public boolean isInGamut() {
+      double[] rgb = this.toRGBUnclipped();
+      for (double comp : rgb) {
+        if (comp < 0 || comp > 1) {
+          return false;
+        }
+      }
+      return true;
     }
   }
 }

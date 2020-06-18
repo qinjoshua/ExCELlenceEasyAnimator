@@ -3,11 +3,9 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.model.ReadOnlyAnimatorModel;
-import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.function.Consumer;
@@ -16,7 +14,6 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 
@@ -29,18 +26,15 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   // TODO: Seems to have a lot of commonalities with player view implementation. Abstract class?
 
-  private Consumer<EditorAction> callback;
   private final Consumer<AnimatorAction> modelCallback;
-
   // Panels
   private final CanvasPanel canvas;
-  private PropertyPanel properties;
   private final ToolbarPanel toolbar;
   private final TimelinePanel timeline;
-
   private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
-
+  private Consumer<EditorAction> callback;
+  private PropertyPanel properties;
   private Point mouseClickedPoint;
 
   public EditorViewImpl(
@@ -98,7 +92,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
       }
     } else {
       this.properties = new PropertyPanel(toBeHighlighted, 1, modelCallback, model,
-              callback);
+          callback);
       properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
       this.getContentPane().add(properties, BorderLayout.EAST);
       this.pack();

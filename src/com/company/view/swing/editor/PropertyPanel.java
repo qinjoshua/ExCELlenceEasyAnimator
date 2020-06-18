@@ -65,14 +65,14 @@ public class PropertyPanel extends JPanel {
 
     SpinnerModel xField = new SpinnerNumberModel(
         origShape.getPosition().getX(),
-        0,
-        model.getCanvasWidth(),
+        model.getCanvasX(),
+        model.getCanvasWidth() + model.getCanvasX(),
         1);
 
     SpinnerModel yField = new SpinnerNumberModel(
         origShape.getPosition().getY(),
-        0,
-        model.getCanvasHeight(),
+        model.getCanvasY(),
+        model.getCanvasHeight() + model.getCanvasY(),
         1);
 
     SpinnerModel widthField = new SpinnerNumberModel(
@@ -151,6 +151,15 @@ public class PropertyPanel extends JPanel {
   }
 
   /**
+   * Sets the editor view callback.
+   *
+   * @param viewCallback the callback for editor view modification
+   */
+  public void setViewCallback(Consumer<EditorAction> viewCallback) {
+    this.viewCallback = viewCallback;
+  }
+
+  /**
    * Adds the spinner to the model, giving it a label to go along with it.
    *
    * @param spinner the spinner to add
@@ -163,14 +172,5 @@ public class PropertyPanel extends JPanel {
     JSpinner spinComp = new JSpinner(spinner);
     spinLabel.setLabelFor(spinComp);
     this.add(spinComp);
-  }
-
-  /**
-   * Sets the editor view callback.
-   *
-   * @param viewCallback the callback for editor view modification
-   */
-  public void setViewCallback(Consumer<EditorAction> viewCallback) {
-    this.viewCallback = viewCallback;
   }
 }

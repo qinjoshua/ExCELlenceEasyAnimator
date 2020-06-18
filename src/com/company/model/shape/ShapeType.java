@@ -22,21 +22,6 @@ public enum ShapeType {
     this.svgName = svgName;
   }
 
-  @Override
-  public String toString() {
-    return this.disp;
-  }
-
-  /**
-   * Returns the name of this shape when represented by an SVG.
-   *
-   * @return string of the name of this shape when represented in an SVG.
-   */
-  // CHANGELOG: Added public method SVGname in order to obtain the SVG name name for this shape
-  public String svgName() {
-    return this.svgName;
-  }
-
   /**
    * Gets a shapeType from its name.
    *
@@ -52,6 +37,21 @@ public enum ShapeType {
     } else {
       throw new IllegalArgumentException("Not a recognized shape name.");
     }
+  }
+
+  @Override
+  public String toString() {
+    return this.disp;
+  }
+
+  /**
+   * Returns the name of this shape when represented by an SVG.
+   *
+   * @return string of the name of this shape when represented in an SVG.
+   */
+  // CHANGELOG: Added public method SVGname in order to obtain the SVG name name for this shape
+  public String svgName() {
+    return this.svgName;
   }
 
   /**
