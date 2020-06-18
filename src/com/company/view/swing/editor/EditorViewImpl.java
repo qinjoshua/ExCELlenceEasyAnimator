@@ -3,8 +3,11 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.model.ReadOnlyAnimatorModel;
+import com.company.model.shape.Shape;
+import com.company.model.shape.ShapeType;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.function.Consumer;
@@ -25,8 +28,12 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   private Consumer<EditorAction> callback;
   private final Consumer<AnimatorAction> modelCallback;
+
+  // Panels
   private final CanvasPanel canvas;
   private PropertyPanel properties;
+  private final ToolbarPanel toolbar;
+
   private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
 
@@ -48,10 +55,12 @@ public class EditorViewImpl extends JFrame implements EditorView {
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
     // properties.setPreferredSize(new Dimension(300, model.getCanvasHeight()));
     this.getContentPane().add(canvas, BorderLayout.CENTER);
-    // this.getContentPane().add(properties, BorderLayout.EAST);
+    //this.getContentPane().add(properties, BorderLayout.EAST);
+
+    this.toolbar = new ToolbarPanel(this.modelCallback);
+    this.getContentPane().add(toolbar, BorderLayout.WEST);
 
     this.callback = null;
-
     this.keyComponent = new KeyComponent();
 
     this.pack();
@@ -77,6 +86,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
     this.canvas.setCallback(callback);
+    this.toolbar.setCallback(callback);
     this.properties = new PropertyPanel("disk1", 1, modelCallback, model, callback);
     properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
     this.getContentPane().add(properties, BorderLayout.EAST);
@@ -91,6 +101,11 @@ public class EditorViewImpl extends JFrame implements EditorView {
   @Override
   public java.awt.Shape getHighlightedShape() {
     return this.canvas.getHighlightedShape();
+  }
+
+  @Override
+  public void createShape(ShapeType type) {
+    this.canvas.createShape(type);
   }
 
   private static class KeyComponent extends JPanel {

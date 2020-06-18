@@ -14,12 +14,14 @@ import com.company.model.shape.Shape;
 import java.awt.Color;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 /**
@@ -55,6 +57,9 @@ public class PropertyPanel extends JPanel {
     this.modelCallback = modelCallback;
     this.model = model;
     this.viewCallback = viewCallback;
+
+    Border border = BorderFactory.createLineBorder(Color.lightGray);
+    this.setBorder(border);
 
     Shape origShape = model.shapesAt(tick).get(shapeName);
 

@@ -61,7 +61,6 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.isLooping = false;
     this.isPlaying = true;
 
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLayout(new BorderLayout());
 
     // Sets the play area to an instance of the animation panel

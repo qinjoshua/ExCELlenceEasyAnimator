@@ -78,7 +78,7 @@ public abstract class AShapesPanel extends JPanel {
    * @param modelShape the shape object to convert
    * @throws IllegalArgumentException if the shape type cannot be recognized
    */
-  private java.awt.Shape toSwingShape(Shape modelShape) {
+  protected final java.awt.Shape toSwingShape(Shape modelShape) {
     Posn posn = modelShape.getPosition();
     double width = modelShape.getWidth();
     double height = modelShape.getHeight();

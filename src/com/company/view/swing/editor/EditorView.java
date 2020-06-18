@@ -1,6 +1,7 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.model.shape.ShapeType;
 import com.company.view.VisualView;
 
 import java.awt.Shape;
@@ -39,4 +40,11 @@ public interface EditorView extends VisualView {
    * @return the currently highlighted shape
    */
   Shape getHighlightedShape();
+
+  /**
+   * Tells the EditorView to prepare to create a shape of the given type.
+   *
+   * @param type type of shape to be created
+   */
+  void createShape(ShapeType type);
 }

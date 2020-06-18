@@ -8,10 +8,12 @@ import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.model.ReadOnlyAnimatorModel;
+import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
 import com.company.view.swing.editor.boundingbox.Anchor;
 import com.company.view.swing.editor.boundingbox.BoundingBox;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -39,6 +41,9 @@ public class CanvasPanel extends AShapesPanel {
   private BoundingBox boundingBox;
   private final Consumer<AnimatorAction> modelCallback;
 
+  private ShapeType toBeCreatedShape;
+  private Shape beingCreatedShape;
+
   /**
    * Initializes the panel given a model and a callback consumer. Sets the time t to 0 to it starts
    * at the beginning.
@@ -54,14 +59,22 @@ public class CanvasPanel extends AShapesPanel {
     this.highlightedShape = null;
     this.highlightedShapeName = null;
 
+    this.toBeCreatedShape = null;
+    this.beingCreatedShape = null;
+
     MouseAdapter resizer = new ResizeMouseAdapter();
     this.addMouseListener(resizer);
     this.addMouseMotionListener(resizer);
     boundingBox = null;
+    this.setBackground(Color.WHITE);
 
     MouseAdapter mover = new MoveMouseAdapter();
     this.addMouseListener(mover);
     this.addMouseMotionListener(mover);
+
+    MouseAdapter creator = new CreateShapeMouseAdapter();
+    this.addMouseListener(creator);
+    this.addMouseMotionListener(creator);
 
     MouseAdapter cursor = new CursorMouseAdapter();
     this.addMouseMotionListener(cursor);
@@ -113,7 +126,6 @@ public class CanvasPanel extends AShapesPanel {
     this.setCommand(KeyStroke.getKeyStroke("DOWN"), "moveDown", MOVE_DOWN);
     this.setCommand(KeyStroke.getKeyStroke("LEFT"), "moveLeft", MOVE_LEFT);
     this.setCommand(KeyStroke.getKeyStroke("RIGHT"), "moveRight", MOVE_RIGHT);
-
   }
 
   /**
@@ -135,6 +147,8 @@ public class CanvasPanel extends AShapesPanel {
     if (boundingBox != null) {
       boundingBox.renderTo((Graphics2D) g);
     }
+
+    this.drawBeingCreatedShape((Graphics2D) g);
   }
 
   /**
@@ -154,9 +168,7 @@ public class CanvasPanel extends AShapesPanel {
    */
   void highlightShape(Shape toBeHighlighted) {
     if (toBeHighlighted == null) {
-      this.highlightedShape = null;
-      this.boundingBox = null;
-      this.highlightedShapeName = null;
+      this.deselectAll();
       return;
     }
     for (Map.Entry<String, ColoredShape> coloredShape : shapes.entrySet()) {
@@ -177,8 +189,8 @@ public class CanvasPanel extends AShapesPanel {
   void updateBoundingBox() {
     if (highlightedShape != null) {
       this.boundingBox = new BoundingBox(this.highlightedShape.shape);
-      this.repaint();
     }
+    this.repaint();
   }
 
   /**
@@ -188,6 +200,34 @@ public class CanvasPanel extends AShapesPanel {
    */
   void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
+  }
+
+  /**
+   * Tells the EditorView to prepare to create a shape of the given type.
+   *
+   * @param type type of shape to be created
+   */
+  void createShape(ShapeType type) {
+    this.toBeCreatedShape = type;
+  }
+
+  /**
+   * Clears any selections that are on the page, removing the bounding box.
+   */
+  private void deselectAll() {
+    this.highlightedShape = null;
+    this.boundingBox = null;
+    this.highlightedShapeName = null;
+    this.updateBoundingBox();
+  }
+
+  private void drawBeingCreatedShape(Graphics2D g) {
+    if (this.beingCreatedShape != null) {
+      Color originalColor = g.getColor();
+      g.setColor(new Color(0, 0, 0, 80));
+      g.fill(this.beingCreatedShape);
+      g.setColor(originalColor);
+    }
   }
 
   /**
@@ -227,7 +267,8 @@ public class CanvasPanel extends AShapesPanel {
 
     @Override
     public void mousePressed(MouseEvent e) {
-      if (boundingBox != null) {
+      // Checks that bounding box exists, and that we are not in the process of making a new shape
+      if (boundingBox != null && toBeCreatedShape == null) {
         this.anchor = boundingBox.getAnchorAtPoint(e.getX(), e.getY());
         this.lastX = e.getX();
         this.lastY = e.getY();
@@ -280,8 +321,9 @@ public class CanvasPanel extends AShapesPanel {
 
     @Override
     public void mousePressed(MouseEvent e) {
+      // Checks that bounding box exists, that we're not trying to resize a shape, and that
       if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null
-              && boundingBox.contains(e.getX(), e.getY())) {
+              && boundingBox.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
         this.oldX = boundingBox.getX();
         this.oldY = boundingBox.getY();
 
@@ -312,6 +354,54 @@ public class CanvasPanel extends AShapesPanel {
     }
   }
 
+  private class CreateShapeMouseAdapter extends MouseAdapter {
+    private int startX;
+    private int startY;
+    private boolean editing;
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+      if (toBeCreatedShape != null) {
+        deselectAll();
+        this.editing = true;
+        this.startX = e.getX();
+        this.startY = e.getY();
+        beingCreatedShape =
+                swingShapeMap.get(toBeCreatedShape).createShape(startX + model.getCanvasX(),
+                startY + model.getCanvasY(), 0, 0);
+      }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+      if (editing) {
+        beingCreatedShape =
+                swingShapeMap.get(toBeCreatedShape).createShape(
+                        startX + model.getCanvasX(),
+                        startY + model.getCanvasY(),
+                        e.getX()-startX, e.getY()-startY);
+        repaint();
+      }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+      if (editing) {
+        editing = false;
+        toBeCreatedShape = null;
+        beingCreatedShape = null;
+        repaint();
+      }
+    }
+  }
+
+  private class createShapeBox {
+
+  }
+
+  /**
+   * Mouse adapter that changes the cursor depending on the context.
+   */
   private class CursorMouseAdapter extends MouseAdapter {
     @Override
     public void mouseMoved(MouseEvent e) {
