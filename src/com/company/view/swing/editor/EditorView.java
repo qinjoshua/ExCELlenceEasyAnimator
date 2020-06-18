@@ -50,4 +50,10 @@ public interface EditorView extends VisualView {
    * @param name name of the shape being created
    */
   void createShape(ShapeType type, String name);
+
+  /**
+   * Sets the editor view to be editing at the specified tick.
+   * @param tick the tick to set the view to
+   */
+  void setTick(int tick);
 }
