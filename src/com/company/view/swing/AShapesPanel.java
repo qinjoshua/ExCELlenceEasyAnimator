@@ -100,8 +100,10 @@ public abstract class AShapesPanel extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
-    Map<String, Shape> shapes = model.shapesAt(t);
 
+    // Every time repaint is called, this code will update the properties of shapes to match how
+    // they appear in the model
+    Map<String, Shape> shapes = model.shapesAt(t);
     for (Map.Entry<String, Shape> shape : shapes.entrySet()) {
       this.shapes.get(shape.getKey()).color = shape.getValue().getColor();
       this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
@@ -135,5 +137,22 @@ public abstract class AShapesPanel extends JPanel {
       throw new IllegalArgumentException("Tick was set to less than zero");
     }
     this.t = t;
+    this.updateShapes();
+  }
+
+  /**
+   * Checks to see if the model has changed, and updates the shapes map to reflect all the shapes
+   * that are drawn on the screen.
+   */
+  protected void updateShapes() {
+    Map<String, com.company.model.shape.Shape> modelShapes = model.shapesAt(this.t);
+
+    for (Map.Entry<String, com.company.model.shape.Shape> modelShape : modelShapes.entrySet()) {
+      if (!this.shapes.containsKey(modelShape.getKey())) {
+        java.awt.Shape newShape = this.toSwingShape(modelShape.getValue());
+        this.shapes.put(modelShape.getKey(),
+                new ColoredShape(modelShape.getValue().getColor(), newShape));
+      }
+    }
   }
 }

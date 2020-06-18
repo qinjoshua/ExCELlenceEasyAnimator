@@ -47,6 +47,7 @@ public interface EditorView extends VisualView {
    * Tells the EditorView to prepare to create a shape of the given type.
    *
    * @param type type of shape to be created
+   * @param name name of the shape being created
    */
-  void createShape(ShapeType type);
+  void createShape(ShapeType type, String name);
 }

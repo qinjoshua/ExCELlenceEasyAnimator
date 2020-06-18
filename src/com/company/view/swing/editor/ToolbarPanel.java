@@ -5,6 +5,7 @@ import com.company.controller.animatoractions.OpenPreview;
 import com.company.controller.viewactions.editoractions.CreateShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.playeractions.Restart;
+import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
 import java.awt.Dimension;
@@ -21,6 +22,7 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -35,8 +37,12 @@ public class ToolbarPanel extends JPanel {
   private Consumer<EditorAction> callback;
   private Consumer<AnimatorAction> modelCallback;
 
-  public ToolbarPanel(Consumer<AnimatorAction> modelCallback) {
+  private final ReadOnlyAnimatorModel model;
+
+  public ToolbarPanel(Consumer<AnimatorAction> modelCallback, ReadOnlyAnimatorModel model) {
     this.buttons = new HashMap<>();
+
+    this.model = model;
 
     this.modelCallback = modelCallback;
     this.setLayout(new GridLayout(0,1));
@@ -74,15 +80,14 @@ public class ToolbarPanel extends JPanel {
     final Action CREATE_RECTANGLE = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        callback.accept(new CreateShape(ShapeType.Rectangle));
+        openNameDialog(ShapeType.Rectangle);
       }
     };
 
     final Action CREATE_ELLIPSE = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        //callback.accept(new CreateShape(ShapeType.Ellipse));
-        openNameDialog();
+        openNameDialog(ShapeType.Ellipse);
       }
     };
 
@@ -95,7 +100,7 @@ public class ToolbarPanel extends JPanel {
     this.callback = callback;
   }
 
-  void openNameDialog() {
+  private void openNameDialog(ShapeType type) {
     final JDialog dialog = new JDialog((Frame) null, "Excellence Name Dialog");
 
     JPanel panel = new JPanel();
@@ -105,8 +110,19 @@ public class ToolbarPanel extends JPanel {
 
     panel.add(txtFieldName);
     panel.add(nameButton);
-    nameButton.addActionListener(e -> {
 
+    nameButton.addActionListener(e -> {
+      if (!model.getKeyframes().containsKey(txtFieldName.getText())) {
+        callback.accept(new CreateShape(type, txtFieldName.getText()));
+        dialog.dispose();
+      } else {
+        txtFieldName.setText("");
+        JOptionPane.showMessageDialog(null,
+                "The name \"" + txtFieldName.getText() + "\" is already in" +
+                        " use. Please choose another name.",
+                "Excellence " +
+                "Warning", JOptionPane.WARNING_MESSAGE);
+      }
     });
 
     dialog.getContentPane().add(panel);

@@ -12,13 +12,15 @@ import java.awt.Color;
  */
 public class CreateShape implements EditorAction {
   private ShapeType type;
+  private String name;
 
-  public CreateShape(ShapeType type) {
+  public CreateShape(ShapeType type, String name) {
     this.type = type;
+    this.name = name;
   }
 
   @Override
   public void actOn(EditorView view) {
-    view.createShape(type);
+    view.createShape(type, name);
   }
 }

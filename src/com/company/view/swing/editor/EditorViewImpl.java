@@ -57,7 +57,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.getContentPane().add(canvas, BorderLayout.CENTER);
     //this.getContentPane().add(properties, BorderLayout.EAST);
 
-    this.toolbar = new ToolbarPanel(this.modelCallback);
+    this.toolbar = new ToolbarPanel(this.modelCallback, this.model);
     this.getContentPane().add(toolbar, BorderLayout.WEST);
 
     this.callback = null;
@@ -82,8 +82,10 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.canvas.highlightShape(toBeHighlighted);
 
     if (toBeHighlighted == null) {
-      this.getContentPane().remove(this.properties);
-      this.pack();
+      if (properties != null) {
+        this.getContentPane().remove(this.properties);
+        this.pack();
+      }
     } else {
       this.properties = new PropertyPanel(toBeHighlighted, 1, modelCallback, model,
               callback);
@@ -111,8 +113,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
   }
 
   @Override
-  public void createShape(ShapeType type) {
-    this.canvas.createShape(type);
+  public void createShape(ShapeType type, String name) {
+    this.canvas.createShape(type, name);
   }
 
   private static class KeyComponent extends JPanel {

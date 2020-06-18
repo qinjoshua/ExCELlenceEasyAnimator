@@ -5,8 +5,10 @@ import com.company.controller.animatoractions.ChangeHeight;
 import com.company.controller.animatoractions.ChangeWidth;
 import com.company.controller.animatoractions.ChangeX;
 import com.company.controller.animatoractions.ChangeY;
+import com.company.controller.animatoractions.CreateNewShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
+import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
@@ -22,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
@@ -42,6 +45,7 @@ public class CanvasPanel extends AShapesPanel {
   private final Consumer<AnimatorAction> modelCallback;
 
   private ShapeType toBeCreatedShape;
+  private String toBeCreatedName;
   private Shape beingCreatedShape;
 
   /**
@@ -61,6 +65,7 @@ public class CanvasPanel extends AShapesPanel {
 
     this.toBeCreatedShape = null;
     this.beingCreatedShape = null;
+    this.toBeCreatedName = null;
 
     MouseAdapter resizer = new ResizeMouseAdapter();
     this.addMouseListener(resizer);
@@ -202,9 +207,11 @@ public class CanvasPanel extends AShapesPanel {
    * Tells the EditorView to prepare to create a shape of the given type.
    *
    * @param type type of shape to be created
+   * @param name name of the shape being created
    */
-  void createShape(ShapeType type) {
+  void createShape(ShapeType type, String name) {
     this.toBeCreatedShape = type;
+    this.toBeCreatedName = name;
   }
 
   /**
@@ -384,15 +391,19 @@ public class CanvasPanel extends AShapesPanel {
     public void mouseReleased(MouseEvent e) {
       if (editing) {
         editing = false;
+
+        modelCallback.accept(new CreateNewShape(
+                toBeCreatedName, startX + model.getCanvasX(), startY + model.getCanvasY(),
+                e.getX() - startX, e.getY() - startY,
+                Color.GRAY, toBeCreatedShape, t));
+
+        updateShapes();
         toBeCreatedShape = null;
         beingCreatedShape = null;
+        toBeCreatedName = null;
         repaint();
       }
     }
-  }
-
-  private class createShapeBox {
-
   }
 
   /**
