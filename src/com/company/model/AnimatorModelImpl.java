@@ -143,6 +143,19 @@ public class AnimatorModelImpl implements AnimatorModel {
     this.canvasY = canvasY;
   }
 
+  @Override
+  public void removeKeyframe(String shapeName, int tick) {
+    SortedSet<Frame> frames = this.timelines.get(shapeName);
+    for (Frame frame : frames) {
+      if (frame.getTime() == tick) {
+        frames.remove(frame);
+        return;
+      }
+    }
+    throw new IllegalArgumentException("A keyframe did not exist for the given shape at the given" +
+            " tick.");
+  }
+
   /**
    * Inner class that allows you to build an animator model implementation.
    */

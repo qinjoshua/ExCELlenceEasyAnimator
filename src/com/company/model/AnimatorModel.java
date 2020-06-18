@@ -45,4 +45,14 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    * @param canvasY y coordinate of the origin to be set
    */
   void setCanvasY(int canvasY);
+
+  /**
+   * Removes the keyframe for the given shape at the given point in time.
+   *
+   * @param shapeName name of the shape whose keyframe is to be removed
+   * @param tick      tick at which to remove the keyframe
+   * @throws IllegalArgumentException if the keyframe does not exist for the given shape at the
+   *                                  given tick
+   */
+  void removeKeyframe(String shapeName, int tick);
 }
