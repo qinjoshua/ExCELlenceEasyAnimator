@@ -65,14 +65,14 @@ public class PropertyPanel extends JPanel {
 
     SpinnerModel xField = new SpinnerNumberModel(
         origShape.getPosition().getX(),
-        0,
-        model.getCanvasWidth(),
+        model.getCanvasX(),
+        model.getCanvasWidth() + model.getCanvasX(),
         1);
 
     SpinnerModel yField = new SpinnerNumberModel(
         origShape.getPosition().getY(),
-        0,
-        model.getCanvasHeight(),
+        model.getCanvasY(),
+        model.getCanvasHeight() + model.getCanvasY(),
         1);
 
     SpinnerModel widthField = new SpinnerNumberModel(
