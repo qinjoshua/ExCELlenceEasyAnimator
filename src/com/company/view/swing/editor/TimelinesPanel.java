@@ -78,22 +78,18 @@ public class TimelinesPanel extends JPanel {
     innerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     innerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     innerScrollPane.setHorizontalScrollBar(tScroll);
-    JPanel innerPanel = new JPanel(new BorderLayout());
-    innerPanel.add(innerScrollPane);
-//    innerScrollPane.setPreferredSize(new Dimension(1500,
+    //    innerScrollPane.setPreferredSize(new Dimension(1500,
 //        (int)innerScrollPane.getPreferredSize().getHeight()));
 
     outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.X_AXIS));
     outerPanel.add(namesPanel);
-    outerPanel.add(innerPanel);
+    outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     outerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     outerScrollPane.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT - 50));
-    JPanel outerOuterPanel = new JPanel(new BorderLayout());
-    outerOuterPanel.add(outerScrollPane);
     this.setLayout(new BorderLayout());
     this.add(tScroll, BorderLayout.NORTH);
     this.add(outerOuterPanel, BorderLayout.CENTER);
