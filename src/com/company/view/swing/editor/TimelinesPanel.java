@@ -78,8 +78,8 @@ public class TimelinesPanel extends JPanel {
     innerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     innerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     innerScrollPane.setHorizontalScrollBar(tScroll);
-    JPanel innerPanel = new JPanel(new BorderLayout());
-    innerPanel.add(innerScrollPane);
+//    JPanel innerPanel = new JPanel(new BorderLayout());
+//    innerPanel.add(innerScrollPane);
     
 //    innerScrollPane.setPreferredSize(new Dimension(1500,
 //        (int)innerScrollPane.getPreferredSize().getHeight()));
@@ -94,7 +94,7 @@ public class TimelinesPanel extends JPanel {
     outerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     outerScrollPane.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT - 50));
 
-    JPanel outerOuterPanel = new JPanel();
+    JPanel outerOuterPanel = new JPanel(new BorderLayout());
     outerOuterPanel.add(outerScrollPane);
 
     this.setLayout(new BorderLayout());
