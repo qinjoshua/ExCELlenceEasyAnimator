@@ -103,10 +103,6 @@ public class TimelinesPanel extends JPanel {
     this.add(tScroll, BorderLayout.NORTH);
     this.add(outerScrollPane, BorderLayout.CENTER);
     this.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT));
-
-
-
-
   }
 
   public void setViewCallback(Consumer<EditorAction> callback) {

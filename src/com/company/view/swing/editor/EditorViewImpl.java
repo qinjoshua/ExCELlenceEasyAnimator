@@ -46,11 +46,12 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
 
-    this.properties = null;
+    this.properties = new PropertyPanel();
 
     this.timelines = new TimelinesPanel(model, modelCallback);
 
     this.getContentPane().add(timelines, BorderLayout.NORTH);
+    this.getContentPane().add(properties, BorderLayout.EAST);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
@@ -64,7 +65,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.keyComponent = new KeyComponent();
 
     this.setTick(1);
-    //this.setPreferredSize(new Dimension(1200, 800));
+    this.setPreferredSize(new Dimension(1200, 800));
     this.pack();
   }
 
@@ -79,19 +80,19 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.canvas.updateShapes();
     this.updateBoundingBox();
     this.timelines.update();
+    this.setPreferredSize(this.getSize());
     this.repaint();
     this.pack();
   }
 
+  /**
+   * Updates the properties pane to include all the details of the shape that is to be highlighted.
+   *
+   * @param toBeHighlighted shape that is to be highlighted
+   */
   private void updateProperties(String toBeHighlighted) {
-    if (properties != null) {
-      this.getContentPane().remove(properties);
-    }
-    this.properties = new PropertyPanel(toBeHighlighted, this.tick, modelCallback, model,
-        callback);
-    properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
-    this.getContentPane().add(properties, BorderLayout.EAST);
-    this.pack();
+    this.properties.addProperties(toBeHighlighted, this.tick, modelCallback, model);
+    this.refreshView();
   }
 
   @Override
@@ -99,10 +100,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.canvas.highlightShape(toBeHighlighted);
 
     if (toBeHighlighted == null) {
-      if (properties != null) {
-        this.getContentPane().remove(this.properties);
-        this.pack();
-      }
+      this.properties.hideProperties();
+      this.refreshView();
     } else {
       this.updateProperties(toBeHighlighted);
     }
@@ -124,6 +123,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.callback = callback;
     this.canvas.setCallback(callback);
     this.toolbar.setCallback(callback);
+    this.properties.setViewCallback(callback);
     this.timelines.setViewCallback(callback);
   }
 
@@ -174,5 +174,4 @@ public class EditorViewImpl extends JFrame implements EditorView {
       this.getActionMap().put(name, action);
     }
   }
-
 }

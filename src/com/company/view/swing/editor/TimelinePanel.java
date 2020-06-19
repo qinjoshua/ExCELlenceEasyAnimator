@@ -57,8 +57,6 @@ public class TimelinePanel extends JPanel {
 
     this.updateButtonText();
 
-
-
     this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     // this.setLayout(new GridLayout(1, 0, 0, 0));
     for (JToggleButton button : buttons) {
@@ -125,7 +123,6 @@ public class TimelinePanel extends JPanel {
         this.add(tickBtn);
       }
     }
-
     for (int i = 0; i < buttons.size(); i++) {
       buttons.get(i).setSelected(i == tick - 1);
     }
