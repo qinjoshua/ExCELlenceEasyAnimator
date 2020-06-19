@@ -3,10 +3,13 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.RefreshView;
+import com.company.controller.viewactions.editoractions.SetTick;
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,6 +20,7 @@ import java.util.function.Consumer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -109,6 +113,9 @@ public class TimelinesPanel extends JPanel {
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setViewCallback(callback);
     }
+    for (Component btn : addFramePanel.getComponents()) {
+      ((AddFrameButton)btn).setViewCallback(callback);
+    }
   }
 
   public void setTick(int tick) {
@@ -117,10 +124,18 @@ public class TimelinesPanel extends JPanel {
     }
   }
 
+  public void update() {
+    for (TimelinePanel timeline : timelines.values()) {
+      timeline.updateButtonText();
+    }
+  }
+
   /**
    * A class that holds a button that adds a frame at any time for a specific shape.
    */
   class AddFrameButton extends JPanel {
+    Consumer<EditorAction> viewCallback;
+
     /**
      * Makes a new panel with a button to add a frame for the given shape.
      *
@@ -148,7 +163,13 @@ public class TimelinesPanel extends JPanel {
         panel.add(tickSpinner);
         panel.add(addButton);
 
-        addButton.addActionListener(evt -> callback.accept(new CreateKeyframe(shapeName, (Integer) tickSpinner.getValue())));
+        addButton.addActionListener(evt -> {
+          int newTick = (Integer)tickSpinner.getValue();
+          callback.accept(new CreateKeyframe(shapeName, newTick));
+          this.getViewCallback().accept(new SetTick(newTick));
+          this.getViewCallback().accept(new RefreshView());
+          dialog.dispose();
+        });
 
         dialog.getContentPane().add(panel);
         dialog.pack();
@@ -156,6 +177,14 @@ public class TimelinesPanel extends JPanel {
       });
 
       this.add(addFrameButton);
+    }
+
+    public Consumer<EditorAction> getViewCallback() {
+      return viewCallback;
+    }
+
+    public void setViewCallback(Consumer<EditorAction> viewCallback) {
+      this.viewCallback = viewCallback;
     }
   }
 }
