@@ -102,7 +102,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
         @Override
         public void mousePressed(MouseEvent e) {
           super.mousePressed(e);
-          System.out.println("Pressing...");
           LCHColor lch = LCHPreviewPanel.getLCHAt(e.getX(), e.getY(), new LCHColor(getRGB()).l);
           if (new XYZColor(lch).isInGamut()) {
             model.setSelectedColor(lch.toRGB());
@@ -112,7 +111,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
         @Override
         public void mouseDragged(MouseEvent e) {
           super.mouseDragged(e);
-          System.out.println("Dragging...");
           LCHColor lch = LCHPreviewPanel.getLCHAt(e.getX(), e.getY(), new LCHColor(getRGB()).l);
           if (new XYZColor(lch).isInGamut()) {
             model.setSelectedColor(lch.toRGB());
@@ -156,8 +154,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
     public void updateRGB(Color rgb) {
       if (Math.abs(new LCHColor(rgb).l - (int)new LCHColor(this.rgb).l) > 1.0) {
-        System.out.println((int)new LCHColor(rgb).l);
-        System.out.println((int)new LCHColor(this.rgb).l);
         im = LCHPreviewPanel.makePreviewImage(rgb);
       }
       this.rgb = rgb;

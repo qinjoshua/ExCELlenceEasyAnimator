@@ -10,6 +10,7 @@ public interface EditorAction {
    * Runs the given action on the editor view.
    *
    * @param view the editor view to be acted on
+   * @throws IllegalStateException if the action was incorrectly created
    */
-  void actOn(EditorView view);
+  void actOn(EditorView view) throws IllegalStateException;
 }

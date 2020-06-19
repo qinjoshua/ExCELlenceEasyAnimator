@@ -208,7 +208,7 @@ public class PropertyPanel extends JPanel {
       color.add(colorField);
 
       // from the Java tutorial
-      layout.SpringUtilities.makeGrid(nonColor,
+      SpringUtilities.makeGrid(nonColor,
           4, 2,
           0, 0,
           10, 10

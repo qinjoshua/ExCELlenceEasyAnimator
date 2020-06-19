@@ -28,45 +28,12 @@ import javax.swing.UnsupportedLookAndFeelException;
  * The main class that runs the program.
  */
 public final class Excellence {
-
   /**
    * Main entry point for the application.
    *
    * @param args list of input arguments for the animator
    */
-  public static void olderMain(String[] args) {
-    AnimatorController controller = new AnimatorControllerImpl(formatArgs(args));
-    controller.run();
-  }
-
-  /**
-   * Main entry point for the application.
-   *
-   * @param args list of input arguments for the animator
-   */
-  public static void oldMain(String[] args) throws IOException {
-    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
-    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
-    AnimatorModel model = AnimationReader.parseFile(input, builder);
-
-    PlayerView view = new PlayerViewImpl(model, 20);
-    view.setCallback(new PlayerActionConsumerImpl(view));
-    view.renderVisual();
-  }
-
-  /**
-   * Main entry point for the application.
-   *
-   * @param args list of input arguments for the animator
-   */
-  public static void main(String[] args) throws IOException {
-//    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
-//    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
-//    AnimatorModel model = AnimationReader.parseFile(input, builder);
-//
-//    EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
-//    view.setCallback(new EditorActionConsumerImpl(view));
-//    view.renderVisual();
+  public static void main(String[] args) {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -74,9 +41,8 @@ public final class Excellence {
       e.printStackTrace();
     }
 
-    MenuView menu = new MenuViewImpl();
-    menu.setCallback(new MenuActionConsumerImpl(menu));
-    menu.renderVisual();
+    AnimatorController controller = new AnimatorControllerImpl(formatArgs(args));
+    controller.run();
   }
 
   /**

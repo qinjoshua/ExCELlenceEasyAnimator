@@ -1,5 +1,11 @@
 package com.company.controller.console;
 
+import com.company.controller.animatoractions.AnimatorAction;
+import com.company.controller.animatoractions.AnimatorActionConsumerImpl;
+import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.EditorActionConsumerImpl;
+import com.company.controller.viewactions.playeractions.PlayerAction;
+import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
 import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
 import com.company.util.AnimationBuilder;
@@ -8,6 +14,10 @@ import com.company.view.VisualView;
 import com.company.view.svg.SVGView;
 import com.company.view.svg.SVGViewImpl;
 import com.company.view.swing.SwingView;
+import com.company.view.swing.editor.EditorView;
+import com.company.view.swing.editor.EditorViewImpl;
+import com.company.view.swing.player.PlayerView;
+import com.company.view.swing.player.PlayerViewImpl;
 import com.company.view.text.TextAnimatorView;
 import com.company.view.text.TextView;
 
@@ -19,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -105,11 +116,13 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
     public Void apply(String s) {
       AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
       AnimatorModel model;
+      Consumer<AnimatorAction> callback;
 
       if (in == null) {
         throw new IllegalStateException("No input file was provided");
       } else {
         model = AnimationReader.parseFile(in, builder);
+        callback = new AnimatorActionConsumerImpl(model);
       }
 
       if (s.equalsIgnoreCase("svg")) {
@@ -129,6 +142,13 @@ public class ArgumentsProcessImpl implements ArgumentsProcessor {
         } catch (IOException e) {
           throw new IllegalStateException("The output was not able to be written to.");
         }
+      } else if (s.equalsIgnoreCase("edit")) {
+        EditorView editorView = new EditorViewImpl(model, callback);
+        editorView.setCallback(new EditorActionConsumerImpl(editorView));
+        editorView.renderVisual();
+      } else if (s.equalsIgnoreCase("play")) {
+        PlayerView playerView = new PlayerViewImpl(model, fps);
+        playerView.setCallback(new PlayerActionConsumerImpl(playerView));
       } else {
         throw new IllegalStateException("The type of view was not recognized.");
       }

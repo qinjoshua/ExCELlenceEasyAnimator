@@ -19,7 +19,7 @@ public class EditorActionConsumerImpl implements Consumer<EditorAction> {
     this.view = view;
   }
 
-  @Override //TODO error handling
+  @Override
   public void accept(EditorAction editorAction) {
     editorAction.actOn(view);
   }
