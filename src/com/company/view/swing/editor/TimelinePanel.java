@@ -27,6 +27,7 @@ public class TimelinePanel extends JPanel {
   Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
   List<JToggleButton> buttons;
+  static final Dimension KEYFRAME_SIZE = new Dimension(15, 40);
 
   /**
    * Creates a panel for a specific shape, showing its keyframes over time in a timeline.
@@ -51,9 +52,7 @@ public class TimelinePanel extends JPanel {
     for (int tick = 1; tick <= lastTick; tick++) {
       JToggleButton tickBtn = new JToggleButton();
       tickBtn.setMargin(new Insets(0, 0, 0, 0));
-      tickBtn.setPreferredSize(new Dimension(20, 60));
-      tickBtn.setMinimumSize(new Dimension(20, 60));
-      tickBtn.setMaximumSize(new Dimension(20, 60));
+      tickBtn.setPreferredSize(KEYFRAME_SIZE);
       int finalTick = tick;
       tickBtn.addActionListener(e -> {
         JToggleButton btn = (JToggleButton) e.getSource();
@@ -69,7 +68,8 @@ public class TimelinePanel extends JPanel {
 
     this.updateButtonText();
 
-    this.setPreferredSize(new Dimension(this.buttons.size() * 20 + 20, 70));
+    this.setPreferredSize(new Dimension(this.buttons.size() * (int)KEYFRAME_SIZE.getWidth(),
+        (int)KEYFRAME_SIZE.getHeight()));
 
     this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     // this.setLayout(new GridLayout(1, 0, 0, 0));

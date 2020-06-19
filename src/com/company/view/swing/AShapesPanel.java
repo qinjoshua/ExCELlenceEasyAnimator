@@ -101,15 +101,15 @@ public abstract class AShapesPanel extends JPanel {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
 
-    // Every time repaint is called, this code will update the properties of shapes to match how
-    // they appear in the model
-    Map<String, Shape> shapes = model.shapesAt(t);
-    for (Map.Entry<String, Shape> shape : shapes.entrySet()) {
-      this.shapes.get(shape.getKey()).color = shape.getValue().getColor();
-      this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
-    }
-
     this.drawModelShape((Graphics2D) g);
+  }
+
+  /**
+   * Gets the current tick.
+   * @return the current tick
+   */
+  public int getTick() {
+    return t;
   }
 
   /**
@@ -130,21 +130,30 @@ public abstract class AShapesPanel extends JPanel {
    * Checks to see if the model has changed, and updates the shapes map to reflect all the shapes
    * that are drawn on the screen.
    */
-  protected void updateShapes() {
-    Map<String, com.company.model.shape.Shape> modelShapes = model.shapesAt(this.t);
-
-    for (Map.Entry<String, com.company.model.shape.Shape> modelShape : modelShapes.entrySet()) {
-      if (!this.shapes.containsKey(modelShape.getKey())) {
-        java.awt.Shape newShape = this.toSwingShape(modelShape.getValue());
-        this.shapes.put(modelShape.getKey(),
-            new ColoredShape(modelShape.getValue().getColor(), newShape));
+  public void updateShapes() {
+    // Every time repaint is called, this code will update the properties of shapes to match how
+    // they appear in the model
+    Map<String, Shape> modelShapes = model.shapesAt(t);
+    for (Map.Entry<String, Shape> shape : modelShapes.entrySet()) {
+      if (this.shapes.containsKey(shape.getKey())) {
+        this.shapes.get(shape.getKey()).color = shape.getValue().getColor();
+        this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
+      } else {
+        java.awt.Shape newShape = this.toSwingShape(shape.getValue());
+        this.shapes.put(shape.getKey(),
+            new ColoredShape(shape.getValue().getColor(), newShape));
       }
     }
 
+    Map<String, ColoredShape> toRemove = new LinkedHashMap<>();
     for (Map.Entry<String, ColoredShape> shape : shapes.entrySet()) {
       if (!modelShapes.containsKey(shape.getKey())) {
-        this.shapes.remove(shape.getKey());
+        toRemove.put(shape.getKey(), shape.getValue());
       }
+    }
+
+    for (String shapeName : toRemove.keySet()) {
+      shapes.remove(shapeName);
     }
   }
 

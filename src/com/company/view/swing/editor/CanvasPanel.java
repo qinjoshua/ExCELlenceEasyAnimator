@@ -8,6 +8,7 @@ import com.company.controller.animatoractions.ChangeY;
 import com.company.controller.animatoractions.CreateNewShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.HighlightShape;
+import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
@@ -162,6 +163,15 @@ public class CanvasPanel extends AShapesPanel {
   }
 
   /**
+   * Gets the name of the currently highlighted shape.
+   *
+   * @return the name of the currently highlighted shape
+   */
+  public String getHighlightedShapeName() {
+    return highlightedShapeName;
+  }
+
+  /**
    * Highlights the given shape.
    *
    * @throws IllegalArgumentException if the given shapw does not exist in the map of shapes
@@ -301,7 +311,7 @@ public class CanvasPanel extends AShapesPanel {
         modelCallback.accept(new ChangeHeight(highlightedShapeName, t,
             boundingBox.getHeight() - oldHeight));
 
-        repaint();
+        callback.accept(new RefreshView());
         this.anchor = null;
       }
     }
@@ -348,7 +358,7 @@ public class CanvasPanel extends AShapesPanel {
         modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - this.oldX));
         modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - this.oldY));
         this.editing = false;
-        repaint();
+        callback.accept(new RefreshView());
       }
     }
   }
@@ -397,7 +407,7 @@ public class CanvasPanel extends AShapesPanel {
         toBeCreatedShape = null;
         beingCreatedShape = null;
         toBeCreatedName = null;
-        repaint();
+        callback.accept(new RefreshView());
       }
     }
   }

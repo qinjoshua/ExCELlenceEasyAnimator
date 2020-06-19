@@ -58,7 +58,7 @@ public final class Excellence {
    * @param args list of input arguments for the animator
    */
   public static void main(String[] args) throws IOException {
-    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
+    BufferedReader input = Files.newBufferedReader(Paths.get("buildings.txt"));
     AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
     AnimatorModel model = AnimationReader.parseFile(input, builder);
 

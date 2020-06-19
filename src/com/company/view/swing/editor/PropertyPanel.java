@@ -12,15 +12,19 @@ import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Shape;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
@@ -65,26 +69,26 @@ public class PropertyPanel extends JPanel {
 
     SpinnerModel xField = new SpinnerNumberModel(
         origShape.getPosition().getX(),
-        model.getCanvasX(),
-        model.getCanvasWidth() + model.getCanvasX(),
+        Integer.MIN_VALUE,
+        Integer.MAX_VALUE,
         1);
 
     SpinnerModel yField = new SpinnerNumberModel(
         origShape.getPosition().getY(),
-        model.getCanvasY(),
-        model.getCanvasHeight() + model.getCanvasY(),
+        Integer.MIN_VALUE,
+        Integer.MAX_VALUE,
         1);
 
     SpinnerModel widthField = new SpinnerNumberModel(
         origShape.getWidth(),
         0,
-        model.getCanvasWidth(),
+        Integer.MAX_VALUE,
         1);
 
     SpinnerModel heightField = new SpinnerNumberModel(
         origShape.getHeight(),
         0,
-        model.getCanvasHeight(),
+        Integer.MAX_VALUE,
         1);
 
     xField.addChangeListener(e -> {
@@ -119,10 +123,18 @@ public class PropertyPanel extends JPanel {
       this.getViewCallback().accept(new RefreshView());
     });
 
-    this.addSpinner(xField, "x");
-    this.addSpinner(yField, "y");
-    this.addSpinner(widthField, "width");
-    this.addSpinner(heightField, "height");
+    String[] labels = {"x", "y", "width", "height"};
+    SpinnerModel[] spinners = {xField, yField, widthField, heightField};
+
+    for (int i = 0; i < labels.length; i++) {
+      JLabel label = new JLabel(labels[i], JLabel.TRAILING);
+      this.add(label);
+      JSpinner spinner = new JSpinner(spinners[i]);
+      spinner.setPreferredSize(new Dimension(50, 20));
+      spinner.setMaximumSize(new Dimension(50, 20));
+      label.setLabelFor(spinner);
+      this.add(spinner);
+    }
 
     JColorChooser colorField = new JColorChooser(origShape.getColor());
     AbstractColorChooserPanel lchPanel = new LCHColorChooser(origShape.getColor());
@@ -138,7 +150,20 @@ public class PropertyPanel extends JPanel {
     });
     colorField.setPreviewPanel(previewPanel);
 
+    JLabel colorLabel = new JLabel("Color", JLabel.TRAILING);
+    colorLabel.setLabelFor(colorField);
+    this.add(colorLabel);
     this.add(colorField);
+
+
+    this.setLayout(new SpringLayout());
+
+    // from the Java tutorial
+    layout.SpringUtilities.makeCompactGrid(this,
+        5, 2,
+        0, 0,
+        0, 0
+    );
   }
 
   /**
@@ -157,20 +182,5 @@ public class PropertyPanel extends JPanel {
    */
   public void setViewCallback(Consumer<EditorAction> viewCallback) {
     this.viewCallback = viewCallback;
-  }
-
-  /**
-   * Adds the spinner to the model, giving it a label to go along with it.
-   *
-   * @param spinner the spinner to add
-   * @param label   the name of the parameter to add
-   */
-  private void addSpinner(SpinnerModel spinner, String label) {
-    JLabel spinLabel = new JLabel(label);
-    this.add(spinLabel);
-
-    JSpinner spinComp = new JSpinner(spinner);
-    spinLabel.setLabelFor(spinComp);
-    this.add(spinComp);
   }
 }

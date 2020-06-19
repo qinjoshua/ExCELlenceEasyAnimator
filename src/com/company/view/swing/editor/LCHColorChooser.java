@@ -48,6 +48,11 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   @Override
   protected void buildChooser() {
     this.setLayout(new GridLayout(0, 1));
+    this.setPreferredSize(new Dimension(300, 80));
+    this.setMaximumSize(new Dimension(300, 150));
+    rSlider.setPreferredSize(new Dimension(200, 20));
+    gSlider.setPreferredSize(new Dimension(200, 20));
+    bSlider.setPreferredSize(new Dimension(200, 20));
     JLabel rLabel = new JLabel("Red");
     rLabel.setLabelFor(rSlider);
     this.add(rLabel);

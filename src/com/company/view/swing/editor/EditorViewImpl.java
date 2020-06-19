@@ -24,18 +24,18 @@ import javax.swing.ScrollPaneConstants;
  */
 public class EditorViewImpl extends JFrame implements EditorView {
 
-  // TODO: Seems to have a lot of commonalities with player view implementation. Abstract class?
-
   private final Consumer<AnimatorAction> modelCallback;
   // Panels
   private final CanvasPanel canvas;
   private final ToolbarPanel toolbar;
-  private final TimelinePanel timeline;
+  private final TimelinesPanel timelines;
   private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
   private Consumer<EditorAction> callback;
   private PropertyPanel properties;
   private Point mouseClickedPoint;
+  private int tick;
+  private static final int TIMELINE_HEIGHT = 200;
 
   public EditorViewImpl(
       ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
@@ -45,18 +45,15 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.modelCallback = modelCallback;
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
-    this.canvas.setTick(1);
 
     this.properties = null;
 
-    this.timeline = new TimelinePanel("disk1", model, modelCallback);
-    JScrollPane scrollPane = new JScrollPane(this.timeline);
-    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-    this.getContentPane().add(scrollPane, BorderLayout.NORTH);
+    this.timelines = new TimelinesPanel(model, modelCallback);
+
+    this.getContentPane().add(timelines, BorderLayout.NORTH);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
-    // properties.setPreferredSize(new Dimension(300, model.getCanvasHeight()));
     this.getContentPane().add(canvas, BorderLayout.CENTER);
     //this.getContentPane().add(properties, BorderLayout.EAST);
 
@@ -67,6 +64,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.keyComponent = new KeyComponent();
 
     this.setTick(1);
+    this.setPreferredSize(new Dimension(1200, 800));
     this.pack();
   }
 
@@ -78,7 +76,20 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   @Override
   public void refreshView() {
+    this.canvas.updateShapes();
     this.updateBoundingBox();
+    this.repaint();
+  }
+
+  private void updateProperties(String toBeHighlighted) {
+    if (properties != null) {
+      this.getContentPane().remove(properties);
+    }
+    this.properties = new PropertyPanel(toBeHighlighted, this.tick, modelCallback, model,
+        callback);
+    properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
+    this.getContentPane().add(properties, BorderLayout.EAST);
+    this.pack();
   }
 
   @Override
@@ -91,18 +102,19 @@ public class EditorViewImpl extends JFrame implements EditorView {
         this.pack();
       }
     } else {
-      this.properties = new PropertyPanel(toBeHighlighted, 1, modelCallback, model,
-          callback);
-      properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
-      this.getContentPane().add(properties, BorderLayout.EAST);
-      this.pack();
+      this.updateProperties(toBeHighlighted);
     }
   }
 
+
   @Override
   public void setTick(int tick) {
+    this.tick = tick;
     this.canvas.setTick(tick);
-    this.timeline.setTick(tick);
+    this.timelines.setTick(tick);
+    if (this.getHighlightedShapeName() != null) {
+      this.updateProperties(this.getHighlightedShapeName());
+    }
   }
 
   @Override
@@ -110,7 +122,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.callback = callback;
     this.canvas.setCallback(callback);
     this.toolbar.setCallback(callback);
-    this.timeline.setViewCallback(callback);
+    this.timelines.setViewCallback(callback);
   }
 
   @Override
@@ -121,6 +133,15 @@ public class EditorViewImpl extends JFrame implements EditorView {
   @Override
   public java.awt.Shape getHighlightedShape() {
     return this.canvas.getHighlightedShape();
+  }
+
+  /**
+   * Gets the name of the currently highlighted shape.
+   *
+   * @return the name of the currently highlighted shape.
+   */
+  private String getHighlightedShapeName() {
+    return this.canvas.getHighlightedShapeName();
   }
 
   @Override

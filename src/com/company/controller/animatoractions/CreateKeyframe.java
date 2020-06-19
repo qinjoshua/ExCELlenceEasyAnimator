@@ -1,6 +1,7 @@
 package com.company.controller.animatoractions;
 
 import com.company.model.AnimatorModel;
+import com.company.model.shape.Shape;
 
 /**
  * Creates a keyframe in the model.
@@ -24,7 +25,11 @@ public class CreateKeyframe extends AShapeModifier implements AnimatorAction {
 
   @Override
   protected void actOnUnchecked(AnimatorModel model) throws IllegalArgumentException {
-    model.createKeyframe(this.shapeName, model.shapesAt(this.tick).get(this.shapeName),
-        this.tick);
+    Shape newShape = model.shapesAt(this.tick).get(this.shapeName);
+    if (newShape == null) {
+      // before first keyframe, initialize to first keyframe instead
+      newShape = model.getKeyframes().get(shapeName).first().getShape();
+    }
+    model.createKeyframe(this.shapeName, newShape, this.tick);
   }
 }
