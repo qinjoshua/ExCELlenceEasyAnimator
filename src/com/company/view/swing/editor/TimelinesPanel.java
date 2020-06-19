@@ -67,19 +67,20 @@ public class TimelinesPanel extends JPanel {
       addFramePanel.add(btn);
     }
 
-    timelinesPanel.setLayout(new BoxLayout(timelinesPanel, BoxLayout.Y_AXIS));
-    namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
-    addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
-    addFramePanel.setPreferredSize(new Dimension(100,
-        (int)addFramePanel.getPreferredSize().getHeight()));
-
-    JScrollPane innerScrollPane = new JScrollPane(timelinesPanel);
-    JScrollBar tScroll = new JScrollBar(JScrollBar.HORIZONTAL);
-    innerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-    innerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-    innerScrollPane.setHorizontalScrollBar(tScroll);
-    JPanel innerPanel = new JPanel(new BorderLayout());
-    innerPanel.add(innerScrollPane);
+//    timelinesPanel.setLayout(new BoxLayout(timelinesPanel, BoxLayout.Y_AXIS));
+//    namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
+//    addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
+//    addFramePanel.setPreferredSize(new Dimension(100,
+//        (int)addFramePanel.getPreferredSize().getHeight()));
+//
+//    JScrollPane innerScrollPane = new JScrollPane(timelinesPanel);
+//    JScrollBar tScroll = new JScrollBar(JScrollBar.HORIZONTAL);
+//    innerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+//    innerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+//    innerScrollPane.setHorizontalScrollBar(tScroll);
+//    JPanel innerPanel = new JPanel(new BorderLayout());
+//    innerPanel.add(innerScrollPane);
+    
 //    innerScrollPane.setPreferredSize(new Dimension(1500,
 //        (int)innerScrollPane.getPreferredSize().getHeight()));
 
@@ -98,6 +99,10 @@ public class TimelinesPanel extends JPanel {
     this.add(tScroll, BorderLayout.NORTH);
     this.add(outerOuterPanel, BorderLayout.CENTER);
     this.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT));
+
+
+
+
   }
 
   public void setViewCallback(Consumer<EditorAction> callback) {
