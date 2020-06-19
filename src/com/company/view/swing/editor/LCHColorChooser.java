@@ -26,7 +26,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   JSlider rSlider;
   JSlider gSlider;
   JSlider bSlider;
-  boolean iterativelyUpdate;
 
   public LCHColorChooser(Color oldColor) {
     rSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getRed());
@@ -37,18 +36,14 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
     rSlider.addChangeListener(this);
     gSlider.addChangeListener(this);
     bSlider.addChangeListener(this);
-
-    iterativelyUpdate = true;
   }
 
   @Override
   public void updateChooser() {
-    iterativelyUpdate = false;
     Color newColor = getColorFromModel();
     rSlider.setValue(newColor.getRed());
     gSlider.setValue(newColor.getGreen());
     bSlider.setValue(newColor.getBlue());
-    iterativelyUpdate = true;
   }
 
   @Override
@@ -90,10 +85,8 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
   @Override
   public void stateChanged(ChangeEvent e) {
-    if (iterativelyUpdate) {
-      Color newColor = new Color(rSlider.getValue(), gSlider.getValue(), bSlider.getValue());
-      getColorSelectionModel().setSelectedColor(newColor);
-    }
+    Color newColor = new Color(rSlider.getValue(), gSlider.getValue(), bSlider.getValue());
+    getColorSelectionModel().setSelectedColor(newColor);
   }
 
   static class LCHPreviewPanel extends JPanel {
@@ -164,13 +157,13 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
     }
 
     public void updateRGB(Color rgb) {
-      if (Math.abs(new LCHColor(rgb).l - (int)new LCHColor(this.rgb).l) > 1.5) {
+      if (Math.abs(new LCHColor(rgb).l - (int)new LCHColor(this.rgb).l) > 1.0) {
         System.out.println((int)new LCHColor(rgb).l);
         System.out.println((int)new LCHColor(this.rgb).l);
         im = LCHPreviewPanel.makePreviewImage(rgb);
       }
       this.rgb = rgb;
-      // this.repaint();
+      this.repaint();
     }
 
     @Override
