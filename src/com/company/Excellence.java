@@ -4,6 +4,7 @@ import com.company.controller.AnimatorController;
 import com.company.controller.AnimatorControllerImpl;
 import com.company.controller.animatoractions.AnimatorActionConsumerImpl;
 import com.company.controller.viewactions.editoractions.EditorActionConsumerImpl;
+import com.company.controller.viewactions.menuactions.MenuActionConsumerImpl;
 import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
 import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;
@@ -12,6 +13,8 @@ import com.company.util.AnimationReader;
 import com.company.view.swing.editor.EditorView;
 import com.company.view.swing.editor.EditorViewImpl;
 import com.company.view.swing.editor.LCHColorChooser;
+import com.company.view.swing.menu.MenuView;
+import com.company.view.swing.menu.MenuViewImpl;
 import com.company.view.swing.player.PlayerView;
 import com.company.view.swing.player.PlayerViewImpl;
 
@@ -58,13 +61,17 @@ public final class Excellence {
    * @param args list of input arguments for the animator
    */
   public static void main(String[] args) throws IOException {
-    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
-    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
-    AnimatorModel model = AnimationReader.parseFile(input, builder);
+//    BufferedReader input = Files.newBufferedReader(Paths.get("toh-3.txt"));
+//    AnimationBuilder<AnimatorModel> builder = new AnimatorModelImpl.Builder();
+//    AnimatorModel model = AnimationReader.parseFile(input, builder);
+//
+//    EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
+//    view.setCallback(new EditorActionConsumerImpl(view));
+//    view.renderVisual();
 
-    EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
-    view.setCallback(new EditorActionConsumerImpl(view));
-    view.renderVisual();
+    MenuView menu = new MenuViewImpl();
+    menu.setCallback(new MenuActionConsumerImpl(menu));
+    menu.renderVisual();
   }
 
   public static void testRGB(String[] args) {

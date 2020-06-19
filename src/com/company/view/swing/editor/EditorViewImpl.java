@@ -110,7 +110,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   @Override
   public void highlightShape(String toBeHighlighted) {
     this.canvas.highlightShape(toBeHighlighted);
-    
+
     if (toBeHighlighted == null) {
       this.properties.hideProperties();
       this.refreshView();
