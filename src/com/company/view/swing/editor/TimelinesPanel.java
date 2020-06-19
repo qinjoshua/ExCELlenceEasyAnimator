@@ -11,10 +11,12 @@ import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
@@ -32,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 
 /**
  * Represents a panel to show all of the timelines for each specific shape.
@@ -42,7 +45,12 @@ public class TimelinesPanel extends JPanel {
   private final JPanel namesPanel;
   private final JPanel outerPanel;
   private final JPanel addFramePanel;
+
   Map<String, TimelinePanel> timelines;
+
+  JPanel highlightedNamePanel;
+  Map<String, JPanel> namesPanels;
+
   ReadOnlyAnimatorModel model;
   Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
@@ -54,6 +62,9 @@ public class TimelinesPanel extends JPanel {
     namesPanel = new JPanel();
     addFramePanel = new JPanel();
     outerPanel = new JPanel();
+
+    this.highlightedNamePanel = null;
+    this.namesPanels = new HashMap<>();
 
     Map<String, SortedSet<Frame>> frames = model.getKeyframes();
     timelines = new LinkedHashMap<>();
@@ -108,6 +119,8 @@ public class TimelinesPanel extends JPanel {
         (int) label.getPreferredSize().getWidth() + 10,
         (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
     label.setLabelFor(timeline);
+
+    namesPanels.put(name, labelPanel);
 
     AddFrameButton addBtn = new AddFrameButton(name, modelCallback);
     DelShapeButton delBtn = new DelShapeButton(name, modelCallback);
@@ -280,6 +293,19 @@ public class TimelinesPanel extends JPanel {
 
     public void setViewCallback(Consumer<EditorAction> viewCallback) {
       this.viewCallback = viewCallback;
+    }
+  }
+
+  void highlightPanel(String name) {
+    this.deHighlightPanel();
+    this.highlightedNamePanel = this.namesPanels.get(name);
+    highlightedNamePanel.setBackground(new Color(128, 179, 229));
+  }
+
+  void deHighlightPanel() {
+    if (this.highlightedNamePanel != null) {
+      this.highlightedNamePanel.setBackground(UIManager.getColor( "Panel.background" ));
+      this.highlightedNamePanel = null;
     }
   }
 }

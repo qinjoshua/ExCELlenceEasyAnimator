@@ -116,9 +116,11 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     if (toBeHighlighted == null) {
       this.properties.hideProperties();
+      this.timelines.deHighlightPanel();
     } else {
       this.modelCallback.accept(new CreateKeyframe(toBeHighlighted, tick));
       this.updateProperties(toBeHighlighted);
+      this.timelines.highlightPanel(toBeHighlighted);
     }
     this.updateBanner(toBeHighlighted);
     this.refreshView();

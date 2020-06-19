@@ -5,11 +5,18 @@ import com.company.controller.viewactions.menuactions.OpenFile;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.function.Consumer;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
@@ -32,10 +39,11 @@ public class MenuViewImpl extends JFrame implements MenuView {
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JPanel splashScreen = new JPanel();
-    splashScreen.setPreferredSize(new Dimension(400, 300));
+    JPanel splashScreen = new SplashScreen();
 
-    main.add(splashScreen, BorderLayout.WEST);
+    main.setLayout(new BorderLayout());
+
+    main.add(splashScreen, BorderLayout.CENTER);
 
     JPanel menuOptions = new JPanel();
     JButton openProject = new JButton("Open Project");
@@ -44,9 +52,9 @@ public class MenuViewImpl extends JFrame implements MenuView {
     menuOptions.add(openProject);
     menuOptions.add(newProject);
 
-    menuOptions.setLayout(new BoxLayout(menuOptions, BoxLayout.Y_AXIS));
+    menuOptions.setLayout(new FlowLayout());
 
-    main.add(menuOptions, BorderLayout.EAST);
+    main.add(menuOptions, BorderLayout.SOUTH);
 
     this.getContentPane().add(main, BorderLayout.CENTER);
 
@@ -97,5 +105,28 @@ public class MenuViewImpl extends JFrame implements MenuView {
   @Override
   public void setCallback(Consumer<MenuAction> callback) {
     this.callback = callback;
+  }
+
+  private Image getImage() throws IOException {
+    return ImageIO.read(getClass().getResource("/images/splash.png")).getScaledInstance(600, 450,
+            Image.SCALE_SMOOTH);
+  }
+
+  private class SplashScreen extends JPanel {
+    public SplashScreen() {
+      this.setPreferredSize(new Dimension(600, 450));
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      Image img;
+      try {
+        img = getImage();
+        g.drawImage(img, 0, 0, null);
+      } catch (IOException e) {
+        System.out.println(e.getMessage());
+      }
+    }
   }
 }
