@@ -1,6 +1,5 @@
 package com.company.view.swing.editor;
 
-import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.viewactions.editoractions.CreateShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.OpenPreview;

@@ -11,7 +11,6 @@ import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Shape;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -85,17 +84,11 @@ public class PropertyPanel extends JPanel {
     this.viewCallback = viewCallback;
   }
 
-  private class PropertiesPanel extends JPanel {
+  private static class PropertiesPanel extends JPanel {
     // The tick that is being edited.
-    int tick;
-    // The name of the shape being edited.
-    private final String shapeName;
-    // The callback for model editing.
-    private final Consumer<AnimatorAction> modelCallback;
+    final int tick;
     // The callback for editor view modification.
     private final Consumer<EditorAction> viewCallback;
-    // The read-only view model.
-    private final ReadOnlyAnimatorModel model;
 
     /**
      * Constructs a property panel to edit a specific shape at a specific time on a given model,
@@ -110,10 +103,10 @@ public class PropertyPanel extends JPanel {
     public PropertiesPanel(String shapeName, int tick, Consumer<AnimatorAction> modelCallback,
                            ReadOnlyAnimatorModel model, Consumer<EditorAction> viewCallback) {
       super();
-      this.shapeName = shapeName;
+      // The name of the shape being edited.
       this.tick = tick;
-      this.modelCallback = modelCallback;
-      this.model = model;
+      // The callback for model editing.
+      // The read-only view model.
       this.viewCallback = viewCallback;
 
       JPanel nonColor = new JPanel(new SpringLayout());

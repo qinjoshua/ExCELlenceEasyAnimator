@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package layout;
+package com.company.view.swing.editor;
 
 import java.awt.Component;
 import java.awt.Container;

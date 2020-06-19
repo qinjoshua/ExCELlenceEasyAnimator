@@ -19,10 +19,10 @@ import javax.swing.JPanel;
  * A panel representing the top banner of the application.
  */
 public class BannerPanel extends JPanel {
-  String shapeName;
-  int tick;
-  ReadOnlyAnimatorModel model;
-  Consumer<AnimatorAction> modelCallback;
+  final String shapeName;
+  final int tick;
+  final ReadOnlyAnimatorModel model;
+  final Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
 
   /**

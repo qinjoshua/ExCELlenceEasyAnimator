@@ -8,7 +8,7 @@ import java.util.function.Consumer;
  * Represents a consumer that performs an action on a player view.
  */
 public class PlayerActionConsumerImpl implements Consumer<PlayerAction> {
-  PlayerView view;
+  final PlayerView view;
 
   /**
    * Constructor that sets the editor view to be acted on.

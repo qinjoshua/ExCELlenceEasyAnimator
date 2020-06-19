@@ -9,7 +9,7 @@ import java.awt.Color;
  * An action to modify the color of a particular shape at a particular time.
  */
 public class ChangeColor extends AShapeModifier {
-  Color newColor;
+  final Color newColor;
 
   /**
    * Constructs a new action to change the color of the given shape at the given tick to the given

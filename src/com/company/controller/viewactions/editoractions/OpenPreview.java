@@ -10,7 +10,7 @@ import com.company.view.swing.player.PlayerViewImpl;
  * Action to open the preview window with given model to play.
  */
 public class OpenPreview implements EditorAction {
-  ReadOnlyAnimatorModel model;
+  final ReadOnlyAnimatorModel model;
 
   /**
    * Initializes the preview opener with a read-only model to preview with.

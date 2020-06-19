@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  * Tests for the animator model.
  */
 public class AnimatorModelImplTest {
-  AnimatorModel testModel = new AnimatorModelImpl();
+  final AnimatorModel testModel = new AnimatorModelImpl();
   AnimatorModel testRectangleMove = new AnimatorModelImpl();
 
   private void initTests() {

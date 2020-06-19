@@ -175,26 +175,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
   }
 
   private static class KeyComponent extends JPanel {
-    /**
-     * Sets the given keystroke to the given action with the given name.
-     *
-     * @param key    the key used to start the action
-     * @param name   the name used for the action
-     * @param action the action itself
-     */
-    public void setCommand(KeyStroke key, String name, Action action) {
-      this.getInputMap().put(key, name);
-      this.getActionMap().put(name, action);
-    }
 
-    /**
-     * Sets the given action with the given name.
-     *
-     * @param name   the name used for the action
-     * @param action the action itself
-     */
-    public void setCommand(String name, Action action) {
-      this.getActionMap().put(name, action);
-    }
   }
 }

@@ -16,8 +16,7 @@ import static org.junit.Assert.fail;
  * Test for text view.
  */
 public class TextViewTest {
-  AnimatorModel testModel = new AnimatorModelImpl();
-  AnimatorModel testRectangleMove = new AnimatorModelImpl();
+  final AnimatorModel testModel = new AnimatorModelImpl();
 
   private void initTests() {
     testModel.createKeyframe("E", new Ellipse(new PosnImpl(10, 10), 10, 20, new Color(0, 144,

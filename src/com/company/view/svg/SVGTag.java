@@ -8,9 +8,9 @@ import java.util.List;
  * Represents a tag in an SVG file.
  */
 public class SVGTag {
-  String name;
-  List<SVGTagAttribute> attributes;
-  List<SVGTag> innerSVGTags;
+  final String name;
+  final List<SVGTagAttribute> attributes;
+  final List<SVGTag> innerSVGTags;
 
   /**
    * Creates a new SVG tag with the given name and list of attributes.

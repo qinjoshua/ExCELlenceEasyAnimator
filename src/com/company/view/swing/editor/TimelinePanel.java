@@ -26,11 +26,11 @@ import javax.swing.JToggleButton;
 public class TimelinePanel extends JPanel {
   public static final String BULLET = "•";
   static final Dimension KEYFRAME_SIZE = new Dimension(15, 40);
-  String shapeName;
-  ReadOnlyAnimatorModel model;
-  Consumer<AnimatorAction> modelCallback;
+  final String shapeName;
+  final ReadOnlyAnimatorModel model;
+  final Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
-  List<JToggleButton> buttons;
+  final List<JToggleButton> buttons;
 
   /**
    * Creates a panel for a specific shape, showing its keyframes over time in a timeline.

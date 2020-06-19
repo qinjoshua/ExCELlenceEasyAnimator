@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
  * commands are called.
  */
 public class MockModelTests {
-  Appendable out = new StringBuilder();
-  AnimatorModel mock = new MockModel(out);
+  final Appendable out = new StringBuilder();
+  final AnimatorModel mock = new MockModel(out);
 
   @Test
   public void testChangeColor() {

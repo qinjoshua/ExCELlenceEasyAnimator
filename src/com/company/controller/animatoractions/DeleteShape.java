@@ -6,7 +6,7 @@ import com.company.model.AnimatorModel;
  * Action that deletes a given shape from the animation entirely. Cannot be undone!
  */
 public class DeleteShape implements AnimatorAction {
-  String shapeName;
+  final String shapeName;
 
   /**
    * Initializes an action to delete the given shape from the model.

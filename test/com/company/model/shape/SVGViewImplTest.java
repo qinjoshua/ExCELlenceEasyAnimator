@@ -19,11 +19,11 @@ import static org.junit.Assert.fail;
  * Test for SVG view.
  */
 public class SVGViewImplTest {
-  AnimatorModel model = new AnimatorModelImpl();
-  AnimatorModel model2 = new AnimatorModelImpl();
+  final AnimatorModel model = new AnimatorModelImpl();
+  final AnimatorModel model2 = new AnimatorModelImpl();
 
-  AnimatorModel smallModelManyAnimations = new AnimatorModelImpl();
-  AnimatorModel smallModelManyShapes = new AnimatorModelImpl();
+  final AnimatorModel smallModelManyAnimations = new AnimatorModelImpl();
+  final AnimatorModel smallModelManyShapes = new AnimatorModelImpl();
 
   private void initTests() {
     model.createKeyframe("c", new Rectangle(new PosnImpl(100, 100), 150, 150, Color.RED), 0);

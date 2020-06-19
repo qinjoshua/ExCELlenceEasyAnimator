@@ -8,7 +8,7 @@ import java.util.function.Consumer;
  * Implementation of an action handler that runs all the given actions on a model.
  */
 public class AnimatorActionConsumerImpl implements Consumer<AnimatorAction> {
-  AnimatorModel model;
+  final AnimatorModel model;
 
   /**
    * Creates an action handler with the given model.

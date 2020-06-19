@@ -22,8 +22,7 @@ public class BoundingBoxImpl implements BoundingBox {
    * @param currentlyHighlightedShape the currently highlighted shape that the bounding box bounds
    */
   public BoundingBoxImpl(Shape currentlyHighlightedShape) {
-    Shape highlightedShape = currentlyHighlightedShape;
-    boundingBox = highlightedShape.getBounds();
+    boundingBox = currentlyHighlightedShape.getBounds();
 
     anchorPoints = new ArrayList<>();
     for (AnchorType type : AnchorType.values()) {

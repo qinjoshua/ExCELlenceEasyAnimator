@@ -46,13 +46,13 @@ public class TimelinesPanel extends JPanel {
   private final JPanel namesPanel;
   private final JPanel addFramePanel;
 
-  Map<String, TimelinePanel> timelines;
+  final Map<String, TimelinePanel> timelines;
 
   JPanel highlightedNamePanel;
-  Map<String, JPanel> namesPanels;
+  final Map<String, JPanel> namesPanels;
 
-  ReadOnlyAnimatorModel model;
-  Consumer<AnimatorAction> modelCallback;
+  final ReadOnlyAnimatorModel model;
+  final Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
 
   /**

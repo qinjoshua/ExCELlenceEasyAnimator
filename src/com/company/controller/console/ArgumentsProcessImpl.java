@@ -27,7 +27,7 @@ import java.util.function.Function;
  * arguments have been processed.
  */
 public class ArgumentsProcessImpl implements ArgumentsProcessor {
-  Map<String, Function<String, Void>> knownArguments;
+  final Map<String, Function<String, Void>> knownArguments;
   private Integer fps;
   private Appendable out;
   private Readable in;

@@ -19,16 +19,13 @@ public class CreateKeyframe extends AShapeModifier implements AnimatorAction {
   }
 
   @Override
-  public boolean checkValidKeyframe(AnimatorModel model) {
-    return true;
-  }
-
-  @Override
   protected void actOnUnchecked(AnimatorModel model) throws IllegalArgumentException {
-    Shape newShape = model.shapesAt(this.tick).get(this.shapeName).copy();
-    if (newShape == null) {
+    Shape newShape;
+    if (!model.shapesAt(this.tick).containsKey(shapeName)) {
       // before first keyframe, initialize to first keyframe instead
       newShape = model.getKeyframes().get(shapeName).first().getShape().copy();
+    } else {
+      newShape = model.shapesAt(this.tick).get(this.shapeName).copy();
     }
     model.createKeyframe(this.shapeName, newShape, this.tick);
   }

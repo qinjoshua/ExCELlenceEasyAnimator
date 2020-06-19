@@ -15,10 +15,10 @@ import static org.junit.Assert.assertEquals;
  * Tests for implementations of Frame.
  */
 public class FrameTest {
-  Frame testFrame = new FrameImpl(3, new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED));
-  Frame testFrame2 = new FrameImpl(1, new Rectangle(new PosnImpl(20, 20), 20, 20, Color.BLUE));
-  Frame testFrame3 = new FrameImpl(5, new Rectangle(new PosnImpl(17, 13), 12, 14, Color.GREEN));
-  Frame testFrame4 = new FrameImpl(5, new Ellipse(new PosnImpl(20, 30), 13, 17, Color.RED));
+  final Frame testFrame = new FrameImpl(3, new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED));
+  final Frame testFrame2 = new FrameImpl(1, new Rectangle(new PosnImpl(20, 20), 20, 20, Color.BLUE));
+  final Frame testFrame3 = new FrameImpl(5, new Rectangle(new PosnImpl(17, 13), 12, 14, Color.GREEN));
+  final Frame testFrame4 = new FrameImpl(5, new Ellipse(new PosnImpl(20, 30), 13, 17, Color.RED));
 
   // Test that frame implementation will initialize with expected parameters
   @Test

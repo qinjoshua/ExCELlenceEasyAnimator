@@ -15,7 +15,7 @@ import java.util.SortedSet;
  * Mock model used for the purpose of testing.
  */
 public class MockModel implements AnimatorModel {
-  Appendable out;
+  final Appendable out;
 
   /**
    * Initializes the appendable out where the testing strings are to be written to.
@@ -37,8 +37,7 @@ public class MockModel implements AnimatorModel {
   public void createKeyframe(String shapeName, Shape shape, int tick)
           throws IllegalArgumentException {
     try {
-      out.append("Name: " + shapeName + " Shape: " + this.shapeToString(shape) + " Tick: "
-              + tick + " ");
+      out.append("Name: ").append(shapeName).append(" Shape: ").append(this.shapeToString(shape)).append(" Tick: ").append(String.valueOf(tick)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -47,7 +46,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public void setCanvasWidth(int canvasWidth) {
     try {
-      out.append(Integer.toString(canvasWidth) + " ");
+      out.append(String.valueOf(canvasWidth)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -56,7 +55,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public void setCanvasHeight(int canvasHeight) {
     try {
-      out.append(Integer.toString(canvasHeight) + " ");
+      out.append(String.valueOf(canvasHeight)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -65,7 +64,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public void setCanvasX(int canvasX) {
     try {
-      out.append(Integer.toString(canvasX) + " ");
+      out.append(String.valueOf(canvasX)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -74,7 +73,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public void setCanvasY(int canvasY) {
     try {
-      out.append(Integer.toString(canvasY) + " ");
+      out.append(String.valueOf(canvasY)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -83,7 +82,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public void removeKeyframe(String shapeName, int tick) {
     try {
-      out.append("Name: " + shapeName + " Tick: " + tick + " ");
+      out.append("Name: ").append(shapeName).append(" Tick: ").append(String.valueOf(tick)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -101,7 +100,7 @@ public class MockModel implements AnimatorModel {
   @Override
   public Map<String, Shape> shapesAt(int tick) throws IllegalArgumentException {
     try {
-      out.append(Integer.toString(tick) + " ");
+      out.append(String.valueOf(tick)).append(" ");
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.function.Function;
@@ -23,9 +22,9 @@ import javax.swing.event.MouseInputAdapter;
  * A CIELCH-based color chooser panel.
  */
 public class LCHColorChooser extends AbstractColorChooserPanel implements ChangeListener {
-  JSlider rSlider;
-  JSlider gSlider;
-  JSlider bSlider;
+  final JSlider rSlider;
+  final JSlider gSlider;
+  final JSlider bSlider;
 
   public LCHColorChooser(Color oldColor) {
     rSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getRed());
@@ -136,7 +135,6 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
 
     private static BufferedImage makePreviewImage(Color rgb) {
       LCHColor lch = new LCHColor(rgb);
-      System.out.println(String.format("Drawing preview panel for %f", lch.l));
       BufferedImage im = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_ARGB);
       for (int y = 0; y < im.getHeight(); y++) {
         for (int x = 0; x < im.getWidth(); x++) {
@@ -187,9 +185,9 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
    * A color in the CIE LCH color space, a cylindrical transformation of CIELAB.
    */
   public static class LCHColor {
-    public double l;
-    public double c;
-    public double h;
+    public final double l;
+    public final double c;
+    public final double h;
 
     public LCHColor(double l, double c, double h) {
       this.l = l;
