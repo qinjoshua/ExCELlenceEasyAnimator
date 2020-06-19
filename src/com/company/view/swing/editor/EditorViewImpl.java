@@ -64,7 +64,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.keyComponent = new KeyComponent();
 
     this.setTick(1);
-    this.setPreferredSize(new Dimension(1200, 800));
+    //this.setPreferredSize(new Dimension(1200, 800));
     this.pack();
   }
 
