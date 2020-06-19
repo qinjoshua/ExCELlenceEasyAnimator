@@ -9,6 +9,7 @@ import com.company.model.ReadOnlyAnimatorModel;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
@@ -78,13 +79,13 @@ public class TimelinesPanel extends JPanel {
     innerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     innerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     innerScrollPane.setHorizontalScrollBar(tScroll);
-    //    innerScrollPane.setPreferredSize(new Dimension(1500,
-//        (int)innerScrollPane.getPreferredSize().getHeight()));
 
     outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.X_AXIS));
     outerPanel.add(namesPanel);
     outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
+    outerPanel.setPreferredSize(new Dimension(0,
+        (int)outerPanel.getPreferredSize().getHeight()));
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -92,7 +93,7 @@ public class TimelinesPanel extends JPanel {
     outerScrollPane.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT - 50));
     this.setLayout(new BorderLayout());
     this.add(tScroll, BorderLayout.NORTH);
-    this.add(outerOuterPanel, BorderLayout.CENTER);
+    this.add(outerScrollPane, BorderLayout.CENTER);
     this.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT));
   }
 
