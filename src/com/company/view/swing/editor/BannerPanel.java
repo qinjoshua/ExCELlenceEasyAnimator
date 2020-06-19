@@ -7,13 +7,19 @@ import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 /**
  * A panel representing the top banner of the application.
@@ -40,22 +46,31 @@ public class BannerPanel extends JPanel {
     this.model = model;
     this.modelCallback = callback;
     this.viewCallback = null;
-    this.setPreferredSize(new Dimension(1200, 50));
-    this.setLayout(new FlowLayout());
-    this.add(new JLabel("Excellence Animation Editor"));
+    this.setPreferredSize(new Dimension(1200, 35));
+    JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
     if (shapeName != null) {
-      this.add(new JLabel(String.format("Current Shape: %s", shapeName)));
+      infoPanel.add(new JLabel(String.format("<html><h4>Current Shape: %s</h4></html>", shapeName)));
     }
-    this.add(new JLabel(String.format("Current Time: %d", tick)));
+    infoPanel.add(new JLabel(String.format("<html><h4>Current Time: %d</h4></html>\"", tick)));
     if (shapeName != null) {
-      JButton delButton = new JButton("Delete Current Frame");
+      JButton delButton = new JButton("<html><h4>Delete Current Frame</h4></html>");
+      delButton.setMargin(new Insets(0, 0, 0, 0));
+      delButton.setPreferredSize(new Dimension(
+          (int)delButton.getPreferredSize().getWidth(),
+          25));
       delButton.addActionListener(e -> {
         modelCallback.accept(new RemoveKeyframe(shapeName, tick));
         getViewCallback().accept(new HighlightShape(null));
         getViewCallback().accept(new RefreshView());
       });
-      this.add(delButton);
+      infoPanel.add(delButton);
     }
+
+    this.setLayout(new BorderLayout());
+    JLabel mainLabel = new JLabel("<html><h2>Excellence Animation Editor</h2></html>");
+    mainLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+    this.add(mainLabel, BorderLayout.WEST);
+    this.add(infoPanel, BorderLayout.EAST);
   }
 
   public Consumer<EditorAction> getViewCallback() {
