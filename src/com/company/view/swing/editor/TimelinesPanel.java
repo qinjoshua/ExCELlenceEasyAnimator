@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -120,10 +119,6 @@ public class TimelinesPanel extends JPanel {
     JLabel label = new JLabel(name, JLabel.TRAILING);
     JPanel labelPanel = new JPanel();
 
-    // This might need some tweaking
-    labelPanel.setLayout(new GridLayout(2, 1));
-    labelPanel.add(Box.createVerticalStrut(1));
-
     labelPanel.add(label);
     labelPanel.setPreferredSize(new Dimension(
         (int) label.getPreferredSize().getWidth() + 10,
@@ -181,8 +176,7 @@ public class TimelinesPanel extends JPanel {
       timelines.remove(name);
     }
     for (int removeInd : toRemoveIndices) {
-      // there's a single padding at the start of each of these, so it only starts at 1
-      namesPanel.remove(removeInd + 1);
+      namesPanel.remove(removeInd);
       addFramePanel.remove(removeInd);
       timelinesPanel.remove(removeInd + 1);
     }
@@ -215,6 +209,7 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton delShapeButton = new JButton("\uD83D\uDDD1");
+      delShapeButton.setToolTipText("Delete the shape \"" + shapeName + "\" in the timeline");
       delShapeButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
@@ -265,6 +260,7 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton addFrameButton = new JButton("+");
+      addFrameButton.setToolTipText("Add a new frame to the shape + \"" + shapeName + "\"");
       addFrameButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       addFrameButton.addActionListener(e -> {
