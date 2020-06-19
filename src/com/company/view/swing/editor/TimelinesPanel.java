@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -78,7 +79,6 @@ public class TimelinesPanel extends JPanel {
     addFramePanel.setPreferredSize(new Dimension(110,
         (int) addFramePanel.getPreferredSize().getHeight()));
 
-    namesPanel.add(Box.createVerticalStrut(9));
     timelinesPanel.add(Box.createVerticalStrut(2));
     for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
       this.addShape(entry.getKey(), entry.getValue());
@@ -114,6 +114,11 @@ public class TimelinesPanel extends JPanel {
   private void addShape(String name, TimelinePanel timeline) {
     JLabel label = new JLabel(name, JLabel.TRAILING);
     JPanel labelPanel = new JPanel();
+
+    // This might need some tweaking
+    labelPanel.setLayout(new GridLayout(2, 1));
+    labelPanel.add(Box.createVerticalStrut(1));
+
     labelPanel.add(label);
     labelPanel.setPreferredSize(new Dimension(
         (int) label.getPreferredSize().getWidth() + 10,

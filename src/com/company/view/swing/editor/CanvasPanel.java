@@ -28,7 +28,9 @@ import java.util.function.Consumer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
+import javax.swing.border.Border;
 
 /**
  * Represents the canvas portion of the editor, the main area where the animation can be modified
@@ -68,7 +70,9 @@ public class CanvasPanel extends AShapesPanel {
     this.addMouseListener(resizer);
     this.addMouseMotionListener(resizer);
     boundingBox = null;
-    this.setBackground(Color.WHITE);
+
+    Border grayLine = BorderFactory.createLineBorder(Color.GRAY);
+    this.setBorder(grayLine);
 
     MouseAdapter mover = new MoveMouseAdapter();
     this.addMouseListener(mover);
@@ -151,6 +155,15 @@ public class CanvasPanel extends AShapesPanel {
     }
 
     this.drawBeingCreatedShape((Graphics2D) g);
+  }
+
+  @Override
+  protected void drawCanvas(Graphics g) {
+    Color oldColor = g.getColor();
+    g.setColor(Color.WHITE);
+    g.fillRect(0, 0, this.model.getCanvasWidth(),
+            this.model.getCanvasHeight());
+    g.setColor(oldColor);
   }
 
   /**

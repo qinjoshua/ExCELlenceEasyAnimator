@@ -35,6 +35,8 @@ public class MenuViewImpl extends JFrame implements MenuView {
    * Constructor that sets the callback to null and initializes the rest of the menu view.
    */
   public MenuViewImpl() {
+    super("Excellence Start Menu");
+
     JPanel main = new JPanel();
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

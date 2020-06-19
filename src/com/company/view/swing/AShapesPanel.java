@@ -101,7 +101,18 @@ public abstract class AShapesPanel extends JPanel {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
 
+    this.drawCanvas(g);
     this.drawModelShape((Graphics2D) g);
+  }
+
+  /**
+   * Draws a canvas between a panel and the shapes.
+   *
+   * @param g the graphics object to draw to
+   */
+  protected void drawCanvas(Graphics g) {
+    // Default behavior does nothing; can be overwritten to draw a canvas onto the screen.
+    return;
   }
 
   /**
