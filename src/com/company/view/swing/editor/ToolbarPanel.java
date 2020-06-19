@@ -1,15 +1,21 @@
 package com.company.view.swing.editor;
 
-import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.viewactions.editoractions.CreateShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.OpenPreview;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
+import com.company.view.svg.SVGView;
+import com.company.view.svg.SVGViewImpl;
+import com.company.view.text.TextAnimatorView;
+import com.company.view.text.TextView;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.Closeable;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -17,13 +23,18 @@ import java.util.function.Consumer;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Panel that contains the tools for controlling the editor. Includes the ability to create new
@@ -89,13 +100,95 @@ public class ToolbarPanel extends JPanel {
       }
     };
 
+    final Action export = new AbstractAction() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        exportDialog();
+      }
+    };
+
     previewButton.addActionListener(preview);
     rectButton.addActionListener(createRectangle);
     circleButton.addActionListener(createEllipse);
+    exportButton.addActionListener(export);
   }
 
   void setCallback(Consumer<EditorAction> callback) {
     this.callback = callback;
+  }
+
+  private void exportDialog() {
+    final JDialog dialog = new JDialog((Frame) null, "Excellence Exporter");
+
+    JPanel panel = new JPanel();
+
+    panel.add(new JLabel("How would you like to export your animation?"));
+
+    ButtonGroup exportOptions = new ButtonGroup();
+    JRadioButton svgOption = new JRadioButton("SVG");
+    JRadioButton txtOption = new JRadioButton("TXT");
+
+    exportOptions.add(svgOption);
+    exportOptions.add(txtOption);
+
+    panel.add(svgOption);
+    panel.add(txtOption);
+
+    JButton export = new JButton("Export");
+    panel.add(export);
+
+    export.addActionListener(e -> {
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle("Specify a file to save");
+
+      String description = "";
+      String extension = "";
+
+      if (svgOption.isSelected()) {
+        description = "SVG file";
+        extension = "svg";
+      } else if (txtOption.isSelected()) {
+        description = "Text file";
+        extension = "svg";
+      } else {
+        JOptionPane.showMessageDialog(null,
+                "Please select an export option",
+                "Excellence " +
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+      }
+
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(description, extension);
+      fileChooser.addChoosableFileFilter(filter);
+
+      int userSelection = fileChooser.showSaveDialog(this);
+
+      if (userSelection == JFileChooser.APPROVE_OPTION) {
+        try {
+          Appendable out = new FileWriter(fileChooser.getSelectedFile().getAbsolutePath());
+
+          if (svgOption.isSelected()) {
+            SVGView svg = new SVGViewImpl(model, 20);
+            svg.outputSVG(out);
+          } else if (txtOption.isSelected()) {
+            TextView txt = new TextAnimatorView(model);
+            txt.outputText(out);
+          }
+          ((Closeable) out).close();
+
+        } catch (IOException ioException) {
+          JOptionPane.showMessageDialog(null,
+                  "The file could not be created. Please contact customer support for help.",
+                  "Excellence " +
+                          "Error", JOptionPane.WARNING_MESSAGE);
+        }
+
+        dialog.dispose();
+      }
+    });
+
+    dialog.getContentPane().add(panel);
+    dialog.pack();
+    dialog.setVisible(true);
   }
 
   private void openNameDialog(ShapeType type) {
@@ -114,12 +207,12 @@ public class ToolbarPanel extends JPanel {
         callback.accept(new CreateShape(type, txtFieldName.getText()));
         dialog.dispose();
       } else {
-        txtFieldName.setText("");
         JOptionPane.showMessageDialog(null,
-            "The name \"" + txtFieldName.getText() + "\" is already in" +
-                " use. Please choose another name.",
-            "Excellence " +
-                "Warning", JOptionPane.WARNING_MESSAGE);
+                "The name \"" + txtFieldName.getText() + "\" is already in" +
+                        " use. Please choose another name.",
+                "Excellence " +
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+        txtFieldName.setText("");
       }
     });
 
