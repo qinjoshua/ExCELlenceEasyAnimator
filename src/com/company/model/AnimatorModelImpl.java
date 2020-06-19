@@ -153,7 +153,7 @@ public class AnimatorModelImpl implements AnimatorModel {
       }
     }
     throw new IllegalArgumentException("A keyframe did not exist for the given shape at the given" +
-            " tick.");
+        " tick.");
   }
 
   @Override
