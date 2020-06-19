@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.function.Consumer;
@@ -47,7 +48,17 @@ public class TimelinePanel extends JPanel {
     this.viewCallback = null;
 
     SortedSet<Frame> frames = this.model.getKeyframes().get(shapeName);
-    int lastTick = (int) frames.last().getTime();
+    Frame maxFrame = frames.first();
+
+    for (SortedSet<Frame> allFrames : model.getKeyframes().values()) {
+      Frame newLastFrame = Collections.max(allFrames);
+      if (maxFrame == null || maxFrame.compareTo(newLastFrame) < 0) {
+        maxFrame = newLastFrame;
+      }
+    }
+
+    int lastTick = (int)maxFrame.getTime();
+
 
     buttons = new ArrayList<>();
 

@@ -1,7 +1,9 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.animatoractions.AnimatorAction;
+import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
@@ -82,7 +84,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void refreshView() {
     this.canvas.updateShapes();
     this.updateBoundingBox();
-    this.timelines.update();
+    this.timelines.update(this.tick);
     this.setPreferredSize(this.getSize());
     this.repaint();
     this.pack();
@@ -113,11 +115,11 @@ public class EditorViewImpl extends JFrame implements EditorView {
     
     if (toBeHighlighted == null) {
       this.properties.hideProperties();
-      this.refreshView();
     } else {
+      this.modelCallback.accept(new CreateKeyframe(toBeHighlighted, tick));
       this.updateProperties(toBeHighlighted);
-      this.updateBanner(toBeHighlighted);
     }
+    this.updateBanner(toBeHighlighted);
     this.refreshView();
   }
 
