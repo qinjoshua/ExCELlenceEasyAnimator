@@ -11,11 +11,15 @@ import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Shape;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -68,7 +72,7 @@ public class PropertyPanel extends JPanel {
     this.hideProperties();
     this.properties = new PropertiesPanel(shapeName, tick, modelCallback, model, viewCallback);
     this.add(properties);
-    this.setPreferredSize(new Dimension(350, 0));
+    this.setPreferredSize(new Dimension(400, 600));
     this.repaint();
   }
 
@@ -111,6 +115,8 @@ public class PropertyPanel extends JPanel {
       this.modelCallback = modelCallback;
       this.model = model;
       this.viewCallback = viewCallback;
+
+      JPanel nonColor = new JPanel(new SpringLayout());
 
       Border border = BorderFactory.createLineBorder(Color.lightGray);
       this.setBorder(border);
@@ -178,12 +184,13 @@ public class PropertyPanel extends JPanel {
 
       for (int i = 0; i < labels.length; i++) {
         JLabel label = new JLabel(labels[i], JLabel.TRAILING);
-        this.add(label);
+        label.setPreferredSize(new Dimension(100, 20));
+        nonColor.add(label);
         JSpinner spinner = new JSpinner(spinners[i]);
-        spinner.setPreferredSize(new Dimension(50, 20));
-        spinner.setMaximumSize(new Dimension(50, 20));
+        spinner.setPreferredSize(new Dimension(100, 20));
+        spinner.setMaximumSize(new Dimension(100, 20));
         label.setLabelFor(spinner);
-        this.add(spinner);
+        nonColor.add(spinner);
       }
 
       JColorChooser colorField = new JColorChooser(origShape.getColor());
@@ -200,20 +207,25 @@ public class PropertyPanel extends JPanel {
       });
       colorField.setPreviewPanel(previewPanel);
 
+      JPanel color = new JPanel(new FlowLayout());
       JLabel colorLabel = new JLabel("Color", JLabel.TRAILING);
       colorLabel.setLabelFor(colorField);
-      this.add(colorLabel);
-      this.add(colorField);
-
-
-      this.setLayout(new SpringLayout());
+      color.add(colorLabel);
+      color.add(colorField);
 
       // from the Java tutorial
-      layout.SpringUtilities.makeCompactGrid(this,
-          5, 2,
+      layout.SpringUtilities.makeGrid(nonColor,
+          4, 2,
           0, 0,
-          0, 0
+          10, 10
       );
+
+      this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      nonColor.setPreferredSize(new Dimension(250, 120));
+      color.setPreferredSize(new Dimension(400, 500));
+      this.add(Box.createVerticalStrut(10));
+      this.add(nonColor);
+      this.add(color);
     }
 
     /**

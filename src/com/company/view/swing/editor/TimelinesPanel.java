@@ -4,6 +4,7 @@ import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.animatoractions.DeleteShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.controller.viewactions.editoractions.SetTick;
 import com.company.model.Frame;
@@ -208,6 +209,7 @@ public class TimelinesPanel extends JPanel {
         );
         if (response == JOptionPane.YES_OPTION) {
           callback.accept(new DeleteShape(shapeName));
+          getViewCallback().accept(new HighlightShape(null));
           getViewCallback().accept(new RefreshView());
         }
       });

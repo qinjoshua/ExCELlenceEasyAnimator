@@ -159,7 +159,11 @@ public class CanvasPanel extends AShapesPanel {
    * @return the highlighted shape
    */
   Shape getHighlightedShape() {
-    return this.highlightedShape.shape;
+    if (this.highlightedShape == null) {
+      return null;
+    } else {
+      return this.highlightedShape.shape;
+    }
   }
 
   /**

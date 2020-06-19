@@ -15,6 +15,7 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 /**
  * Provides a view for the main editor that allows animations to be made. This view provides an
@@ -81,6 +82,9 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void refreshView() {
     this.canvas.updateShapes();
     this.updateBoundingBox();
+    if (this.getHighlightedShape() != null) {
+      properties.addProperties(this.getHighlightedShapeName(), tick, modelCallback, model);
+    }
     this.timelines.update(this.tick);
     this.setPreferredSize(this.getSize());
     this.repaint();
