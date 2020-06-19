@@ -149,6 +149,9 @@ public class AnimatorModelImpl implements AnimatorModel {
     for (Frame frame : frames) {
       if (frame.getTime() == tick) {
         frames.remove(frame);
+        if (frames.size() == 0) {
+          this.deleteShape(shapeName);
+        }
         return;
       }
     }

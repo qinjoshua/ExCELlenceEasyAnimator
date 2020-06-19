@@ -68,7 +68,7 @@ public class TimelinePanel extends JPanel {
 
     this.updateButtonText();
 
-    this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
     // this.setLayout(new GridLayout(1, 0, 0, 0));
     for (JToggleButton button : buttons) {
       this.add(button);
