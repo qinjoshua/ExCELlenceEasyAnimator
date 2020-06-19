@@ -24,6 +24,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -193,8 +194,22 @@ public class TimelinesPanel extends JPanel {
       delShapeButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
-        callback.accept(new DeleteShape(shapeName));
-        getViewCallback().accept(new RefreshView());
+        Object[] options = {"Yes, kill it with fire!", "No, it's too young to die!"};
+        int response = JOptionPane.showOptionDialog(
+            null,
+            String.format("Are you sure you want to delete shape %s? This cannot be undone.",
+                shapeName),
+            "Delete Shape",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE,
+            null,
+            options,
+            options[1]
+        );
+        if (response == JOptionPane.YES_OPTION) {
+          callback.accept(new DeleteShape(shapeName));
+          getViewCallback().accept(new RefreshView());
+        }
       });
 
       this.add(delShapeButton);
