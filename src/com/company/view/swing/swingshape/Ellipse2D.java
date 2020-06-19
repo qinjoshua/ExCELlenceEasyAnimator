@@ -10,8 +10,10 @@ public class Ellipse2D implements SwingShape {
   private final int y;
 
   /**
-   * @param x
-   * @param y
+   * Initializes a new ellipse swing shape at the given x and y coordinates.
+   *
+   * @param x x-coordinate of the ellipse
+   * @param y y-coordinate of the ellipse
    */
   public Ellipse2D(int x, int y) {
     this.x = x;

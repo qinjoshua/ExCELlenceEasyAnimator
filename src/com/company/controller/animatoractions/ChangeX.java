@@ -4,6 +4,9 @@ import com.company.model.AnimatorModel;
 import com.company.model.shape.PosnImpl;
 import com.company.model.shape.Shape;
 
+/**
+ * Action to change the x-coordinates of a given shape.
+ */
 public class ChangeX extends AShapeModifier {
   private final double x;
 

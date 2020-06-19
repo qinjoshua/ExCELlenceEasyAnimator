@@ -14,7 +14,6 @@ import static org.junit.Assert.fail;
 
 /**
  * Test for text view.
- *
  */
 public class TextViewTest {
   AnimatorModel testModel = new AnimatorModelImpl();

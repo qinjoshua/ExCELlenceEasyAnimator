@@ -25,9 +25,9 @@ public abstract class AShapeModifier implements AnimatorAction {
 
   @Override
   public void actOn(AnimatorModel model) throws IllegalStateException {
-//    if(!this.checkValidKeyframe(model)) {
-//      throw new IllegalStateException("Attempted to modify invalid keyframe.");
-//    }
+    // if(!this.checkValidKeyframe(model)) {
+    //    throw new IllegalStateException("Attempted to modify invalid keyframe.");
+    // }
     try {
       this.actOnUnchecked(model);
     } catch (IllegalArgumentException e) {

@@ -1,9 +1,9 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.animatoractions.AnimatorAction;
-import com.company.controller.animatoractions.OpenPreview;
 import com.company.controller.viewactions.editoractions.CreateShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.OpenPreview;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
@@ -30,17 +30,19 @@ import javax.swing.SwingConstants;
  * shapes, preview the animation, and export the animation.
  */
 public class ToolbarPanel extends JPanel {
-  private final Map<String, AbstractButton> buttons;
   private final ReadOnlyAnimatorModel model;
-  private final Consumer<AnimatorAction> modelCallback;
   private Consumer<EditorAction> callback;
 
-  public ToolbarPanel(Consumer<AnimatorAction> modelCallback, ReadOnlyAnimatorModel model) {
-    this.buttons = new HashMap<>();
+  /**
+   * Creates the toolbar panel with the given read-only model.
+   *
+   * @param model the read-only model that this toolbar can retrieve information from
+   */
+  public ToolbarPanel(ReadOnlyAnimatorModel model) {
+    Map<String, AbstractButton> buttons = new HashMap<>();
 
     this.model = model;
 
-    this.modelCallback = modelCallback;
     this.setLayout(new GridLayout(0, 1));
 
     JButton previewButton = new JButton("▶");
@@ -66,30 +68,30 @@ public class ToolbarPanel extends JPanel {
     this.add(rectButton);
     this.add(new JSeparator(SwingConstants.HORIZONTAL));
 
-    final Action PREVIEW = new AbstractAction() {
+    final Action preview = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        modelCallback.accept(new OpenPreview());
+        callback.accept(new OpenPreview(model));
       }
     };
 
-    final Action CREATE_RECTANGLE = new AbstractAction() {
+    final Action createRectangle = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         openNameDialog(ShapeType.Rectangle);
       }
     };
 
-    final Action CREATE_ELLIPSE = new AbstractAction() {
+    final Action createEllipse = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         openNameDialog(ShapeType.Ellipse);
       }
     };
 
-    previewButton.addActionListener(PREVIEW);
-    rectButton.addActionListener(CREATE_RECTANGLE);
-    circleButton.addActionListener(CREATE_ELLIPSE);
+    previewButton.addActionListener(preview);
+    rectButton.addActionListener(createRectangle);
+    circleButton.addActionListener(createEllipse);
   }
 
   void setCallback(Consumer<EditorAction> callback) {
@@ -125,5 +127,4 @@ public class ToolbarPanel extends JPanel {
     dialog.pack();
     dialog.setVisible(true);
   }
-
 }

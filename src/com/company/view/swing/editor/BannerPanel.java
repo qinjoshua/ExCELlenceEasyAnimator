@@ -25,7 +25,14 @@ public class BannerPanel extends JPanel {
   Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
 
-
+  /**
+   * Creates a new panel for the banner of the editor view.
+   *
+   * @param shapeName name of the shape that is currently being edited
+   * @param tick      current tick in the timeline
+   * @param model     a read-only model to retrieve information from
+   * @param callback  a callback to request changes to the model
+   */
   public BannerPanel(String shapeName, int tick, ReadOnlyAnimatorModel model,
                      Consumer<AnimatorAction> callback) {
     this.shapeName = shapeName;

@@ -6,6 +6,9 @@ import com.company.model.shape.ShapeType;
 
 import java.awt.Color;
 
+/**
+ * Action to create a new shape.
+ */
 public class CreateNewShape implements AnimatorAction {
   private final String name;
   private final int x;

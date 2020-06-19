@@ -13,7 +13,7 @@ import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
 import com.company.view.swing.editor.boundingbox.Anchor;
-import com.company.view.swing.editor.boundingbox.BoundingBox;
+import com.company.view.swing.editor.boundingbox.BoundingBoxImpl;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -42,7 +42,7 @@ public class CanvasPanel extends AShapesPanel {
   private ColoredShape highlightedShape;
   private String highlightedShapeName;
   private Consumer<EditorAction> callback;
-  private BoundingBox boundingBox;
+  private BoundingBoxImpl boundingBoxImpl;
   private ShapeType toBeCreatedShape;
   private String toBeCreatedName;
   private Shape beingCreatedShape;
@@ -69,7 +69,7 @@ public class CanvasPanel extends AShapesPanel {
     MouseAdapter resizer = new ResizeMouseAdapter();
     this.addMouseListener(resizer);
     this.addMouseMotionListener(resizer);
-    boundingBox = null;
+    boundingBoxImpl = null;
 
     Border grayLine = BorderFactory.createLineBorder(Color.GRAY);
     this.setBorder(grayLine);
@@ -87,51 +87,51 @@ public class CanvasPanel extends AShapesPanel {
 
     this.addMouseListener(new ClickMouseAdapter());
 
-    final Action MOVE_UP = new AbstractAction() {
+    final Action moveUp = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if (callback != null && boundingBox != null) {
+        if (callback != null && boundingBoxImpl != null) {
           modelCallback.accept(new ChangeY(highlightedShapeName, t, -1));
-          boundingBox.translate(0, -1);
+          boundingBoxImpl.translate(0, -1);
           repaint();
         }
       }
     };
-    final Action MOVE_DOWN = new AbstractAction() {
+    final Action moveDown = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if (callback != null && boundingBox != null) {
+        if (callback != null && boundingBoxImpl != null) {
           modelCallback.accept(new ChangeY(highlightedShapeName, t, 1));
-          boundingBox.translate(0, 1);
+          boundingBoxImpl.translate(0, 1);
           repaint();
         }
       }
     };
-    final Action MOVE_LEFT = new AbstractAction() {
+    final Action moveLeft = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if (callback != null && boundingBox != null) {
+        if (callback != null && boundingBoxImpl != null) {
           modelCallback.accept(new ChangeX(highlightedShapeName, t, -1));
-          boundingBox.translate(-1, 0);
+          boundingBoxImpl.translate(-1, 0);
           repaint();
         }
       }
     };
-    final Action MOVE_RIGHT = new AbstractAction() {
+    final Action moveRight = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if (callback != null && boundingBox != null) {
+        if (callback != null && boundingBoxImpl != null) {
           modelCallback.accept(new ChangeX(highlightedShapeName, t, 1));
-          boundingBox.translate(1, 0);
+          boundingBoxImpl.translate(1, 0);
           repaint();
         }
       }
     };
 
-    this.setCommand(KeyStroke.getKeyStroke("UP"), "moveUp", MOVE_UP);
-    this.setCommand(KeyStroke.getKeyStroke("DOWN"), "moveDown", MOVE_DOWN);
-    this.setCommand(KeyStroke.getKeyStroke("LEFT"), "moveLeft", MOVE_LEFT);
-    this.setCommand(KeyStroke.getKeyStroke("RIGHT"), "moveRight", MOVE_RIGHT);
+    this.setCommand(KeyStroke.getKeyStroke("UP"), "moveUp", moveUp);
+    this.setCommand(KeyStroke.getKeyStroke("DOWN"), "moveDown", moveDown);
+    this.setCommand(KeyStroke.getKeyStroke("LEFT"), "moveLeft", moveLeft);
+    this.setCommand(KeyStroke.getKeyStroke("RIGHT"), "moveRight", moveRight);
   }
 
   /**
@@ -150,8 +150,8 @@ public class CanvasPanel extends AShapesPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    if (boundingBox != null) {
-      boundingBox.renderTo((Graphics2D) g);
+    if (boundingBoxImpl != null) {
+      boundingBoxImpl.renderTo((Graphics2D) g);
     }
 
     this.drawBeingCreatedShape((Graphics2D) g);
@@ -212,7 +212,7 @@ public class CanvasPanel extends AShapesPanel {
    */
   void updateBoundingBox() {
     if (highlightedShape != null) {
-      this.boundingBox = new BoundingBox(this.highlightedShape.shape);
+      this.boundingBoxImpl = new BoundingBoxImpl(this.highlightedShape.shape);
     }
     this.repaint();
   }
@@ -242,7 +242,7 @@ public class CanvasPanel extends AShapesPanel {
    */
   private void deselectAll() {
     this.highlightedShape = null;
-    this.boundingBox = null;
+    this.boundingBoxImpl = null;
     this.highlightedShapeName = null;
     this.updateBoundingBox();
   }
@@ -294,22 +294,22 @@ public class CanvasPanel extends AShapesPanel {
     @Override
     public void mousePressed(MouseEvent e) {
       // Checks that bounding box exists, and that we are not in the process of making a new shape
-      if (boundingBox != null && toBeCreatedShape == null) {
-        this.anchor = boundingBox.getAnchorAtPoint(e.getX(), e.getY());
+      if (boundingBoxImpl != null && toBeCreatedShape == null) {
+        this.anchor = boundingBoxImpl.getAnchorAtPoint(e.getX(), e.getY());
         this.lastX = e.getX();
         this.lastY = e.getY();
 
-        this.oldX = boundingBox.getX();
-        this.oldY = boundingBox.getY();
-        this.oldWidth = boundingBox.getWidth();
-        this.oldHeight = boundingBox.getHeight();
+        this.oldX = boundingBoxImpl.getX();
+        this.oldY = boundingBoxImpl.getY();
+        this.oldWidth = boundingBoxImpl.getWidth();
+        this.oldHeight = boundingBoxImpl.getHeight();
       }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
       if (this.anchor != null) {
-        boundingBox.growFromAnchor(anchor.getType(), e.getX() - lastX, e.getY() - lastY);
+        boundingBoxImpl.growFromAnchor(anchor.getType(), e.getX() - lastX, e.getY() - lastY);
 
         this.lastX = e.getX();
         this.lastY = e.getY();
@@ -321,12 +321,12 @@ public class CanvasPanel extends AShapesPanel {
     @Override
     public void mouseReleased(MouseEvent e) {
       if (this.anchor != null) {
-        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - oldX));
-        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - oldY));
+        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - oldX));
+        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - oldY));
         modelCallback.accept(new ChangeWidth(highlightedShapeName, t,
-            boundingBox.getWidth() - oldWidth));
+                boundingBoxImpl.getWidth() - oldWidth));
         modelCallback.accept(new ChangeHeight(highlightedShapeName, t,
-            boundingBox.getHeight() - oldHeight));
+                boundingBoxImpl.getHeight() - oldHeight));
 
         callback.accept(new RefreshView());
         this.anchor = null;
@@ -348,10 +348,10 @@ public class CanvasPanel extends AShapesPanel {
     @Override
     public void mousePressed(MouseEvent e) {
       // Checks that bounding box exists, that we're not trying to resize a shape, and that
-      if (boundingBox != null && boundingBox.getAnchorAtPoint(e.getX(), e.getY()) == null
-          && boundingBox.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
-        this.oldX = boundingBox.getX();
-        this.oldY = boundingBox.getY();
+      if (boundingBoxImpl != null && boundingBoxImpl.getAnchorAtPoint(e.getX(), e.getY()) == null
+              && boundingBoxImpl.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
+        this.oldX = boundingBoxImpl.getX();
+        this.oldY = boundingBoxImpl.getY();
 
         lastX = e.getX();
         lastY = e.getY();
@@ -361,8 +361,8 @@ public class CanvasPanel extends AShapesPanel {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-      if (boundingBox != null && editing) {
-        boundingBox.translate(e.getX() - lastX, e.getY() - lastY);
+      if (boundingBoxImpl != null && editing) {
+        boundingBoxImpl.translate(e.getX() - lastX, e.getY() - lastY);
         lastX = e.getX();
         lastY = e.getY();
         repaint();
@@ -372,8 +372,8 @@ public class CanvasPanel extends AShapesPanel {
     @Override
     public void mouseReleased(MouseEvent e) {
       if (this.editing) {
-        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBox.getX() - this.oldX));
-        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBox.getY() - this.oldY));
+        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - this.oldX));
+        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - this.oldY));
         this.editing = false;
         callback.accept(new RefreshView());
       }
@@ -435,11 +435,11 @@ public class CanvasPanel extends AShapesPanel {
   private class CursorMouseAdapter extends MouseAdapter {
     @Override
     public void mouseMoved(MouseEvent e) {
-      if (boundingBox != null) {
-        Anchor anchor = boundingBox.getAnchorAtPoint(e.getX(), e.getY());
+      if (boundingBoxImpl != null) {
+        Anchor anchor = boundingBoxImpl.getAnchorAtPoint(e.getX(), e.getY());
         if (anchor != null) {
           setCursor(new Cursor(anchor.getType().getCursor()));
-        } else if (boundingBox.contains(e.getX(), e.getY())) {
+        } else if (boundingBoxImpl.contains(e.getX(), e.getY())) {
           setCursor(new Cursor(Cursor.MOVE_CURSOR));
         } else {
           setCursor(Cursor.getDefaultCursor());
