@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.function.Consumer;
@@ -23,13 +24,13 @@ import javax.swing.JToggleButton;
  * The panel representing a single timeline of keyframes for a single shape.
  */
 public class TimelinePanel extends JPanel {
+  public static final String BULLET = "•";
+  static final Dimension KEYFRAME_SIZE = new Dimension(15, 40);
   String shapeName;
   ReadOnlyAnimatorModel model;
   Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
   List<JToggleButton> buttons;
-  static final Dimension KEYFRAME_SIZE = new Dimension(15, 40);
-  public static final String BULLET = "•";
 
   /**
    * Creates a panel for a specific shape, showing its keyframes over time in a timeline.
@@ -47,7 +48,17 @@ public class TimelinePanel extends JPanel {
     this.viewCallback = null;
 
     SortedSet<Frame> frames = this.model.getKeyframes().get(shapeName);
-    int lastTick = (int) frames.last().getTime();
+    Frame maxFrame = frames.first();
+
+    for (SortedSet<Frame> allFrames : model.getKeyframes().values()) {
+      Frame newLastFrame = Collections.max(allFrames);
+      if (maxFrame == null || maxFrame.compareTo(newLastFrame) < 0) {
+        maxFrame = newLastFrame;
+      }
+    }
+
+    int lastTick = (int) maxFrame.getTime();
+
 
     buttons = new ArrayList<>();
 
@@ -66,8 +77,8 @@ public class TimelinePanel extends JPanel {
 
   @Override
   public Dimension getPreferredSize() {
-    return new Dimension(this.buttons.size() * (int)KEYFRAME_SIZE.getWidth(),
-        (int)KEYFRAME_SIZE.getHeight());
+    return new Dimension(this.buttons.size() * (int) KEYFRAME_SIZE.getWidth(),
+        (int) KEYFRAME_SIZE.getHeight());
   }
 
   private JToggleButton makeTickBtn(int tick) {
@@ -118,7 +129,7 @@ public class TimelinePanel extends JPanel {
   public void setTick(int tick) {
     if (tick > buttons.size()) {
       for (int t = buttons.size(); t < tick; t++) {
-        JToggleButton tickBtn = this.makeTickBtn(t+1);
+        JToggleButton tickBtn = this.makeTickBtn(t + 1);
         buttons.add(tickBtn);
         this.add(tickBtn);
       }

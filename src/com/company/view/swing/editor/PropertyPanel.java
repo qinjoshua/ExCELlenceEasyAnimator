@@ -11,12 +11,14 @@ import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Shape;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -70,7 +72,7 @@ public class PropertyPanel extends JPanel {
     this.hideProperties();
     this.properties = new PropertiesPanel(shapeName, tick, modelCallback, model, viewCallback);
     this.add(properties);
-    this.setPreferredSize(new Dimension(350, 0));
+    this.setPreferredSize(new Dimension(400, 600));
     this.repaint();
   }
 
@@ -84,16 +86,16 @@ public class PropertyPanel extends JPanel {
   }
 
   private class PropertiesPanel extends JPanel {
-    // The name of the shape being edited.
-    private String shapeName;
     // The tick that is being edited.
     int tick;
+    // The name of the shape being edited.
+    private final String shapeName;
     // The callback for model editing.
-    private Consumer<AnimatorAction> modelCallback;
+    private final Consumer<AnimatorAction> modelCallback;
     // The callback for editor view modification.
-    private Consumer<EditorAction> viewCallback;
+    private final Consumer<EditorAction> viewCallback;
     // The read-only view model.
-    private ReadOnlyAnimatorModel model;
+    private final ReadOnlyAnimatorModel model;
 
     /**
      * Constructs a property panel to edit a specific shape at a specific time on a given model,
@@ -106,7 +108,7 @@ public class PropertyPanel extends JPanel {
      * @param viewCallback  the callback to use for editing the view
      */
     public PropertiesPanel(String shapeName, int tick, Consumer<AnimatorAction> modelCallback,
-                         ReadOnlyAnimatorModel model, Consumer<EditorAction> viewCallback) {
+                           ReadOnlyAnimatorModel model, Consumer<EditorAction> viewCallback) {
       super();
       this.shapeName = shapeName;
       this.tick = tick;
@@ -114,40 +116,42 @@ public class PropertyPanel extends JPanel {
       this.model = model;
       this.viewCallback = viewCallback;
 
+      JPanel nonColor = new JPanel(new SpringLayout());
+
       Border border = BorderFactory.createLineBorder(Color.lightGray);
       this.setBorder(border);
 
       Shape origShape = model.shapesAt(tick).get(shapeName);
 
       SpinnerModel xField = new SpinnerNumberModel(
-              origShape.getPosition().getX(),
-              Integer.MIN_VALUE,
-              Integer.MAX_VALUE,
-              1);
+          origShape.getPosition().getX(),
+          Integer.MIN_VALUE,
+          Integer.MAX_VALUE,
+          1);
 
       SpinnerModel yField = new SpinnerNumberModel(
-              origShape.getPosition().getY(),
-              Integer.MIN_VALUE,
-              Integer.MAX_VALUE,
-              1);
+          origShape.getPosition().getY(),
+          Integer.MIN_VALUE,
+          Integer.MAX_VALUE,
+          1);
 
       SpinnerModel widthField = new SpinnerNumberModel(
-              origShape.getWidth(),
-              0,
-              Integer.MAX_VALUE,
-              1);
+          origShape.getWidth(),
+          0,
+          Integer.MAX_VALUE,
+          1);
 
       SpinnerModel heightField = new SpinnerNumberModel(
-              origShape.getHeight(),
-              0,
-              Integer.MAX_VALUE,
-              1);
+          origShape.getHeight(),
+          0,
+          Integer.MAX_VALUE,
+          1);
 
       xField.addChangeListener(e -> {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeX(shapeName, tick,
-                (double) source.getNumber() - currShape.getPosition().getX()));
+            (double) source.getNumber() - currShape.getPosition().getX()));
         this.getViewCallback().accept(new RefreshView());
       });
 
@@ -155,7 +159,7 @@ public class PropertyPanel extends JPanel {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeY(shapeName, tick,
-                (double) source.getNumber() - currShape.getPosition().getY()));
+            (double) source.getNumber() - currShape.getPosition().getY()));
         this.getViewCallback().accept(new RefreshView());
       });
 
@@ -163,7 +167,7 @@ public class PropertyPanel extends JPanel {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeWidth(shapeName, tick,
-                (double) source.getNumber() - currShape.getWidth()));
+            (double) source.getNumber() - currShape.getWidth()));
         this.getViewCallback().accept(new RefreshView());
       });
 
@@ -171,7 +175,7 @@ public class PropertyPanel extends JPanel {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeHeight(shapeName, tick,
-                (double) source.getNumber() - currShape.getHeight()));
+            (double) source.getNumber() - currShape.getHeight()));
         this.getViewCallback().accept(new RefreshView());
       });
 
@@ -180,19 +184,20 @@ public class PropertyPanel extends JPanel {
 
       for (int i = 0; i < labels.length; i++) {
         JLabel label = new JLabel(labels[i], JLabel.TRAILING);
-        this.add(label);
+        label.setPreferredSize(new Dimension(100, 20));
+        nonColor.add(label);
         JSpinner spinner = new JSpinner(spinners[i]);
-        spinner.setPreferredSize(new Dimension(50, 20));
-        spinner.setMaximumSize(new Dimension(50, 20));
+        spinner.setPreferredSize(new Dimension(100, 20));
+        spinner.setMaximumSize(new Dimension(100, 20));
         label.setLabelFor(spinner);
-        this.add(spinner);
+        nonColor.add(spinner);
       }
 
       JColorChooser colorField = new JColorChooser(origShape.getColor());
       AbstractColorChooserPanel lchPanel = new LCHColorChooser(origShape.getColor());
       colorField.setChooserPanels(new AbstractColorChooserPanel[]{lchPanel});
       LCHColorChooser.LCHPreviewPanel previewPanel = new LCHColorChooser.LCHPreviewPanel(
-              origShape.getColor(), colorField.getSelectionModel());
+          origShape.getColor(), colorField.getSelectionModel());
 
       colorField.getSelectionModel().addChangeListener(e -> {
         Color newColor = colorField.getColor();
@@ -202,20 +207,25 @@ public class PropertyPanel extends JPanel {
       });
       colorField.setPreviewPanel(previewPanel);
 
+      JPanel color = new JPanel(new FlowLayout());
       JLabel colorLabel = new JLabel("Color", JLabel.TRAILING);
       colorLabel.setLabelFor(colorField);
-      this.add(colorLabel);
-      this.add(colorField);
-
-
-      this.setLayout(new SpringLayout());
+      color.add(colorLabel);
+      color.add(colorField);
 
       // from the Java tutorial
-      layout.SpringUtilities.makeCompactGrid(this,
-              5, 2,
-              0, 0,
-              0, 0
+      layout.SpringUtilities.makeGrid(nonColor,
+          4, 2,
+          0, 0,
+          10, 10
       );
+
+      this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      nonColor.setPreferredSize(new Dimension(250, 120));
+      color.setPreferredSize(new Dimension(400, 500));
+      this.add(Box.createVerticalStrut(10));
+      this.add(nonColor);
+      this.add(color);
     }
 
     /**

@@ -32,8 +32,8 @@ import javax.swing.SwingConstants;
 public class ToolbarPanel extends JPanel {
   private final Map<String, AbstractButton> buttons;
   private final ReadOnlyAnimatorModel model;
-  private Consumer<EditorAction> callback;
   private final Consumer<AnimatorAction> modelCallback;
+  private Consumer<EditorAction> callback;
 
   public ToolbarPanel(Consumer<AnimatorAction> modelCallback, ReadOnlyAnimatorModel model) {
     this.buttons = new HashMap<>();

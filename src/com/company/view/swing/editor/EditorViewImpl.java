@@ -1,6 +1,7 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.animatoractions.AnimatorAction;
+import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
@@ -13,9 +14,8 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 
 /**
  * Provides a view for the main editor that allows animations to be made. This view provides an
@@ -24,19 +24,19 @@ import javax.swing.ScrollPaneConstants;
  */
 public class EditorViewImpl extends JFrame implements EditorView {
 
+  private static final int TIMELINE_HEIGHT = 200;
   private final Consumer<AnimatorAction> modelCallback;
-  // Panels
-  private BannerPanel banner;
   private final CanvasPanel canvas;
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
   private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
+  // Panels
+  private BannerPanel banner;
   private Consumer<EditorAction> callback;
-  private PropertyPanel properties;
+  private final PropertyPanel properties;
   private Point mouseClickedPoint;
   private int tick;
-  private static final int TIMELINE_HEIGHT = 200;
 
   public EditorViewImpl(
       ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
@@ -82,7 +82,10 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void refreshView() {
     this.canvas.updateShapes();
     this.updateBoundingBox();
-    this.timelines.update();
+    if (this.getHighlightedShape() != null) {
+      properties.addProperties(this.getHighlightedShapeName(), tick, modelCallback, model);
+    }
+    this.timelines.update(this.tick);
     this.setPreferredSize(this.getSize());
     this.repaint();
     this.pack();
@@ -113,11 +116,11 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     if (toBeHighlighted == null) {
       this.properties.hideProperties();
-      this.refreshView();
     } else {
+      this.modelCallback.accept(new CreateKeyframe(toBeHighlighted, tick));
       this.updateProperties(toBeHighlighted);
-      this.updateBanner(toBeHighlighted);
     }
+    this.updateBanner(toBeHighlighted);
     this.refreshView();
   }
 

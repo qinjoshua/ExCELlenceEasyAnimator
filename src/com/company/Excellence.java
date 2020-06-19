@@ -25,6 +25,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 /**
  * The main class that runs the program.
  */
@@ -68,6 +71,11 @@ public final class Excellence {
 //    EditorView view = new EditorViewImpl(model, new AnimatorActionConsumerImpl(model));
 //    view.setCallback(new EditorActionConsumerImpl(view));
 //    view.renderVisual();
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
 
     MenuView menu = new MenuViewImpl();
     menu.setCallback(new MenuActionConsumerImpl(menu));

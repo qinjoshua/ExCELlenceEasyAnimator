@@ -106,6 +106,7 @@ public abstract class AShapesPanel extends JPanel {
 
   /**
    * Gets the current tick.
+   *
    * @return the current tick
    */
   public int getTick() {

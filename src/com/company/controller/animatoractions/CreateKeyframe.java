@@ -25,10 +25,10 @@ public class CreateKeyframe extends AShapeModifier implements AnimatorAction {
 
   @Override
   protected void actOnUnchecked(AnimatorModel model) throws IllegalArgumentException {
-    Shape newShape = model.shapesAt(this.tick).get(this.shapeName);
+    Shape newShape = model.shapesAt(this.tick).get(this.shapeName).copy();
     if (newShape == null) {
       // before first keyframe, initialize to first keyframe instead
-      newShape = model.getKeyframes().get(shapeName).first().getShape();
+      newShape = model.getKeyframes().get(shapeName).first().getShape().copy();
     }
     model.createKeyframe(this.shapeName, newShape, this.tick);
   }

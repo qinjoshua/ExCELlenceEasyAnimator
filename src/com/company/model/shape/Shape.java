@@ -63,4 +63,11 @@ public interface Shape {
    *                                  are of different types
    */
   Shape interpolate(Shape to, double progress);
+
+  /**
+   * Makes a copy of itself.
+   *
+   * @return a shape that is a copy of itself
+   */
+  Shape copy();
 }

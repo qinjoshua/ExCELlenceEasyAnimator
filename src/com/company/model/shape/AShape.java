@@ -43,6 +43,11 @@ public abstract class AShape implements Shape {
   }
 
   @Override
+  public Shape copy() {
+    return this.newShape(this.posn, this.width, this.height, this.color);
+  }
+
+  @Override
   public Posn getPosition() {
     return this.posn;
   }

@@ -37,9 +37,9 @@ public class BannerPanel extends JPanel {
     this.setLayout(new FlowLayout());
     this.add(new JLabel("Excellence Animation Editor"));
     if (shapeName != null) {
-      this.add(new JLabel(String.format("Current shape: %s", shapeName)));
+      this.add(new JLabel(String.format("Current Shape: %s", shapeName)));
     }
-    this.add(new JLabel(String.format("Current time: %d", tick)));
+    this.add(new JLabel(String.format("Current Time: %d", tick)));
     if (shapeName != null) {
       JButton delButton = new JButton("Delete Current Frame");
       delButton.addActionListener(e -> {

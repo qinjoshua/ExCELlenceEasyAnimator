@@ -4,6 +4,7 @@ import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.animatoractions.DeleteShape;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.controller.viewactions.editoractions.SetTick;
 import com.company.model.Frame;
@@ -13,17 +14,18 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.function.Consumer;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -59,15 +61,17 @@ public class TimelinesPanel extends JPanel {
       timelines.put(entry.getKey(), new TimelinePanel(entry.getKey(), model, modelCallback));
     }
 
-    for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
-      this.addShape(entry.getKey(), entry.getValue());
-    }
-
     timelinesPanel.setLayout(new BoxLayout(timelinesPanel, BoxLayout.Y_AXIS));
     namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
     addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
-    addFramePanel.setPreferredSize(new Dimension(100,
+    addFramePanel.setPreferredSize(new Dimension(110,
         (int) addFramePanel.getPreferredSize().getHeight()));
+
+    namesPanel.add(Box.createVerticalStrut(9));
+    timelinesPanel.add(Box.createVerticalStrut(2));
+    for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
+      this.addShape(entry.getKey(), entry.getValue());
+    }
 
     JScrollPane innerScrollPane = new JScrollPane(timelinesPanel);
     JScrollBar tScroll = new JScrollBar(JScrollBar.HORIZONTAL);
@@ -107,9 +111,11 @@ public class TimelinesPanel extends JPanel {
 
     AddFrameButton addBtn = new AddFrameButton(name, modelCallback);
     DelShapeButton delBtn = new DelShapeButton(name, modelCallback);
-    JPanel actionsPanel = new JPanel(new FlowLayout());
-    actionsPanel.add(addBtn);
-    actionsPanel.add(delBtn);
+    JPanel actionsPanel = new JPanel(new BorderLayout());
+    actionsPanel.add(addBtn, BorderLayout.WEST);
+    actionsPanel.add(delBtn, BorderLayout.EAST);
+    actionsPanel.setPreferredSize(new Dimension(110,
+        (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
 
     namesPanel.add(labelPanel);
     timelinesPanel.add(timeline);
@@ -137,24 +143,25 @@ public class TimelinesPanel extends JPanel {
     }
   }
 
-  public void update() {
+  public void update(int tick) {
     ArrayList<String> toRemove = new ArrayList<>();
-    ArrayList<Integer> toRemoveInds = new ArrayList<>();
+    ArrayList<Integer> toRemoveIndices = new ArrayList<>();
     int i = 0;
     for (String shapeName : timelines.keySet()) {
       if (!model.getKeyframes().containsKey(shapeName)) {
         toRemove.add(shapeName);
-        toRemoveInds.add(i);
+        toRemoveIndices.add(i);
       }
       i += 1;
     }
     for (String name : toRemove) {
       timelines.remove(name);
     }
-    for (int removeInd : toRemoveInds) {
-      namesPanel.remove(removeInd);
+    for (int removeInd : toRemoveIndices) {
+      // there's a single padding at the start of each of these, so it only starts at 1
+      namesPanel.remove(removeInd + 1);
       addFramePanel.remove(removeInd);
-      timelinesPanel.remove(removeInd);
+      timelinesPanel.remove(removeInd + 1);
     }
 
     for (Map.Entry<String, SortedSet<Frame>> entry : model.getKeyframes().entrySet()) {
@@ -168,6 +175,8 @@ public class TimelinesPanel extends JPanel {
     for (TimelinePanel timeline : timelines.values()) {
       timeline.updateButtonText();
     }
+
+    this.setTick(tick);
   }
 
   static class DelShapeButton extends JPanel {
@@ -181,14 +190,28 @@ public class TimelinesPanel extends JPanel {
      */
     public DelShapeButton(String shapeName, Consumer<AnimatorAction> callback) {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
-      Dimension panelSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight());
 
-      JButton delShapeButton = new JButton("Kill");
+      JButton delShapeButton = new JButton("\uD83D\uDDD1");
       delShapeButton.setPreferredSize(btnSize);
-      this.setPreferredSize(panelSize);
+      this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
-        callback.accept(new DeleteShape(shapeName));
-        getViewCallback().accept(new RefreshView());
+        Object[] options = {"Yes, kill it with fire!", "No, it's too young to die!"};
+        int response = JOptionPane.showOptionDialog(
+            null,
+            String.format("Are you sure you want to delete shape %s? This cannot be undone.",
+                shapeName),
+            "Delete Shape",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE,
+            null,
+            options,
+            options[1]
+        );
+        if (response == JOptionPane.YES_OPTION) {
+          callback.accept(new DeleteShape(shapeName));
+          getViewCallback().accept(new HighlightShape(null));
+          getViewCallback().accept(new RefreshView());
+        }
       });
 
       this.add(delShapeButton);
@@ -206,7 +229,7 @@ public class TimelinesPanel extends JPanel {
   /**
    * A class that holds a button that adds a frame at any time for a specific shape.
    */
-  class AddFrameButton extends JPanel {
+  static class AddFrameButton extends JPanel {
     Consumer<EditorAction> viewCallback;
 
     /**
@@ -217,11 +240,10 @@ public class TimelinesPanel extends JPanel {
      */
     public AddFrameButton(String shapeName, Consumer<AnimatorAction> callback) {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
-      Dimension panelSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight());
 
       JButton addFrameButton = new JButton("+");
       addFrameButton.setPreferredSize(btnSize);
-      this.setPreferredSize(panelSize);
+      this.setPreferredSize(btnSize);
       addFrameButton.addActionListener(e -> {
         final JDialog dialog = new JDialog((Dialog) null, "Add Key Frame For Shape " + shapeName);
 

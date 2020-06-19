@@ -2,9 +2,6 @@ package com.company.controller;
 
 import com.company.controller.console.ArgumentsProcessImpl;
 import com.company.controller.console.ArgumentsProcessor;
-import com.company.controller.viewactions.editoractions.EditorAction;
-
-import java.util.function.Consumer;
 
 /**
  * Implementation of the animator controller that begins the animation.
