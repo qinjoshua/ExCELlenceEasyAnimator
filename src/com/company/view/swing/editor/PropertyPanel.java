@@ -202,6 +202,7 @@ public class PropertyPanel extends JPanel {
       colorField.getSelectionModel().addChangeListener(e -> {
         Color newColor = colorField.getColor();
         previewPanel.updateRGB(newColor);
+        colorField.setColor(newColor);
         modelCallback.accept(new ChangeColor(shapeName, tick, newColor));
         this.getViewCallback().accept(new RefreshView());
       });

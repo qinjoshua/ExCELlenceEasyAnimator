@@ -86,9 +86,9 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void refreshView() {
     this.canvas.updateShapes();
     this.updateBoundingBox();
-    if (this.getHighlightedShape() != null) {
-      properties.addProperties(this.getHighlightedShapeName(), tick, modelCallback, model);
-    }
+//    if (this.getHighlightedShape() != null) {
+//       properties.addProperties(this.getHighlightedShapeName(), tick, modelCallback, model);
+//    }
     this.timelines.update(this.tick);
     this.setPreferredSize(this.getSize());
     this.repaint();
