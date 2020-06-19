@@ -55,4 +55,12 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    *                                  given tick
    */
   void removeKeyframe(String shapeName, int tick);
+
+  /**
+   * Deletes the shape from the model entirely.
+   *
+   * @param shapeName the name of the shape to delete
+   * @throws IllegalArgumentException if the shape doesn't exist
+   */
+  void deleteShape(String shapeName);
 }

@@ -26,6 +26,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   private final Consumer<AnimatorAction> modelCallback;
   // Panels
+  private BannerPanel banner;
   private final CanvasPanel canvas;
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
@@ -50,7 +51,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.timelines = new TimelinesPanel(model, modelCallback);
 
-    this.getContentPane().add(timelines, BorderLayout.NORTH);
+    this.getContentPane().add(timelines, BorderLayout.SOUTH);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
@@ -64,6 +65,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.keyComponent = new KeyComponent();
 
     this.setTick(1);
+
+    this.updateBanner(null);
     //this.setPreferredSize(new Dimension(1200, 800));
     this.pack();
   }
@@ -84,28 +87,33 @@ public class EditorViewImpl extends JFrame implements EditorView {
   }
 
   private void updateProperties(String toBeHighlighted) {
-    if (properties != null) {
+    if (properties != null && toBeHighlighted == null) {
       this.getContentPane().remove(properties);
     }
-    this.properties = new PropertyPanel(toBeHighlighted, this.tick, modelCallback, model,
-        callback);
-    properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
-    this.getContentPane().add(properties, BorderLayout.EAST);
-    this.pack();
+
+    if (toBeHighlighted != null) {
+      this.properties = new PropertyPanel(toBeHighlighted, this.tick, modelCallback, model,
+          callback);
+      properties.setPreferredSize(new Dimension(350, model.getCanvasHeight()));
+      this.getContentPane().add(properties, BorderLayout.EAST);
+    }
+  }
+
+  private void updateBanner(String toBeHighlighted) {
+    if (banner != null) {
+      this.getContentPane().remove(banner);
+    }
+    banner = new BannerPanel(toBeHighlighted, this.tick, model, modelCallback);
+    banner.setViewCallback(callback);
+    this.getContentPane().add(banner, BorderLayout.NORTH);
   }
 
   @Override
   public void highlightShape(String toBeHighlighted) {
     this.canvas.highlightShape(toBeHighlighted);
-
-    if (toBeHighlighted == null) {
-      if (properties != null) {
-        this.getContentPane().remove(this.properties);
-        this.pack();
-      }
-    } else {
-      this.updateProperties(toBeHighlighted);
-    }
+    this.updateProperties(toBeHighlighted);
+    this.updateBanner(toBeHighlighted);
+    this.pack();
   }
 
 
