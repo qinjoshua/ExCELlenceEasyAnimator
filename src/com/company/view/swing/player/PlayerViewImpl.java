@@ -36,9 +36,7 @@ import javax.swing.Timer;
  */
 public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
   private final AnimationPanel playArea;
-  private final JPanel buttonPanel;
   private final Map<String, AbstractButton> buttons;
-  private final KeyComponent keyComponent;
   private final Timer mainLoop;
   private int fps;
   private boolean isLooping;
@@ -70,7 +68,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     this.getContentPane().add(playArea, BorderLayout.NORTH);
 
     // Creates the button controls on the bottom of the screen
-    buttonPanel = new JPanel();
+    JPanel buttonPanel = new JPanel();
     buttonPanel.setLayout(new FlowLayout());
 
     JButton restartButton = new JButton("Restart");
@@ -95,7 +93,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
 
     this.callback = null;
 
-    final Action RESTART = new AbstractAction() {
+    final Action restart = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -104,7 +102,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       }
     };
 
-    final Action TOGGLE_PLAY = new AbstractAction() {
+    final Action togglePlay = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -113,7 +111,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       }
     };
 
-    final Action TOGGLE_LOOP = new AbstractAction() {
+    final Action toggleLoop = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -122,7 +120,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       }
     };
 
-    final Action SLOW_DOWN = new AbstractAction() {
+    final Action slowDown = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -131,7 +129,7 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
       }
     };
 
-    final Action SPEED_UP = new AbstractAction() {
+    final Action speedUp = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -141,21 +139,20 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     };
 
 
-    this.keyComponent = new KeyComponent();
 
-    this.keyComponent.setCommand(KeyStroke.getKeyStroke('r'), "restart", RESTART);
-    this.keyComponent.setCommand(KeyStroke.getKeyStroke('p'), "togglePlay", TOGGLE_PLAY);
-    this.keyComponent.setCommand(KeyStroke.getKeyStroke('l'), "toggleLoop", TOGGLE_LOOP);
-    this.keyComponent.setCommand(KeyStroke.getKeyStroke("LEFT"), "slowDown", SLOW_DOWN);
-    this.keyComponent.setCommand(KeyStroke.getKeyStroke("RIGHT"), "speedUp", SPEED_UP);
+    KeyComponent keyComponent = new KeyComponent();
 
-    restartButton.addActionListener(RESTART);
-    playButton.addActionListener(TOGGLE_PLAY);
-    loopButton.addActionListener(TOGGLE_LOOP);
-    slowDownButton.addActionListener(SLOW_DOWN);
-    speedUpButton.addActionListener(SPEED_UP);
+    keyComponent.setCommand(KeyStroke.getKeyStroke('r'), "restart", restart);
+    keyComponent.setCommand(KeyStroke.getKeyStroke('p'), "togglePlay", togglePlay);
+    keyComponent.setCommand(KeyStroke.getKeyStroke('l'), "toggleLoop", toggleLoop);
+    keyComponent.setCommand(KeyStroke.getKeyStroke("LEFT"), "slowDown", slowDown);
+    keyComponent.setCommand(KeyStroke.getKeyStroke("RIGHT"), "speedUp", speedUp);
 
-    //buttonPanel
+    restartButton.addActionListener(restart);
+    playButton.addActionListener(togglePlay);
+    loopButton.addActionListener(toggleLoop);
+    slowDownButton.addActionListener(slowDown);
+    speedUpButton.addActionListener(speedUp);
 
     this.add(keyComponent);
     this.add(buttonPanel, BorderLayout.SOUTH);

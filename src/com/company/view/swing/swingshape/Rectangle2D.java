@@ -10,8 +10,10 @@ public class Rectangle2D implements SwingShape {
   private final int y;
 
   /**
-   * @param x
-   * @param y
+   * Initializes a new rectangle swing shape at the given x and y coordinates.
+   *
+   * @param x x-coordinate of the swing shape
+   * @param y y-coordinate of the swing shape
    */
   public Rectangle2D(int x, int y) {
     this.x = x;

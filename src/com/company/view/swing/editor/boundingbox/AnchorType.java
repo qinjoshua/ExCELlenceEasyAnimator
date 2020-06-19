@@ -2,6 +2,10 @@ package com.company.view.swing.editor.boundingbox;
 
 import java.awt.Cursor;
 
+/**
+ * Represents a type of anchor, which could be at the top, bottom, left, or right of the bounding
+ * box or any of the four corners. Provides information related to each one of those anchors.
+ */
 public enum AnchorType {
   Top(0, -1, Cursor.N_RESIZE_CURSOR),
   Bottom(0, 1, Cursor.S_RESIZE_CURSOR),

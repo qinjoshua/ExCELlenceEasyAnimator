@@ -3,6 +3,9 @@ package com.company.controller.animatoractions;
 import com.company.model.AnimatorModel;
 import com.company.model.shape.Shape;
 
+/**
+ * Action to change the width of a given shape.
+ */
 public class ChangeWidth extends AShapeModifier {
   private final double width;
 

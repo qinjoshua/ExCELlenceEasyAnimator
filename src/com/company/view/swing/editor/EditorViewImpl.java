@@ -15,7 +15,6 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 
 /**
  * Provides a view for the main editor that allows animations to be made. This view provides an
@@ -29,7 +28,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private final CanvasPanel canvas;
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
-  private final KeyComponent keyComponent;
   private final ReadOnlyAnimatorModel model;
   // Panels
   private BannerPanel banner;
@@ -38,8 +36,14 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private Point mouseClickedPoint;
   private int tick;
 
+  /**
+   * Creates a new implementation of editor view with the given model and model callback.
+   *
+   * @param model         the read-only model for the editor view to retrieve information from
+   * @param modelCallback a callback for the editorView to request changes to the model
+   */
   public EditorViewImpl(
-      ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
+          ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
     super("Excellence Editor");
 
     this.model = model;
@@ -59,11 +63,11 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.getContentPane().add(canvas, BorderLayout.CENTER);
     //this.getContentPane().add(properties, BorderLayout.EAST);
 
-    this.toolbar = new ToolbarPanel(this.modelCallback, this.model);
+    this.toolbar = new ToolbarPanel(this.model);
     this.getContentPane().add(toolbar, BorderLayout.WEST);
 
     this.callback = null;
-    this.keyComponent = new KeyComponent();
+    KeyComponent keyComponent = new KeyComponent();
 
     this.setTick(1);
     this.setPreferredSize(new Dimension(1200, 800));

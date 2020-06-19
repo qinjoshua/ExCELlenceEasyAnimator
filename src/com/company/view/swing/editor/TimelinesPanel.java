@@ -44,7 +44,6 @@ public class TimelinesPanel extends JPanel {
   private static final int TIMELINE_HEIGHT = 200;
   private final JPanel timelinesPanel;
   private final JPanel namesPanel;
-  private final JPanel outerPanel;
   private final JPanel addFramePanel;
 
   Map<String, TimelinePanel> timelines;
@@ -56,13 +55,19 @@ public class TimelinesPanel extends JPanel {
   Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
 
+  /**
+   * Creates a timelines panel with the given model and callback for the model.
+   *
+   * @param model         read-only model to for the timelines panel to retrieve information from
+   * @param modelCallback callback for requesting changes to the model
+   */
   public TimelinesPanel(ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
     this.model = model;
     this.modelCallback = modelCallback;
     timelinesPanel = new JPanel();
     namesPanel = new JPanel();
     addFramePanel = new JPanel();
-    outerPanel = new JPanel();
+    JPanel outerPanel = new JPanel();
 
     this.highlightedNamePanel = null;
     this.namesPanels = new HashMap<>();
@@ -77,7 +82,7 @@ public class TimelinesPanel extends JPanel {
     namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
     addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
     addFramePanel.setPreferredSize(new Dimension(110,
-        (int) addFramePanel.getPreferredSize().getHeight()));
+            (int) addFramePanel.getPreferredSize().getHeight()));
 
     timelinesPanel.add(Box.createVerticalStrut(2));
     for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
@@ -95,7 +100,7 @@ public class TimelinesPanel extends JPanel {
     outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
     outerPanel.setPreferredSize(new Dimension(0,
-        (int) outerPanel.getPreferredSize().getHeight()));
+            (int) outerPanel.getPreferredSize().getHeight()));
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

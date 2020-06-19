@@ -1,4 +1,5 @@
 package com.company.view.swing.menu;
+
 import com.company.controller.viewactions.menuactions.MenuAction;
 import com.company.controller.viewactions.menuactions.NewProject;
 import com.company.controller.viewactions.menuactions.OpenFile;
@@ -8,10 +9,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -19,7 +17,6 @@ import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -60,14 +57,14 @@ public class MenuViewImpl extends JFrame implements MenuView {
 
     this.getContentPane().add(main, BorderLayout.CENTER);
 
-    final Action OPEN = new AbstractAction() {
+    final Action open = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         openFile();
       }
     };
 
-    final Action NEW = new AbstractAction() {
+    final Action createNew = new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (callback != null) {
@@ -76,8 +73,8 @@ public class MenuViewImpl extends JFrame implements MenuView {
       }
     };
 
-    newProject.addActionListener(NEW);
-    openProject.addActionListener(OPEN);
+    newProject.addActionListener(createNew);
+    openProject.addActionListener(open);
 
     this.pack();
   }

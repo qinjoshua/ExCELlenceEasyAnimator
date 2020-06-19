@@ -1,6 +1,5 @@
 package com.company.controller.viewactions.menuactions;
 
-import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.view.swing.menu.MenuView;
 
 import java.util.function.Consumer;

@@ -1,111 +1,76 @@
 package com.company.view.swing.editor.boundingbox;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Represents a box that bounds a bounds a shape
- */
-public class BoundingBox {
-  private final Shape highlightedShape;
-  private final Rectangle boundingBox;
-  private List<Anchor> anchorPoints;
-
-  public BoundingBox(Shape highlightedShape) {
-    this.highlightedShape = highlightedShape;
-    boundingBox = highlightedShape.getBounds();
-
-    anchorPoints = new ArrayList<>();
-    for (AnchorType type : AnchorType.values()) {
-      anchorPoints.add(new Anchor(type, this.boundingBox));
-    }
-  }
-
+public interface BoundingBox {
   /**
-   * @param dx
-   * @param dy
-   */
-  public void translate(int dx, int dy) {
-    this.boundingBox.translate(dx, dy);
-    for (Anchor anchor : anchorPoints) {
-      anchor.translate(dx, dy);
-    }
-  }
-
-  public void renderTo(Graphics2D g) {
-    Color originalColor = g.getColor();
-
-    g.setColor(Color.LIGHT_GRAY);
-    g.draw(this.boundingBox);
-
-    for (Anchor anchor : anchorPoints) {
-      anchor.renderTo(g);
-    }
-
-    g.setColor(originalColor);
-  }
-
-  private void recomputeAnchors() {
-    anchorPoints = new ArrayList<>();
-    for (AnchorType type : AnchorType.values()) {
-      anchorPoints.add(new Anchor(type, this.boundingBox));
-    }
-  }
-
-  public void growFromAnchor(AnchorType type, int dx, int dy) {
-    int widthChange = dx * type.getX();
-    int heightChange = dy * type.getY();
-
-    this.boundingBox.width += widthChange;
-    this.boundingBox.height += heightChange;
-
-    if (type.getX() < 0) {
-      this.translate(dx * Math.abs(type.getX()), 0);
-    }
-    if (type.getY() < 0) {
-      this.translate(0, dy * Math.abs(type.getY()));
-    }
-
-    this.recomputeAnchors();
-  }
-
-  public boolean contains(int x, int y) {
-    return this.boundingBox.contains(x, y);
-  }
-
-  /**
-   * Gets the anchor at a given point, or null if there is no anchor at the given point.
+   * Translates the bounding box by the given x and y values.
    *
-   * @param x x-coordinate to get the anchor at
-   * @param y y-coordinate to get the anchor at
-   * @return the anchor at the given point, or null
+   * @param dx delta x, distance to move in x direction
+   * @param dy delta y, distance to move in y direction
    */
-  public Anchor getAnchorAtPoint(int x, int y) {
-    for (Anchor anchor : anchorPoints) {
-      if (anchor.contains(x, y)) {
-        return anchor;
-      }
-    }
-    return null;
-  }
+  void translate(int dx, int dy);
 
-  public int getX() {
-    return this.boundingBox.x;
-  }
+  /**
+   * Renders the bounding box to the given graphics.
+   *
+   * @param g graphics to render the bounding box to
+   */
+  void renderTo(Graphics2D g);
 
-  public int getY() {
-    return this.boundingBox.y;
-  }
+  /**
+   * Increases/decreases the size of the bounding box from the given anchor.
+   *
+   * @param type the anchor from which the bounding box is growing for, such as Top, Bottom, Bottom
+   *             Left, etc.
+   * @param dx   delta x, the distance to move in the x direction
+   * @param dy   delta y, the distance to move in the y direction
+   */
+  void growFromAnchor(AnchorType type, int dx, int dy);
 
-  public double getWidth() {
-    return this.boundingBox.getWidth();
-  }
+  /**
+   * Checks to see if the bounding box contains the given x and y coordinate.
+   *
+   * @param x x-coordinate
+   * @param y y-coordinate
+   * @return true if the x and y coordinate are within the bounding box, false otherwise
+   */
+  boolean contains(int x, int y);
 
-  public double getHeight() {
-    return this.boundingBox.getHeight();
-  }
+  /**
+   * Gets the anchor point at the given x and y location.
+   *
+   * @param x x-coordinate
+   * @param y y-coordinate
+   * @return the anchor at the given x and y coordinates
+   */
+  Anchor getAnchorAtPoint(int x, int y);
+
+  /**
+   * Gets the x coordinate of this bounding box.
+   *
+   * @return the x coordinate of the bounding box
+   */
+  int getX();
+
+  /**
+   * Gets the y coordinate of this bounding box.
+   *
+   * @return the y coordinate of the bounding box
+   */
+  int getY();
+
+  /**
+   * Gets the width of this bounding box.
+   *
+   * @return the width of this bounding box
+   */
+  double getWidth();
+
+  /**
+   * Gets the height of this bounding box.
+   *
+   * @return the height of this bounding box
+   */
+  double getHeight();
 }

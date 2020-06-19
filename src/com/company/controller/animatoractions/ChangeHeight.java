@@ -3,6 +3,9 @@ package com.company.controller.animatoractions;
 import com.company.model.AnimatorModel;
 import com.company.model.shape.Shape;
 
+/**
+ * Action to change the height of a given shape.
+ */
 public class ChangeHeight extends AShapeModifier {
   private final double height;
 
