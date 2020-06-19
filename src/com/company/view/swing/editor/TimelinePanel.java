@@ -3,6 +3,7 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.controller.viewactions.editoractions.SetTick;
 import com.company.model.Frame;
 import com.company.model.ReadOnlyAnimatorModel;
@@ -79,10 +80,11 @@ public class TimelinePanel extends JPanel {
       JToggleButton btn = (JToggleButton) e.getSource();
       if (btn.getText().equals("")) {
         modelCallback.accept(new CreateKeyframe(shapeName, tick));
-        this.getViewCallback().accept(new SetTick(tick));
       } else {
         btn.setSelected(true);
       }
+      this.getViewCallback().accept(new SetTick(tick));
+      this.getViewCallback().accept(new HighlightShape(shapeName));
     });
 
     return tickBtn;
