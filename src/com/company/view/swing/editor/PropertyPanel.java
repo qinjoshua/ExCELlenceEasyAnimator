@@ -210,7 +210,7 @@ public class PropertyPanel extends JPanel {
       JPanel color = new JPanel(new FlowLayout());
       JLabel colorLabel = new JLabel("Color", JLabel.TRAILING);
       colorLabel.setLabelFor(colorField);
-      color.add(colorLabel);
+      // color.add(colorLabel);
       color.add(colorField);
 
       // from the Java tutorial
