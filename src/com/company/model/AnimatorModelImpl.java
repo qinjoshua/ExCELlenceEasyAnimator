@@ -156,6 +156,15 @@ public class AnimatorModelImpl implements AnimatorModel {
             " tick.");
   }
 
+  @Override
+  public void deleteShape(String shapeName) {
+    if (timelines.containsKey(shapeName)) {
+      timelines.remove(shapeName);
+    } else {
+      throw new IllegalArgumentException("Cannot remove nonexistent shape " + shapeName);
+    }
+  }
+
   /**
    * Inner class that allows you to build an animator model implementation.
    */

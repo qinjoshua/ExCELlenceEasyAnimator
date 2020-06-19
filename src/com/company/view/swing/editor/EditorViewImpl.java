@@ -26,6 +26,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
   private final Consumer<AnimatorAction> modelCallback;
   // Panels
+  private BannerPanel banner;
   private final CanvasPanel canvas;
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
@@ -50,8 +51,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.timelines = new TimelinesPanel(model, modelCallback);
 
-    this.getContentPane().add(timelines, BorderLayout.NORTH);
     this.getContentPane().add(properties, BorderLayout.EAST);
+    this.getContentPane().add(timelines, BorderLayout.SOUTH);
 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     canvas.setPreferredSize(new Dimension(model.getCanvasWidth(), model.getCanvasHeight()));
@@ -66,6 +67,8 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.setTick(1);
     this.setPreferredSize(new Dimension(1200, 800));
+
+    this.updateBanner(null);
     this.pack();
   }
 
@@ -95,16 +98,27 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.refreshView();
   }
 
+  private void updateBanner(String toBeHighlighted) {
+    if (banner != null) {
+      this.getContentPane().remove(banner);
+    }
+    banner = new BannerPanel(toBeHighlighted, this.tick, model, modelCallback);
+    banner.setViewCallback(callback);
+    this.getContentPane().add(banner, BorderLayout.NORTH);
+  }
+
   @Override
   public void highlightShape(String toBeHighlighted) {
     this.canvas.highlightShape(toBeHighlighted);
-
+    
     if (toBeHighlighted == null) {
       this.properties.hideProperties();
       this.refreshView();
     } else {
       this.updateProperties(toBeHighlighted);
+      this.updateBanner(toBeHighlighted);
     }
+    this.refreshView();
   }
 
 
