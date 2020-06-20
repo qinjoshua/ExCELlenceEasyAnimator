@@ -1,4 +1,4 @@
-package com.company.view.swing.editor.boundingbox;
+package com.company.view.swing.editor;
 
 import java.awt.Cursor;
 

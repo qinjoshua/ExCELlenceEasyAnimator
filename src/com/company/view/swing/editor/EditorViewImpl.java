@@ -11,10 +11,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.function.Consumer;
 
-import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 /**
  * Provides a view for the main editor that allows animations to be made. This view provides an
@@ -29,10 +27,10 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
   private final ReadOnlyAnimatorModel model;
+  private final PropertyPanel properties;
   // Panels
   private BannerPanel banner;
   private Consumer<EditorAction> callback;
-  private final PropertyPanel properties;
   private Point mouseClickedPoint;
   private int tick;
 
@@ -43,7 +41,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
    * @param modelCallback a callback for the editorView to request changes to the model
    */
   public EditorViewImpl(
-          ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
+      ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
     super("Excellence Editor");
 
     this.model = model;

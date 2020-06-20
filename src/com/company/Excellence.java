@@ -26,7 +26,7 @@ public final class Excellence {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException |
-            IllegalAccessException | UnsupportedLookAndFeelException e) {
+        IllegalAccessException | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
     }
 

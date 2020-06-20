@@ -11,11 +11,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,14 +46,15 @@ public class BannerPanel extends JPanel {
     this.setPreferredSize(new Dimension(1200, 35));
     JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
     if (shapeName != null) {
-      infoPanel.add(new JLabel(String.format("<html><h4>Current Shape: %s</h4></html>", shapeName)));
+      infoPanel.add(new JLabel(String.format("<html><h4>Current Shape: %s</h4></html>",
+          shapeName)));
     }
     infoPanel.add(new JLabel(String.format("<html><h4>Current Time: %d</h4></html>\"", tick)));
     if (shapeName != null) {
       JButton delButton = new JButton("<html><h4>Delete Current Frame</h4></html>");
       delButton.setMargin(new Insets(0, 0, 0, 0));
       delButton.setPreferredSize(new Dimension(
-          (int)delButton.getPreferredSize().getWidth(),
+          (int) delButton.getPreferredSize().getWidth(),
           25));
       delButton.addActionListener(e -> {
         modelCallback.accept(new RemoveKeyframe(shapeName, tick));

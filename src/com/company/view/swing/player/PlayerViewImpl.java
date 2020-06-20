@@ -139,7 +139,6 @@ public class PlayerViewImpl extends JFrame implements VisualView, PlayerView {
     };
 
 
-
     KeyComponent keyComponent = new KeyComponent();
 
     keyComponent.setCommand(KeyStroke.getKeyStroke('r'), "restart", restart);

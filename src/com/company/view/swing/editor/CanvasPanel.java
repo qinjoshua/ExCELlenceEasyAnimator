@@ -12,8 +12,6 @@ import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
-import com.company.view.swing.editor.boundingbox.Anchor;
-import com.company.view.swing.editor.boundingbox.BoundingBoxImpl;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -162,7 +160,7 @@ public class CanvasPanel extends AShapesPanel {
     Color oldColor = g.getColor();
     g.setColor(Color.WHITE);
     g.fillRect(0, 0, this.model.getCanvasWidth(),
-            this.model.getCanvasHeight());
+        this.model.getCanvasHeight());
     g.setColor(oldColor);
   }
 
@@ -324,9 +322,9 @@ public class CanvasPanel extends AShapesPanel {
         modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - oldX));
         modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - oldY));
         modelCallback.accept(new ChangeWidth(highlightedShapeName, t,
-                boundingBoxImpl.getWidth() - oldWidth));
+            boundingBoxImpl.getWidth() - oldWidth));
         modelCallback.accept(new ChangeHeight(highlightedShapeName, t,
-                boundingBoxImpl.getHeight() - oldHeight));
+            boundingBoxImpl.getHeight() - oldHeight));
 
         callback.accept(new RefreshView());
         this.anchor = null;
@@ -349,7 +347,7 @@ public class CanvasPanel extends AShapesPanel {
     public void mousePressed(MouseEvent e) {
       // Checks that bounding box exists, that we're not trying to resize a shape, and that
       if (boundingBoxImpl != null && boundingBoxImpl.getAnchorAtPoint(e.getX(), e.getY()) == null
-              && boundingBoxImpl.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
+          && boundingBoxImpl.contains(e.getX(), e.getY()) && toBeCreatedShape == null) {
         this.oldX = boundingBoxImpl.getX();
         this.oldY = boundingBoxImpl.getY();
 
@@ -373,9 +371,9 @@ public class CanvasPanel extends AShapesPanel {
     public void mouseReleased(MouseEvent e) {
       if (this.editing) {
         modelCallback.accept(
-                new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - this.oldX));
+            new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - this.oldX));
         modelCallback.accept(
-                new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - this.oldY));
+            new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - this.oldY));
         this.editing = false;
         callback.accept(new RefreshView());
       }

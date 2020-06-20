@@ -4,9 +4,9 @@ import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.Posn;
 import com.company.model.shape.Shape;
 import com.company.model.shape.ShapeType;
-import com.company.view.swing.swingshape.Ellipse2D;
-import com.company.view.swing.swingshape.Rectangle2D;
-import com.company.view.swing.swingshape.SwingShape;
+import com.company.view.swing.editor.Ellipse2D;
+import com.company.view.swing.editor.Rectangle2D;
+import com.company.view.swing.editor.SwingShape;
 
 import java.awt.Color;
 import java.awt.Graphics;

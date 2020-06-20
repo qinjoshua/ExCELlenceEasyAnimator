@@ -15,6 +15,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -42,17 +44,14 @@ import javax.swing.UIManager;
  */
 public class TimelinesPanel extends JPanel {
   private static final int TIMELINE_HEIGHT = 200;
+  final Map<String, TimelinePanel> timelines;
+  final Map<String, JPanel> namesPanels;
+  final ReadOnlyAnimatorModel model;
+  final Consumer<AnimatorAction> modelCallback;
   private final JPanel timelinesPanel;
   private final JPanel namesPanel;
   private final JPanel addFramePanel;
-
-  final Map<String, TimelinePanel> timelines;
-
   JPanel highlightedNamePanel;
-  final Map<String, JPanel> namesPanels;
-
-  final ReadOnlyAnimatorModel model;
-  final Consumer<AnimatorAction> modelCallback;
   Consumer<EditorAction> viewCallback;
 
   /**
@@ -82,7 +81,7 @@ public class TimelinesPanel extends JPanel {
     namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
     addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
     addFramePanel.setPreferredSize(new Dimension(110,
-            (int) addFramePanel.getPreferredSize().getHeight()));
+        (int) addFramePanel.getPreferredSize().getHeight()));
 
     timelinesPanel.add(Box.createVerticalStrut(2));
     for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
@@ -100,7 +99,7 @@ public class TimelinesPanel extends JPanel {
     outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
     outerPanel.setPreferredSize(new Dimension(0,
-            (int) outerPanel.getPreferredSize().getHeight()));
+        (int) outerPanel.getPreferredSize().getHeight()));
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -212,6 +211,19 @@ public class TimelinesPanel extends JPanel {
     this.setTick(tick);
   }
 
+  void highlightPanel(String name) {
+    this.deHighlightPanel();
+    this.highlightedNamePanel = this.namesPanels.get(name);
+    highlightedNamePanel.setBackground(new Color(128, 179, 229));
+  }
+
+  void deHighlightPanel() {
+    if (this.highlightedNamePanel != null) {
+      this.highlightedNamePanel.setBackground(UIManager.getColor("Panel.background"));
+      this.highlightedNamePanel = null;
+    }
+  }
+
   private static class DelShapeButton extends JPanel {
     Consumer<EditorAction> viewCallback;
 
@@ -225,22 +237,26 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton delShapeButton = new JButton();
-      delShapeButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/trash.png")));
+      try {
+        delShapeButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/uDDWOyI.png")));
+      } catch (MalformedURLException e) {
+        e.printStackTrace(System.out);
+      }
       delShapeButton.setToolTipText("Delete the shape \"" + shapeName + "\" in the timeline");
       delShapeButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
         Object[] options = {"Yes, kill it with fire!", "No, it's too young to die!"};
         int response = JOptionPane.showOptionDialog(
-                null,
-                String.format("Are you sure you want to delete shape %s? This cannot be undone.",
-                        shapeName),
-                "Delete Shape",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE,
-                null,
-                options,
-                options[1]
+            null,
+            String.format("Are you sure you want to delete shape %s? This cannot be undone.",
+                shapeName),
+            "Delete Shape",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE,
+            null,
+            options,
+            options[1]
         );
         if (response == JOptionPane.YES_OPTION) {
           callback.accept(new DeleteShape(shapeName));
@@ -287,7 +303,11 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton addFrameButton = new JButton();
-      addFrameButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/plus.png")));
+      try {
+        addFrameButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/zgTmQcz.png")));
+      } catch (MalformedURLException e) {
+        e.printStackTrace(System.out);
+      }
 
       addFrameButton.setToolTipText("Add a new frame to the shape + \"" + shapeName + "\"");
       addFrameButton.setPreferredSize(btnSize);
@@ -328,19 +348,6 @@ public class TimelinesPanel extends JPanel {
 
     public void setViewCallback(Consumer<EditorAction> viewCallback) {
       this.viewCallback = viewCallback;
-    }
-  }
-
-  void highlightPanel(String name) {
-    this.deHighlightPanel();
-    this.highlightedNamePanel = this.namesPanels.get(name);
-    highlightedNamePanel.setBackground(new Color(128, 179, 229));
-  }
-
-  void deHighlightPanel() {
-    if (this.highlightedNamePanel != null) {
-      this.highlightedNamePanel.setBackground(UIManager.getColor( "Panel.background" ));
-      this.highlightedNamePanel = null;
     }
   }
 }

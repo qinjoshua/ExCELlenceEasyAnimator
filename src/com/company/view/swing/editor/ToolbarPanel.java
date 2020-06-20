@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.io.Closeable;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -59,12 +61,25 @@ public class ToolbarPanel extends JPanel {
 
     JButton previewButton = new JButton("▶");
     JButton exportButton = new JButton();
-    exportButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/export.png")));
+    try {
+      exportButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/RVyBaTD.png")));
+    } catch (MalformedURLException e) {
+      e.printStackTrace(System.out);
+    }
 
     JButton circleButton = new JButton();
-    circleButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/circle.png")));
+    try {
+      circleButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/bPU0WAj.png")));
+    } catch (MalformedURLException e) {
+      e.printStackTrace(System.out);
+    }
+
     JButton rectButton = new JButton();
-    rectButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/rect.png")));
+    try {
+      rectButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/Q3YV4Mt.png")));
+    } catch (MalformedURLException e) {
+      e.printStackTrace(System.out);
+    }
 
     previewButton.setToolTipText("Preview/Play animation");
     exportButton.setToolTipText("Build/Export animation");
@@ -156,9 +171,9 @@ public class ToolbarPanel extends JPanel {
         extension = "svg";
       } else {
         JOptionPane.showMessageDialog(null,
-                "Please select an export option",
-                "Excellence " +
-                        "Warning", JOptionPane.WARNING_MESSAGE);
+            "Please select an export option",
+            "Excellence " +
+                "Warning", JOptionPane.WARNING_MESSAGE);
       }
 
       FileNameExtensionFilter filter = new FileNameExtensionFilter(description, extension);
@@ -181,9 +196,9 @@ public class ToolbarPanel extends JPanel {
 
         } catch (IOException ioException) {
           JOptionPane.showMessageDialog(null,
-                  "The file could not be created. Please contact customer support for help.",
-                  "Excellence " +
-                          "Error", JOptionPane.WARNING_MESSAGE);
+              "The file could not be created. Please contact customer support for help.",
+              "Excellence " +
+                  "Error", JOptionPane.WARNING_MESSAGE);
         }
 
         dialog.dispose();
@@ -212,10 +227,10 @@ public class ToolbarPanel extends JPanel {
         dialog.dispose();
       } else {
         JOptionPane.showMessageDialog(null,
-                "The name \"" + txtFieldName.getText() + "\" is already in" +
-                        " use. Please choose another name.",
-                "Excellence " +
-                        "Warning", JOptionPane.WARNING_MESSAGE);
+            "The name \"" + txtFieldName.getText() + "\" is already in" +
+                " use. Please choose another name.",
+            "Excellence " +
+                "Warning", JOptionPane.WARNING_MESSAGE);
         txtFieldName.setText("");
       }
     });

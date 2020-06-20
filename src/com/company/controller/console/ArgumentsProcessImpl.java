@@ -2,9 +2,7 @@ package com.company.controller.console;
 
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.AnimatorActionConsumerImpl;
-import com.company.controller.viewactions.editoractions.EditorAction;
 import com.company.controller.viewactions.editoractions.EditorActionConsumerImpl;
-import com.company.controller.viewactions.playeractions.PlayerAction;
 import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
 import com.company.model.AnimatorModel;
 import com.company.model.AnimatorModelImpl;

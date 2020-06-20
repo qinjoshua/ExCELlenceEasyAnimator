@@ -29,8 +29,8 @@ public class TimelinePanel extends JPanel {
   final String shapeName;
   final ReadOnlyAnimatorModel model;
   final Consumer<AnimatorAction> modelCallback;
-  Consumer<EditorAction> viewCallback;
   final List<JToggleButton> buttons;
+  Consumer<EditorAction> viewCallback;
 
   /**
    * Creates a panel for a specific shape, showing its keyframes over time in a timeline.

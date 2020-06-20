@@ -201,12 +201,24 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
     public final double c;
     public final double h;
 
+    /**
+     * Creates an LCH color.
+     *
+     * @param l the luminance
+     * @param c the chroma
+     * @param h the hue
+     */
     public LCHColor(double l, double c, double h) {
       this.l = l;
       this.c = c;
       this.h = h;
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param lch the lch to copy
+     */
     public LCHColor(LCHColor lch) {
       this.l = lch.l;
       this.c = lch.c;

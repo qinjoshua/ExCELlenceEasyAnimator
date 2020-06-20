@@ -1,7 +1,10 @@
-package com.company.view.swing.editor.boundingbox;
+package com.company.view.swing.editor;
 
 import java.awt.Graphics2D;
 
+/**
+ * An interface representing the bounding box of a shape.
+ */
 public interface BoundingBox {
   /**
    * Translates the bounding box by the given x and y values.

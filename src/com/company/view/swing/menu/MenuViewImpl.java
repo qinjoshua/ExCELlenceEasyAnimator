@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
@@ -107,8 +108,8 @@ public class MenuViewImpl extends JFrame implements MenuView {
   }
 
   private Image getImage() throws IOException {
-    return ImageIO.read(getClass().getResource("/images/splash.png")).getScaledInstance(600, 450,
-            Image.SCALE_SMOOTH);
+    return ImageIO.read(new URL("https://i.imgur.com/bUF0FeB.png"))
+        .getScaledInstance(600, 450, Image.SCALE_SMOOTH);
   }
 
   private class SplashScreen extends JPanel {
