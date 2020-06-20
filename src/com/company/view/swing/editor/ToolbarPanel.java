@@ -24,6 +24,7 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -57,10 +58,13 @@ public class ToolbarPanel extends JPanel {
     this.setLayout(new GridLayout(0, 1));
 
     JButton previewButton = new JButton("▶");
-    JButton exportButton = new JButton("⛏");
+    JButton exportButton = new JButton();
+    exportButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/export.png")));
 
-    JButton circleButton = new JButton("●");
-    JButton rectButton = new JButton("■");
+    JButton circleButton = new JButton();
+    circleButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/circle.png")));
+    JButton rectButton = new JButton();
+    rectButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/rect.png")));
 
     previewButton.setToolTipText("Preview/Play animation");
     exportButton.setToolTipText("Build/Export animation");

@@ -3,21 +3,9 @@ package com.company;
 import com.company.controller.AnimatorController;
 import com.company.controller.AnimatorControllerImpl;
 import com.company.controller.viewactions.menuactions.MenuActionConsumerImpl;
-import com.company.controller.viewactions.playeractions.PlayerActionConsumerImpl;
-import com.company.model.AnimatorModel;
-import com.company.model.AnimatorModelImpl;
-import com.company.util.AnimationBuilder;
-import com.company.util.AnimationReader;
-import com.company.view.swing.editor.LCHColorChooser;
 import com.company.view.swing.menu.MenuView;
 import com.company.view.swing.menu.MenuViewImpl;
-import com.company.view.swing.player.PlayerView;
-import com.company.view.swing.player.PlayerViewImpl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +25,20 @@ public final class Excellence {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+    } catch (ClassNotFoundException | InstantiationException |
+            IllegalAccessException | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
     }
 
-    AnimatorController controller = new AnimatorControllerImpl(formatArgs(args));
-    controller.run();
+    if (args.length == 0) {
+      MenuView menu = new MenuViewImpl();
+      MenuActionConsumerImpl callback = new MenuActionConsumerImpl(menu);
+      menu.setCallback(callback);
+      menu.renderVisual();
+    } else {
+      AnimatorController controller = new AnimatorControllerImpl(formatArgs(args));
+      controller.run();
+    }
   }
 
   /**

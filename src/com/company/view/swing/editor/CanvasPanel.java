@@ -372,8 +372,10 @@ public class CanvasPanel extends AShapesPanel {
     @Override
     public void mouseReleased(MouseEvent e) {
       if (this.editing) {
-        modelCallback.accept(new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - this.oldX));
-        modelCallback.accept(new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - this.oldY));
+        modelCallback.accept(
+                new ChangeX(highlightedShapeName, t, boundingBoxImpl.getX() - this.oldX));
+        modelCallback.accept(
+                new ChangeY(highlightedShapeName, t, boundingBoxImpl.getY() - this.oldY));
         this.editing = false;
         callback.accept(new RefreshView());
       }

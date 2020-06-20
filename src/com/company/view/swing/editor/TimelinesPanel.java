@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -143,6 +144,11 @@ public class TimelinesPanel extends JPanel {
     this.setViewCallback(this.viewCallback);
   }
 
+  /**
+   * Sets the view callback.
+   *
+   * @param callback the view callback
+   */
   public void setViewCallback(Consumer<EditorAction> callback) {
     this.viewCallback = callback;
     for (TimelinePanel timeline : timelines.values()) {
@@ -155,12 +161,22 @@ public class TimelinesPanel extends JPanel {
     }
   }
 
+  /**
+   * Sets the tick for this timelines panel.
+   *
+   * @param tick the tick to be set
+   */
   public void setTick(int tick) {
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setTick(tick);
     }
   }
 
+  /**
+   * Updates the timelines to any changes made in the model.
+   *
+   * @param tick the tick to update the selection to
+   */
   public void update(int tick) {
     ArrayList<String> toRemove = new ArrayList<>();
     ArrayList<Integer> toRemoveIndices = new ArrayList<>();
@@ -196,7 +212,7 @@ public class TimelinesPanel extends JPanel {
     this.setTick(tick);
   }
 
-  static class DelShapeButton extends JPanel {
+  private static class DelShapeButton extends JPanel {
     Consumer<EditorAction> viewCallback;
 
     /**
@@ -208,22 +224,23 @@ public class TimelinesPanel extends JPanel {
     public DelShapeButton(String shapeName, Consumer<AnimatorAction> callback) {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
-      JButton delShapeButton = new JButton("\uD83D\uDDD1");
+      JButton delShapeButton = new JButton();
+      delShapeButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/trash.png")));
       delShapeButton.setToolTipText("Delete the shape \"" + shapeName + "\" in the timeline");
       delShapeButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
         Object[] options = {"Yes, kill it with fire!", "No, it's too young to die!"};
         int response = JOptionPane.showOptionDialog(
-            null,
-            String.format("Are you sure you want to delete shape %s? This cannot be undone.",
-                shapeName),
-            "Delete Shape",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE,
-            null,
-            options,
-            options[1]
+                null,
+                String.format("Are you sure you want to delete shape %s? This cannot be undone.",
+                        shapeName),
+                "Delete Shape",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
         );
         if (response == JOptionPane.YES_OPTION) {
           callback.accept(new DeleteShape(shapeName));
@@ -235,10 +252,20 @@ public class TimelinesPanel extends JPanel {
       this.add(delShapeButton);
     }
 
+    /**
+     * Gets the view callback.
+     *
+     * @return the view callback
+     */
     public Consumer<EditorAction> getViewCallback() {
       return viewCallback;
     }
 
+    /**
+     * Sets the view callback.
+     *
+     * @param viewCallback the view callback
+     */
     public void setViewCallback(Consumer<EditorAction> viewCallback) {
       this.viewCallback = viewCallback;
     }
@@ -259,7 +286,9 @@ public class TimelinesPanel extends JPanel {
     public AddFrameButton(String shapeName, Consumer<AnimatorAction> callback) {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
-      JButton addFrameButton = new JButton("+");
+      JButton addFrameButton = new JButton();
+      addFrameButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/plus.png")));
+
       addFrameButton.setToolTipText("Add a new frame to the shape + \"" + shapeName + "\"");
       addFrameButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);

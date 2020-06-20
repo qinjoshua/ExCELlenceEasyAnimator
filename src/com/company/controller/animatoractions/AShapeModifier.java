@@ -1,9 +1,6 @@
 package com.company.controller.animatoractions;
 
 import com.company.model.AnimatorModel;
-import com.company.model.Frame;
-
-import java.util.SortedSet;
 
 /**
  * Abstract class that represents a command that modifies a shape at a given tick.

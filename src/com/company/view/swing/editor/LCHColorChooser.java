@@ -26,6 +26,11 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
   final JSlider gSlider;
   final JSlider bSlider;
 
+  /**
+   * Creates a new color chooser with the specified initial color.
+   *
+   * @param oldColor initial color
+   */
   public LCHColorChooser(Color oldColor) {
     rSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getRed());
     gSlider = new JSlider(JSlider.HORIZONTAL, 0, 255, oldColor.getGreen());
@@ -94,6 +99,12 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
     private BufferedImage im;
     private Color rgb;
 
+    /**
+     * Initializes a preview panel with the given color and model.
+     *
+     * @param rgb   color
+     * @param model model to read information from
+     */
     public LCHPreviewPanel(Color rgb, ColorSelectionModel model) {
       this.rgb = rgb;
       this.im = LCHPreviewPanel.makePreviewImage(rgb);
@@ -152,8 +163,13 @@ public class LCHColorChooser extends AbstractColorChooserPanel implements Change
       return this.rgb;
     }
 
+    /**
+     * Updates the RGB color whenever the colors change by something outside of this picker.
+     *
+     * @param rgb the color to set it to
+     */
     public void updateRGB(Color rgb) {
-      if (Math.abs(new LCHColor(rgb).l - (int)new LCHColor(this.rgb).l) > 1.0) {
+      if (Math.abs(new LCHColor(rgb).l - (int) new LCHColor(this.rgb).l) > 1.0) {
         im = LCHPreviewPanel.makePreviewImage(rgb);
       }
       this.rgb = rgb;

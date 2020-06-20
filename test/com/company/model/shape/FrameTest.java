@@ -1,5 +1,6 @@
 package com.company.model.shape;
 
+import com.company.model.AnimatorModel;
 import com.company.model.Frame;
 import com.company.model.FrameImpl;
 import com.company.model.shape.shapes.Ellipse;
@@ -8,6 +9,10 @@ import com.company.model.shape.shapes.Rectangle;
 import org.junit.Test;
 
 import java.awt.Color;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedSet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,10 +20,14 @@ import static org.junit.Assert.assertEquals;
  * Tests for implementations of Frame.
  */
 public class FrameTest {
-  final Frame testFrame = new FrameImpl(3, new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED));
-  final Frame testFrame2 = new FrameImpl(1, new Rectangle(new PosnImpl(20, 20), 20, 20, Color.BLUE));
-  final Frame testFrame3 = new FrameImpl(5, new Rectangle(new PosnImpl(17, 13), 12, 14, Color.GREEN));
-  final Frame testFrame4 = new FrameImpl(5, new Ellipse(new PosnImpl(20, 30), 13, 17, Color.RED));
+  final Frame testFrame =
+          new FrameImpl(3, new Ellipse(new PosnImpl(15, 25), 10, 15, Color.RED));
+  final Frame testFrame2 =
+          new FrameImpl(1, new Rectangle(new PosnImpl(20, 20), 20, 20, Color.BLUE));
+  final Frame testFrame3 =
+          new FrameImpl(5, new Rectangle(new PosnImpl(17, 13), 12, 14, Color.GREEN));
+  final Frame testFrame4 =
+          new FrameImpl(5, new Ellipse(new PosnImpl(20, 30), 13, 17, Color.RED));
 
   // Test that frame implementation will initialize with expected parameters
   @Test
@@ -92,5 +101,133 @@ public class FrameTest {
   @Test(expected = IllegalArgumentException.class)
   public void testInterpolationToFrameBefore() {
     testFrame3.interpolateShape(testFrame2, 0.5);
+  }
+
+  /**
+   * Mock model used for the purpose of testing.
+   */
+  private class MockModel implements AnimatorModel {
+    final Appendable out;
+
+    /**
+     * Initializes the appendable out where the testing strings are to be written to.
+     *
+     * @param out where the test results are written to
+     */
+    public MockModel(Appendable out) {
+      this.out = out;
+    }
+
+    private String shapeToString(Shape shape) {
+      return String.format("x: %f y: %f w: %f h: %f r: %d g: %d b: %d",
+              shape.getPosition().getX(), shape.getPosition().getY(),
+              shape.getWidth(), shape.getHeight(),
+              shape.getColor().getRed(), shape.getColor().getGreen(), shape.getColor().getBlue());
+    }
+
+    @Override
+    public void createKeyframe(String shapeName, Shape shape, int tick)
+            throws IllegalArgumentException {
+      try {
+        out.append("Name: ").append(shapeName).append(" Shape: ").append(this.shapeToString(shape)).
+                append(" Tick: ").append(String.valueOf(tick)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void setCanvasWidth(int canvasWidth) {
+      try {
+        out.append(String.valueOf(canvasWidth)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void setCanvasHeight(int canvasHeight) {
+      try {
+        out.append(String.valueOf(canvasHeight)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void setCanvasX(int canvasX) {
+      try {
+        out.append(String.valueOf(canvasX)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void setCanvasY(int canvasY) {
+      try {
+        out.append(String.valueOf(canvasY)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void removeKeyframe(String shapeName, int tick) {
+      try {
+        out.append("Name: ").append(shapeName).append(" Tick: ").
+                append(String.valueOf(tick)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void deleteShape(String shapeName) {
+      try {
+        out.append(shapeName);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public Map<String, Shape> shapesAt(int tick) throws IllegalArgumentException {
+      try {
+        out.append(String.valueOf(tick)).append(" ");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      Map<String, Shape> returnMap = new HashMap<>();
+      returnMap.put("mock", new Rectangle(new PosnImpl(0, 0), 0, 0, Color.GREEN));
+      returnMap.put("mock2", new Ellipse(new PosnImpl(10, 20), 20, 10, Color.BLUE));
+
+      return returnMap;
+    }
+
+    @Override
+    public Map<String, SortedSet<Frame>> getKeyframes() {
+      return null;
+    }
+
+    @Override
+    public int getCanvasHeight() {
+      return 0;
+    }
+
+    @Override
+    public int getCanvasWidth() {
+      return 0;
+    }
+
+    @Override
+    public int getCanvasX() {
+      return 0;
+    }
+
+    @Override
+    public int getCanvasY() {
+      return 0;
+    }
   }
 }
