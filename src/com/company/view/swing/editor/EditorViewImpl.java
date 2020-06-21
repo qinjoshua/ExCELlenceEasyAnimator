@@ -128,7 +128,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.refreshView();
   }
 
-
   @Override
   public void setTick(int tick) {
     this.tick = tick;

@@ -103,8 +103,6 @@ public class TimelinesPanel extends JPanel {
     outerPanel.add(namesPanel);
     outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
-    outerPanel.setPreferredSize(new Dimension(0,
-            (int) outerPanel.getPreferredSize().getHeight()));
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
