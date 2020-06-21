@@ -3,6 +3,7 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
+import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
@@ -133,9 +134,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.tick = tick;
     this.canvas.setTick(tick);
     this.timelines.setTick(tick);
-    if (this.getHighlightedShapeName() != null) {
-      this.updateProperties(this.getHighlightedShapeName());
-    }
   }
 
   @Override

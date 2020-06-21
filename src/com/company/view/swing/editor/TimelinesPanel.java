@@ -50,6 +50,8 @@ public class TimelinesPanel extends JPanel {
 
   JPanel highlightedNamePanel;
   final Map<String, JPanel> namesPanels;
+  JPanel highlightedTimelinePanel;
+  final Map<String, JPanel> timelinePanels;
 
   final ReadOnlyAnimatorModel model;
   final Consumer<AnimatorAction> modelCallback;
@@ -71,6 +73,8 @@ public class TimelinesPanel extends JPanel {
 
     this.highlightedNamePanel = null;
     this.namesPanels = new HashMap<>();
+    this.highlightedTimelinePanel = null;
+    this.timelinePanels = new HashMap<>();
 
     Map<String, SortedSet<Frame>> frames = model.getKeyframes();
     timelines = new LinkedHashMap<>();
@@ -123,10 +127,9 @@ public class TimelinesPanel extends JPanel {
     labelPanel.add(label);
     labelPanel.setPreferredSize(new Dimension(
         (int) label.getPreferredSize().getWidth() + 10,
+
         (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
     label.setLabelFor(timeline);
-
-    namesPanels.put(name, labelPanel);
 
     AddFrameButton addBtn = new AddFrameButton(name, modelCallback);
     DelShapeButton delBtn = new DelShapeButton(name, modelCallback);
@@ -135,6 +138,12 @@ public class TimelinesPanel extends JPanel {
     actionsPanel.add(delBtn, BorderLayout.EAST);
     actionsPanel.setPreferredSize(new Dimension(110,
         (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
+
+    // TODO remove
+    timelinesPanel.setBackground(Color.blue);
+
+    namesPanels.put(name, labelPanel);
+    timelinePanels.put(name, timeline);
 
     namesPanel.add(labelPanel);
     timelinesPanel.add(timeline);
@@ -209,6 +218,8 @@ public class TimelinesPanel extends JPanel {
       timeline.updateButtonText();
     }
 
+    this.revalidate();
+    this.repaint();
     this.setTick(tick);
   }
 
@@ -334,13 +345,17 @@ public class TimelinesPanel extends JPanel {
   void highlightPanel(String name) {
     this.deHighlightPanel();
     this.highlightedNamePanel = this.namesPanels.get(name);
-    highlightedNamePanel.setBackground(new Color(128, 179, 229));
+    this.highlightedNamePanel.setBackground(new Color(128, 179, 229));
+    this.highlightedTimelinePanel = this.timelinePanels.get(name);
+    this.highlightedTimelinePanel.setBackground(new Color(128, 179, 229));
   }
 
   void deHighlightPanel() {
     if (this.highlightedNamePanel != null) {
       this.highlightedNamePanel.setBackground(UIManager.getColor( "Panel.background" ));
       this.highlightedNamePanel = null;
+      this.highlightedTimelinePanel.setBackground(UIManager.getColor( "Panel.background" ));
+      this.highlightedTimelinePanel = null;
     }
   }
 }

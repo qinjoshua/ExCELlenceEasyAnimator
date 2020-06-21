@@ -92,6 +92,7 @@ public class TimelinePanel extends JPanel {
       } else {
         btn.setSelected(true);
       }
+
       this.getViewCallback().accept(new SetTick(tick));
       this.getViewCallback().accept(new HighlightShape(shapeName));
     });
