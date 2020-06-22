@@ -15,8 +15,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -44,15 +42,24 @@ import javax.swing.UIManager;
  */
 public class TimelinesPanel extends JPanel {
   private static final int TIMELINE_HEIGHT = 200;
-  final Map<String, TimelinePanel> timelines;
-  final Map<String, JPanel> namesPanels;
-  final ReadOnlyAnimatorModel model;
-  final Consumer<AnimatorAction> modelCallback;
   private final JPanel timelinesPanel;
   private final JPanel namesPanel;
   private final JPanel addFramePanel;
-  JPanel highlightedNamePanel;
-  Consumer<EditorAction> viewCallback;
+
+  private JPanel highlightedNamePanel;
+  private final Map<String, JPanel> namesPanels;
+  private JPanel highlightedTimelinePanel;
+  private final Map<String, TimelinePanel> timelines;
+
+  private int timelinesHeight;
+
+  private final ReadOnlyAnimatorModel model;
+  private final Consumer<AnimatorAction> modelCallback;
+  private Consumer<EditorAction> viewCallback;
+
+  private final JPanel outerPanel;
+
+  private static final int TIMELINE_OFFSET_SIZE = 2;
 
   /**
    * Creates a timelines panel with the given model and callback for the model.
@@ -66,13 +73,15 @@ public class TimelinesPanel extends JPanel {
     timelinesPanel = new JPanel();
     namesPanel = new JPanel();
     addFramePanel = new JPanel();
-    JPanel outerPanel = new JPanel();
+    this.outerPanel = new JPanel();
 
     this.highlightedNamePanel = null;
     this.namesPanels = new HashMap<>();
+    this.highlightedTimelinePanel = null;
+    timelines = new LinkedHashMap<>();
 
     Map<String, SortedSet<Frame>> frames = model.getKeyframes();
-    timelines = new LinkedHashMap<>();
+
     for (Map.Entry<String, SortedSet<Frame>> entry : frames.entrySet()) {
       timelines.put(entry.getKey(), new TimelinePanel(entry.getKey(), model, modelCallback));
     }
@@ -81,9 +90,11 @@ public class TimelinesPanel extends JPanel {
     namesPanel.setLayout(new BoxLayout(namesPanel, BoxLayout.Y_AXIS));
     addFramePanel.setLayout(new BoxLayout(addFramePanel, BoxLayout.Y_AXIS));
     addFramePanel.setPreferredSize(new Dimension(110,
-        (int) addFramePanel.getPreferredSize().getHeight()));
+            (int) addFramePanel.getPreferredSize().getHeight()));
 
-    timelinesPanel.add(Box.createVerticalStrut(2));
+    timelinesPanel.add(Box.createVerticalStrut(TIMELINE_OFFSET_SIZE));
+    this.timelinesHeight = TIMELINE_OFFSET_SIZE;
+
     for (Map.Entry<String, TimelinePanel> entry : timelines.entrySet()) {
       this.addShape(entry.getKey(), entry.getValue());
     }
@@ -99,7 +110,7 @@ public class TimelinesPanel extends JPanel {
     outerPanel.add(innerScrollPane);
     outerPanel.add(addFramePanel);
     outerPanel.setPreferredSize(new Dimension(0,
-        (int) outerPanel.getPreferredSize().getHeight()));
+            this.timelinesHeight));
 
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -122,10 +133,9 @@ public class TimelinesPanel extends JPanel {
     labelPanel.add(label);
     labelPanel.setPreferredSize(new Dimension(
         (int) label.getPreferredSize().getWidth() + 10,
+
         (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
     label.setLabelFor(timeline);
-
-    namesPanels.put(name, labelPanel);
 
     AddFrameButton addBtn = new AddFrameButton(name, modelCallback);
     DelShapeButton delBtn = new DelShapeButton(name, modelCallback);
@@ -135,9 +145,13 @@ public class TimelinesPanel extends JPanel {
     actionsPanel.setPreferredSize(new Dimension(110,
         (int) TimelinePanel.KEYFRAME_SIZE.getHeight()));
 
+    namesPanels.put(name, labelPanel);
+
     namesPanel.add(labelPanel);
     timelinesPanel.add(timeline);
     addFramePanel.add(actionsPanel);
+
+    this.timelinesHeight += timeline.getPreferredSize().getHeight();
 
     // set the callbacks for the new buttons if the callback exists
     this.setViewCallback(this.viewCallback);
@@ -208,20 +222,9 @@ public class TimelinesPanel extends JPanel {
       timeline.updateButtonText();
     }
 
+    this.revalidate();
+    this.repaint();
     this.setTick(tick);
-  }
-
-  void highlightPanel(String name) {
-    this.deHighlightPanel();
-    this.highlightedNamePanel = this.namesPanels.get(name);
-    highlightedNamePanel.setBackground(new Color(128, 179, 229));
-  }
-
-  void deHighlightPanel() {
-    if (this.highlightedNamePanel != null) {
-      this.highlightedNamePanel.setBackground(UIManager.getColor("Panel.background"));
-      this.highlightedNamePanel = null;
-    }
   }
 
   private static class DelShapeButton extends JPanel {
@@ -237,26 +240,22 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton delShapeButton = new JButton();
-      try {
-        delShapeButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/uDDWOyI.png")));
-      } catch (MalformedURLException e) {
-        e.printStackTrace(System.out);
-      }
+      delShapeButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/trash.png")));
       delShapeButton.setToolTipText("Delete the shape \"" + shapeName + "\" in the timeline");
       delShapeButton.setPreferredSize(btnSize);
       this.setPreferredSize(btnSize);
       delShapeButton.addActionListener(e -> {
         Object[] options = {"Yes, kill it with fire!", "No, it's too young to die!"};
         int response = JOptionPane.showOptionDialog(
-            null,
-            String.format("Are you sure you want to delete shape %s? This cannot be undone.",
-                shapeName),
-            "Delete Shape",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE,
-            null,
-            options,
-            options[1]
+                null,
+                String.format("Are you sure you want to delete shape %s? This cannot be undone.",
+                        shapeName),
+                "Delete Shape",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
         );
         if (response == JOptionPane.YES_OPTION) {
           callback.accept(new DeleteShape(shapeName));
@@ -303,11 +302,7 @@ public class TimelinesPanel extends JPanel {
       Dimension btnSize = new Dimension(50, (int) TimelinePanel.KEYFRAME_SIZE.getHeight() - 5);
 
       JButton addFrameButton = new JButton();
-      try {
-        addFrameButton.setIcon(new ImageIcon(new URL("https://i.imgur.com/zgTmQcz.png")));
-      } catch (MalformedURLException e) {
-        e.printStackTrace(System.out);
-      }
+      addFrameButton.setIcon(new ImageIcon(this.getClass().getResource("/icons/plus.png")));
 
       addFrameButton.setToolTipText("Add a new frame to the shape + \"" + shapeName + "\"");
       addFrameButton.setPreferredSize(btnSize);
@@ -348,6 +343,23 @@ public class TimelinesPanel extends JPanel {
 
     public void setViewCallback(Consumer<EditorAction> viewCallback) {
       this.viewCallback = viewCallback;
+    }
+  }
+
+  void highlightPanel(String name) {
+    this.deHighlightPanel();
+    this.highlightedNamePanel = this.namesPanels.get(name);
+    this.highlightedNamePanel.setBackground(new Color(128, 179, 229));
+    this.highlightedTimelinePanel = this.timelines.get(name);
+    this.highlightedTimelinePanel.setBackground(new Color(128, 179, 229));
+  }
+
+  void deHighlightPanel() {
+    if (this.highlightedNamePanel != null) {
+      this.highlightedNamePanel.setBackground(UIManager.getColor( "Panel.background" ));
+      this.highlightedNamePanel = null;
+      this.highlightedTimelinePanel.setBackground(UIManager.getColor( "Panel.background" ));
+      this.highlightedTimelinePanel = null;
     }
   }
 }
