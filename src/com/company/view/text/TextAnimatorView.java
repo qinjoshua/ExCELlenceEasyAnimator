@@ -53,6 +53,8 @@ public class TextAnimatorView implements TextView {
       }
       renderString.append("\n");
     }
+    // for java 8
+    // return renderString.toString();
     return renderString.toString().stripTrailing();
   }
 

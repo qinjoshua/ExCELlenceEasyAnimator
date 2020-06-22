@@ -52,7 +52,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.properties = new PropertyPanel();
 
-    this.timelines = new TimelinesPanel(model, modelCallback);
+    this.timelines = new TimelinesPanel(model, modelCallback, 1);
 
     this.getContentPane().add(properties, BorderLayout.EAST);
     this.getContentPane().add(timelines, BorderLayout.SOUTH);

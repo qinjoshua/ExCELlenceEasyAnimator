@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
@@ -50,12 +51,14 @@ public class TimelinesPanel extends JPanel {
   private final Map<String, JPanel> namesPanels;
   private JPanel highlightedTimelinePanel;
   private final Map<String, TimelinePanel> timelines;
+  private final Scrubber scrubber;
 
   private int timelinesHeight;
 
   private final ReadOnlyAnimatorModel model;
   private final Consumer<AnimatorAction> modelCallback;
   private Consumer<EditorAction> viewCallback;
+  private int tick;
 
   private final JPanel outerPanel;
 
@@ -66,8 +69,10 @@ public class TimelinesPanel extends JPanel {
    *
    * @param model         read-only model to for the timelines panel to retrieve information from
    * @param modelCallback callback for requesting changes to the model
+   * @param tick the tick to set the animation at
    */
-  public TimelinesPanel(ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback) {
+  public TimelinesPanel(ReadOnlyAnimatorModel model, Consumer<AnimatorAction> modelCallback,
+                        int tick) {
     this.model = model;
     this.modelCallback = modelCallback;
     timelinesPanel = new JPanel();
@@ -120,10 +125,15 @@ public class TimelinesPanel extends JPanel {
     JPanel outerOuterPanel = new JPanel(new BorderLayout());
     outerOuterPanel.add(outerScrollPane);
 
+    scrubber = new Scrubber();
+
     this.setLayout(new BorderLayout());
     this.add(tScroll, BorderLayout.NORTH);
     this.add(outerScrollPane, BorderLayout.CENTER);
+    this.add(scrubber, BorderLayout.SOUTH);
     this.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT));
+
+    this.setTick(tick);
   }
 
   private void addShape(String name, TimelinePanel timeline) {
@@ -164,6 +174,7 @@ public class TimelinesPanel extends JPanel {
    */
   public void setViewCallback(Consumer<EditorAction> callback) {
     this.viewCallback = callback;
+    scrubber.setViewCallback(callback);
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setViewCallback(callback);
     }
@@ -180,6 +191,7 @@ public class TimelinesPanel extends JPanel {
    * @param tick the tick to be set
    */
   public void setTick(int tick) {
+    this.tick = tick;
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setTick(tick);
     }
@@ -225,6 +237,27 @@ public class TimelinesPanel extends JPanel {
     this.revalidate();
     this.repaint();
     this.setTick(tick);
+  }
+
+  private class Scrubber extends JPanel {
+    JSlider timeSlider;
+    Consumer<EditorAction> viewCallback;
+
+    public Scrubber() {
+      // TODO how do we want to get the slider max?
+      timeSlider = new JSlider(JSlider.HORIZONTAL,1, 300, tick);
+      timeSlider.addChangeListener(e -> {
+        getViewCallback().accept(new SetTick(((JSlider)e.getSource()).getValue()));
+      });
+    }
+
+    public Consumer<EditorAction> getViewCallback() {
+      return viewCallback;
+    }
+
+    public void setViewCallback(Consumer<EditorAction> viewCallback) {
+      this.viewCallback = viewCallback;
+    }
   }
 
   private static class DelShapeButton extends JPanel {
