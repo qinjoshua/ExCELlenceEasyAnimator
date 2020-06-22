@@ -42,7 +42,7 @@ import javax.swing.UIManager;
  * Represents a panel to show all of the timelines for each specific shape.
  */
 public class TimelinesPanel extends JPanel {
-  private static final int TIMELINE_HEIGHT = 200;
+  private static final int TIMELINE_HEIGHT = 300;
   private final JPanel timelinesPanel;
   private final JPanel namesPanel;
   private final JPanel addFramePanel;
@@ -120,11 +120,12 @@ public class TimelinesPanel extends JPanel {
     JScrollPane outerScrollPane = new JScrollPane(outerPanel);
     outerScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     outerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    outerScrollPane.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT - 50));
+    outerScrollPane.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT - 150));
 
     JPanel outerOuterPanel = new JPanel(new BorderLayout());
     outerOuterPanel.add(outerScrollPane);
 
+    this.setTick(tick);
     scrubber = new Scrubber();
 
     this.setLayout(new BorderLayout());
@@ -132,8 +133,6 @@ public class TimelinesPanel extends JPanel {
     this.add(outerScrollPane, BorderLayout.CENTER);
     this.add(scrubber, BorderLayout.SOUTH);
     this.setPreferredSize(new Dimension(1200, TIMELINE_HEIGHT));
-
-    this.setTick(tick);
   }
 
   private void addShape(String name, TimelinePanel timeline) {
@@ -174,7 +173,9 @@ public class TimelinesPanel extends JPanel {
    */
   public void setViewCallback(Consumer<EditorAction> callback) {
     this.viewCallback = callback;
-    scrubber.setViewCallback(callback);
+    if (scrubber != null) {
+      scrubber.setViewCallback(callback);
+    }
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setViewCallback(callback);
     }
@@ -245,10 +246,12 @@ public class TimelinesPanel extends JPanel {
 
     public Scrubber() {
       // TODO how do we want to get the slider max?
+      this.setPreferredSize(new Dimension(800, 30));
       timeSlider = new JSlider(JSlider.HORIZONTAL,1, 300, tick);
       timeSlider.addChangeListener(e -> {
         getViewCallback().accept(new SetTick(((JSlider)e.getSource()).getValue()));
       });
+      this.add(timeSlider);
     }
 
     public Consumer<EditorAction> getViewCallback() {
