@@ -19,13 +19,27 @@ public class Rectangle extends AShape {
    * @param width  the width of the rectangle
    * @param height the height of the rectangle
    * @param color  the color of the rectangle
+   * @param angle  the angle of the shape
+   */
+  public Rectangle(Posn posn, double width, double height, Color color, double angle) {
+    super(posn, width, height, color, ShapeType.Rectangle, angle);
+  }
+
+  /**
+   * Creates a rectangle given the location of its upper-left corner, its width and height, and its
+   * color.
+   *
+   * @param posn   the upper-left corner
+   * @param width  the width of the rectangle
+   * @param height the height of the rectangle
+   * @param color  the color of the rectangle
    */
   public Rectangle(Posn posn, double width, double height, Color color) {
-    super(posn, width, height, color, ShapeType.Rectangle);
+    super(posn, width, height, color, ShapeType.Rectangle, 0);
   }
 
   @Override
-  protected AShape newShape(Posn posn, double width, double height, Color color) {
-    return new Rectangle(posn, width, height, color);
+  protected AShape newShape(Posn posn, double width, double height, Color color, double angle) {
+    return new Rectangle(posn, width, height, color, angle);
   }
 }

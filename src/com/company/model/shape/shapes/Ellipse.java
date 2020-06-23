@@ -19,13 +19,27 @@ public class Ellipse extends AShape implements Shape {
    * @param width  this shape's width
    * @param height this shape's height
    * @param color  this shape's color
+   * @param angle  this shape's angle
+   */
+  public Ellipse(Posn posn, double width, double height, Color color, double angle) {
+    super(posn, width, height, color, ShapeType.Ellipse, angle);
+  }
+
+  /**
+   * Constructor that initializes all the fields for this shape, except angle which is
+   * initialized to zero.
+   *
+   * @param posn   the center of this ellipse
+   * @param width  this shape's width
+   * @param height this shape's height
+   * @param color  this shape's color
    */
   public Ellipse(Posn posn, double width, double height, Color color) {
-    super(posn, width, height, color, ShapeType.Ellipse);
+    super(posn, width, height, color, ShapeType.Ellipse, 0);
   }
 
   @Override
-  protected AShape newShape(Posn posn, double width, double height, Color color) {
-    return new Ellipse(posn, width, height, color);
+  protected AShape newShape(Posn posn, double width, double height, Color color, double angle) {
+    return new Ellipse(posn, width, height, color, angle);
   }
 }

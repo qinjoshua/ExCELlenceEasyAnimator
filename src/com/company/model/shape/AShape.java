@@ -12,6 +12,7 @@ public abstract class AShape implements Shape {
   private double height;
   private Color color;
   private ShapeType shapeType;
+  private double angle;
 
   /**
    * Constructor that initializes all the fields for this shape.
@@ -21,13 +22,30 @@ public abstract class AShape implements Shape {
    * @param height    this shape's height
    * @param color     this shape's color
    * @param shapeType this shape's type
+   * @param angle     this shape's angle
    */
-  public AShape(Posn posn, double width, double height, Color color, ShapeType shapeType) {
+  public AShape(Posn posn, double width, double height, Color color, ShapeType shapeType,
+                double angle) {
     this.posn = posn;
     this.width = width;
     this.height = height;
     this.color = color;
     this.shapeType = shapeType;
+    this.angle = angle;
+  }
+
+  /**
+   * Constructor that initializes all the fields for this shape except angle, which is set to
+   * zero.
+   *
+   * @param posn      this shape's position
+   * @param width     this shape's width
+   * @param height    this shape's height
+   * @param color     this shape's color
+   * @param shapeType this shape's type
+   */
+  public AShape(Posn posn, double width, double height, Color color, ShapeType shapeType) {
+    this(posn, width, height, color, shapeType, 0);
   }
 
   /**
@@ -44,7 +62,7 @@ public abstract class AShape implements Shape {
 
   @Override
   public Shape copy() {
-    return this.newShape(this.posn, this.width, this.height, this.color);
+    return this.newShape(this.posn, this.width, this.height, this.color, angle);
   }
 
   @Override
@@ -98,6 +116,16 @@ public abstract class AShape implements Shape {
   }
 
   @Override
+  public double getShapeAngle() {
+    return this.angle;
+  }
+
+  @Override
+  public void setShapeAngle(double angle) {
+    this.angle = angle;
+  }
+
+  @Override
   public Shape interpolate(Shape to, double progress) {
     if (progress < 0 || progress > 1) {
       throw new IllegalArgumentException("Progress must be between 0 and 1");
@@ -106,16 +134,17 @@ public abstract class AShape implements Shape {
     }
 
     return newShape(this.posn.interpolate(to.getPosition(), progress),
-        interpolateNum(this.width, to.getWidth(), progress),
-        interpolateNum(this.height, to.getHeight(), progress),
-        new Color(
-            (int) Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(),
-                progress)),
-            (int) Math.round(
-                interpolateNum(
-                    this.color.getGreen(), to.getColor().getGreen(), progress)),
-            (int) Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
-                progress))));
+            interpolateNum(this.width, to.getWidth(), progress),
+            interpolateNum(this.height, to.getHeight(), progress),
+            new Color(
+                    (int) Math.round(interpolateNum(this.color.getRed(), to.getColor().getRed(),
+                            progress)),
+                    (int) Math.round(
+                            interpolateNum(
+                                    this.color.getGreen(), to.getColor().getGreen(), progress)),
+                    (int) Math.round(interpolateNum(this.color.getBlue(), to.getColor().getBlue(),
+                            progress))),
+            interpolateNum(this.angle, to.getShapeAngle(), progress));
   }
 
   /**
@@ -127,7 +156,8 @@ public abstract class AShape implements Shape {
    * @param color  this shape's color
    * @return the new shape
    */
-  protected abstract AShape newShape(Posn posn, double width, double height, Color color);
+  protected abstract AShape newShape(Posn posn, double width, double height, Color color,
+                                     double angle);
 
   @Override
   public boolean equals(Object o) {

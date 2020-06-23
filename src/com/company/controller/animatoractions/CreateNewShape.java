@@ -17,10 +17,38 @@ public class CreateNewShape implements AnimatorAction {
   private final double height;
   private final Color color;
   private final ShapeType type;
+  private final double angle;
   private final int tick;
 
   /**
    * Initializes all the properties that are useful for creating a new shape.
+   *
+   * @param name   name of the shape that will be created
+   * @param x      x position of the shape that will be created
+   * @param y      y position of the shape that will be created
+   * @param width  width of the shape that will be created
+   * @param height height of the shape that will be created
+   * @param color  color of the shape that will be created
+   * @param type   type of shape being created
+   * @param angle  angle of the shape that will be created
+   * @param tick   initial tick of the shape that will be created
+   */
+  public CreateNewShape(String name, int x, int y, double width, double height, Color color,
+                        ShapeType type, double angle, int tick) {
+    this.name = name;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.type = type;
+    this.angle = angle;
+    this.tick = tick;
+  }
+
+  /**
+   * Initializes all the properties that are useful for creating a new shape, except the angle,
+   * which is initialized to zero.
    *
    * @param name   name of the shape that will be created
    * @param x      x position of the shape that will be created
@@ -40,12 +68,13 @@ public class CreateNewShape implements AnimatorAction {
     this.height = height;
     this.color = color;
     this.type = type;
+    this.angle = 0;
     this.tick = tick;
   }
 
   @Override
   public void actOn(AnimatorModel model) throws IllegalStateException {
     model.createKeyframe(this.name, type.getShape(new PosnImpl(this.x, this.y), this.width,
-        this.height, this.color), this.tick);
+        this.height, this.color, this.angle), this.tick);
   }
 }

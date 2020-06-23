@@ -61,15 +61,16 @@ public enum ShapeType {
    * @param width  the shape's width
    * @param height the shape's height
    * @param color  the shape's color
+   * @param angle  the shape's angle
    * @return shape of this type with the given parameters
    */
   public Shape getShape(
-      Posn posn, double width, double height, Color color) {
+      Posn posn, double width, double height, Color color, double angle) {
     switch (this) {
       case Rectangle:
-        return new Rectangle(posn, width, height, color);
+        return new Rectangle(posn, width, height, color, angle);
       case Ellipse:
-        return new Ellipse(posn, width, height, color);
+        return new Ellipse(posn, width, height, color, angle);
       default:
         throw new IllegalStateException("Unreachable code");
     }

@@ -15,12 +15,24 @@ public interface Shape {
   Posn getPosition();
 
   /**
+   * Sets the position for this shape.
+   *
+   * @param posn the position of this shape
+   */
+  void setPosn(Posn posn);
+
+  /**
    * Gets the width of this shape.
    *
    * @return the width of the shape as an integer
    */
   double getWidth();
 
+  /**
+   * Sets the width of this shape.
+   *
+   * @param width the width of this shapes
+   */
   void setWidth(double width);
 
   /**
@@ -30,6 +42,11 @@ public interface Shape {
    */
   double getHeight();
 
+  /**
+   * Sets the height of this shape.
+   *
+   * @param height the height of the shape as a double
+   */
   void setHeight(double height);
 
   /**
@@ -39,6 +56,11 @@ public interface Shape {
    */
   Color getColor();
 
+  /**
+   * Sets the color for this shape.
+   *
+   * @param color the color of this shape
+   */
   void setColor(Color color);
 
   /**
@@ -48,9 +70,26 @@ public interface Shape {
    */
   ShapeType getShapeType();
 
+  /**
+   * Sets the type of this shape.
+   *
+   * @param shapeType the type of this shape
+   */
   void setShapeType(ShapeType shapeType);
 
-  void setPosn(Posn posn);
+  /**
+   * Gets the angle of the shape.
+   *
+   * @return the angle of the shape as a double
+   */
+  double getShapeAngle();
+
+  /**
+   * Sets the angle of the shape.
+   *
+   * @param angle the angle of the shape as a double
+   */
+  void setShapeAngle(double angle);
 
   /**
    * Gets the interpolated shape between this shape and the given shape, at the given progress.
