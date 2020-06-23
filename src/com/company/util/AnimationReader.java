@@ -104,7 +104,7 @@ public class AnimationReader {
 
     String line = s.nextLine();
 
-    boolean usingAngles = line.split("\\w+").length == 18;
+    boolean usingAngles = line.split("\\w+").length == 20;
 
     Scanner lineScanner = new Scanner(line);
     double[] vals = new double[18];
@@ -112,10 +112,10 @@ public class AnimationReader {
     for (int i = 0; i < 18; i++) {
       if (i == 8 || i == 17) {
         if (usingAngles) {
-          vals[i] = getDouble(lineScanner, "Motion", fieldNames[i]);
+          vals[i] = getDouble(lineScanner, "Motion", fieldNames[i]) % (2 * Math.PI);
+        } else {
+          vals[i] = 0;
         }
-        //TODO
-        vals[i] = Math.PI/16;
       } else {
         vals[i] = getDouble(lineScanner, "Motion", fieldNames[i]);
       }
