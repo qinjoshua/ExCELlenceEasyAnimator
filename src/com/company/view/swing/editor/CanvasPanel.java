@@ -12,6 +12,9 @@ import com.company.controller.viewactions.editoractions.RefreshView;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 import com.company.view.swing.AShapesPanel;
+import com.company.view.swing.DecoratedShape;
+import com.company.view.swing.editor.boundingbox.Anchor;
+import com.company.view.swing.editor.boundingbox.BoundingBoxImpl;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -37,7 +40,7 @@ import javax.swing.border.Border;
  */
 public class CanvasPanel extends AShapesPanel {
   private final Consumer<AnimatorAction> modelCallback;
-  private ColoredShape highlightedShape;
+  private DecoratedShape highlightedShape;
   private String highlightedShapeName;
   private Consumer<EditorAction> callback;
   private BoundingBoxImpl boundingBoxImpl;
@@ -169,11 +172,11 @@ public class CanvasPanel extends AShapesPanel {
    *
    * @return the highlighted shape
    */
-  Shape getHighlightedShape() {
+  DecoratedShape getHighlightedShape() {
     if (this.highlightedShape == null) {
       return null;
     } else {
-      return this.highlightedShape.shape;
+      return this.highlightedShape;
     }
   }
 
@@ -210,7 +213,7 @@ public class CanvasPanel extends AShapesPanel {
    */
   void updateBoundingBox() {
     if (highlightedShape != null) {
-      this.boundingBoxImpl = new BoundingBoxImpl(this.highlightedShape.shape);
+      this.boundingBoxImpl = new BoundingBoxImpl(this.highlightedShape);
     }
     this.repaint();
   }
@@ -262,7 +265,7 @@ public class CanvasPanel extends AShapesPanel {
     public void mouseClicked(MouseEvent e) {
       String toBeHighlighted = null;
 
-      for (Map.Entry<String, ColoredShape> coloredShape : shapes.entrySet()) {
+      for (Map.Entry<String, DecoratedShape> coloredShape : shapes.entrySet()) {
         if (coloredShape.getValue().shape.contains(e.getPoint())) {
           toBeHighlighted = coloredShape.getKey();
         }

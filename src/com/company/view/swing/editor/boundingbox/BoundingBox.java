@@ -1,4 +1,7 @@
-package com.company.view.swing.editor;
+package com.company.view.swing.editor.boundingbox;
+
+import com.company.view.swing.editor.boundingbox.Anchor;
+import com.company.view.swing.editor.boundingbox.AnchorType;
 
 import java.awt.Graphics2D;
 
