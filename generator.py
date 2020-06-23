@@ -12,7 +12,7 @@ def gen_single_rotation(filename):
         x, y = 0, 0
         w, h = 300, 100
         r, g, b = 200, 100, 200
-        for t in range(1, 1001, 10):
+        for t in range(1, 301, 10):
             line = "motion R "
             line += "{} {} {} {} {} {} {} {} {:.2f}   ".format(t, x, y, w, h, r, g, b, angle)
             angle += math.pi * math.sin(t) + random.random()
@@ -31,7 +31,7 @@ def gen_combo_rotation(filename):
         x, y = 50, 150
         w, h = 300, 100
         r, g, b = 200, 100, 200
-        for t in range(1, 1001, 10):
+        for t in range(1, 301, 10):
             line = "motion R "
             line += "{} {} {} {} {} {} {} {} {:.2f}   ".format(t, x, y, w, h, r, g, b, angle)
             w += int(50 * (random.random() - 0.5))

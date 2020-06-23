@@ -247,9 +247,7 @@ public class TimelinesPanel extends JPanel {
     JSlider timeSlider;
     Consumer<EditorAction> viewCallback;
 
-    public Scrubber() {
-      this.setPreferredSize(new Dimension(800, 30));
-      timeSlider = new JSlider(JSlider.HORIZONTAL,1, (int)model.lastTick(), tick);
+    public Scrubber() {      timeSlider = new JSlider(JSlider.HORIZONTAL,1, (int)model.lastTick(), tick);
       timeSlider.addChangeListener(e -> {
         getViewCallback().accept(new SetTick(((JSlider)e.getSource()).getValue()));
       });

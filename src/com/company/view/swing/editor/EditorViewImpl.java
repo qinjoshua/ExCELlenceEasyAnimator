@@ -143,6 +143,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.canvas.setTick(tick);
     this.timelines.setTick(tick);
     this.updateProperties();
+    this.updateBanner(this.getHighlightedShapeName());
   }
 
   @Override
