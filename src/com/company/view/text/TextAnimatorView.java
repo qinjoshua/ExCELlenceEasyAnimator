@@ -5,6 +5,7 @@ import com.company.model.ReadOnlyAnimatorModel;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.SortedSet;
 
 /**
@@ -30,28 +31,44 @@ public class TextAnimatorView implements TextView {
     Map<String, SortedSet<Frame>> timelines = model.getKeyframes();
 
     renderString.append(String.format("canvas %d %d %d %d\n",
-        this.model.getCanvasWidth(), this.model.getCanvasHeight(), this.model.getCanvasX(),
-        this.model.getCanvasY()));
-    for (Map.Entry<String, SortedSet<Frame>> timeline : timelines.entrySet()) {
-      renderString.append("shape ").append(timeline.getKey()).append(" ").
-          append(timeline.getValue().first().getShape().getShapeType()).append("\n");
-
-      Frame prevFrame = null;
-
-      if (timeline.getValue().size() == 1) {
-        renderString.append("motion\t").append(timeline.getKey()).append("\t")
-            .append(timeline.getValue().first());
-      } else {
-        for (Frame frame : timeline.getValue()) {
-          if (prevFrame != null) {
-            renderString.append("motion\t").append(timeline.getKey()).append("\t")
-                .append(prevFrame).append("\t\t");
-            renderString.append(timeline.getKey()).append("\t").append(frame).append("\n");
-          }
-          prevFrame = frame;
-        }
+        this.model.getCanvasX(),
+        this.model.getCanvasY(),
+        this.model.getCanvasWidth(),
+        this.model.getCanvasHeight()
+    ));
+    for (String layerName : model.getLayers()) {
+      renderString.append("layer ").append(layerName).append("\n");
+    }
+    for (String layerName : model.getLayers()) {
+      renderString.append("layer ").append(layerName).append("\n");
+      for (String shapeName : model.getShapesInLayer(layerName)) {
+        SortedSet<Frame> timeline = timelines.get(shapeName);
+        renderString.append("shape ")
+            .append(shapeName).append(" ")
+            .append(timelines.get(shapeName).first().getShape().getShapeType()).append(" ")
+            .append(layerName)
+            .append("\n");
       }
-      renderString.append("\n");
+    }
+    for (String layerName : model.getLayers()) {
+      for (String shapeName : model.getShapesInLayer(layerName)) {
+        SortedSet<Frame> timeline = timelines.get(shapeName);
+        Frame prevFrame = null;
+
+        if (timeline.size() == 1) {
+          renderString.append("motion ").append(shapeName).append(" ")
+              .append(timeline.first());
+        } else {
+          for (Frame frame : timeline) {
+            if (prevFrame != null) {
+              renderString.append("motion ").append(shapeName).append(" ")
+                  .append(prevFrame).append("  ").append(frame).append("\n");
+            }
+            prevFrame = frame;
+          }
+        }
+        renderString.append("\n");
+      }
     }
     // for java 8
     // return renderString.toString();

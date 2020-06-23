@@ -53,7 +53,7 @@ public class FrameImpl implements Frame {
 
   @Override
   public String toString() {
-    return String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2f",
+    return String.format("%s %s %s %s %s %s %s %s %.2f",
             (int) this.getTime(),
             (int) this.getShape().getPosition().getX(),
             (int) this.getShape().getPosition().getY(),

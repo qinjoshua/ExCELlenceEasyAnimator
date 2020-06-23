@@ -133,7 +133,7 @@ public class AnimationReader {
 
     String line = s.nextLine();
 
-    boolean usingAngles = line.split(" +").length == 19;
+    boolean usingAngles = line.split("[\t ]+").length == 19;
 
     Scanner lineScanner = new Scanner(line);
     lineScanner.useDelimiter(" +");

@@ -254,6 +254,10 @@ public class AnimatorModelImpl implements AnimatorModel {
 
   @Override
   public void addLayer(String layerName) {
+    if (layerName.equals(DEFAULT_LAYER_NAME)) {
+      // do nothing
+      return;
+    }
     if (layers.containsKey(layerName)) {
       throw new IllegalArgumentException("Cannot add existing layer name " + layerName);
     }
