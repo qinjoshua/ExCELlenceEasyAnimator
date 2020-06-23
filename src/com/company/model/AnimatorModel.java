@@ -8,7 +8,7 @@ import com.company.model.shape.Shape;
  */
 public interface AnimatorModel extends ReadOnlyAnimatorModel {
   /**
-   * keyframes at the existing position.
+   * Creates a keyframe at the existing position in the default layer.
    *
    * @param shapeName The name of the shape for which the keyframe is being created for
    * @param shape     The shape in the keyframe
@@ -17,6 +17,20 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    *                                  as the other keyframes for this shape name
    */
   void createKeyframe(String shapeName, Shape shape, int tick) throws IllegalArgumentException;
+
+  /**
+   * Creates a keyframe at the existing position at the given layer.
+   *
+   * @param shapeName The name of the shape for which the keyframe is being created for
+   * @param shape     The shape in the keyframe
+   * @param tick      The tick the keyframe is at
+   * @param layerName The name of the layer to add the shape to
+   * @throws IllegalArgumentException if the tick is negative, or if the shape is not the same type
+   *                                  as the other keyframes for this shape name, or if the layer
+   *                                  name does not exist in the model
+   */
+  void createKeyframe(String shapeName, Shape shape,
+                      int tick, String layerName) throws IllegalArgumentException;
 
   /**
    * Sets the width of the canvas.
@@ -66,6 +80,7 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
 
   /**
    * Moves the layer with the given name up one level.
+   *
    * @param layerName the name of the layer to move up
    * @throws IllegalArgumentException if the layer name does not exist
    */
@@ -73,6 +88,7 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
 
   /**
    * Moves the layer with the given name down one level.
+   *
    * @param layerName the name of the layer to move down
    * @throws IllegalArgumentException if the layer name does not exist
    */
@@ -80,6 +96,7 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
 
   /**
    * Adds an empty later with the given name.
+   *
    * @param layerName the name of the layer to add
    * @throws IllegalArgumentException if the name already exists
    */
@@ -87,6 +104,7 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
 
   /**
    * Deletes the layer with the given name and all of its shapes.
+   *
    * @param layerName the name of the layer to add
    * @throws IllegalArgumentException if the name already exists
    */

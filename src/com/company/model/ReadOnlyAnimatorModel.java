@@ -12,7 +12,8 @@ import java.util.SortedSet;
  */
 public interface ReadOnlyAnimatorModel {
   /**
-   * Gets the state of each shape at a given tick, excluding the ones that have not been drawn yet.
+   * Gets the state of each shape at a given tick, excluding the ones that have not been drawn
+   * yet. The map iteration order is the same as the correct drawing order.
    *
    * @param tick tick of the desired scene
    * @return A map of the names and shapes representing the contents of a scene
