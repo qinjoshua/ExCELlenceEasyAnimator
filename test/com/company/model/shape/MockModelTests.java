@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -194,6 +195,11 @@ public class MockModelTests {
       returnMap.put("mock2", new Ellipse(new PosnImpl(10, 20), 20, 10, Color.BLUE));
 
       return returnMap;
+    }
+
+    @Override
+    public Collection<String> getLayers() {
+      return null;
     }
 
     @Override

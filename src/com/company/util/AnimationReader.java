@@ -49,11 +49,25 @@ public class AnimationReader {
         case "motion":
           readMotion(s, builder);
           break;
+        case "layer":
+          readLayer(s, builder);
+          break;
         default:
           throw new IllegalStateException("Unexpected keyword: " + word + s.nextLine());
       }
     }
     return builder.build();
+  }
+
+  private static <Doc> void readLayer(Scanner s, AnimationBuilder<Doc> builder) {
+    String name;
+    if (s.hasNext()) {
+      name = s.next();
+    } else {
+      throw new IllegalStateException("Layer: Expected a name, but no more input available");
+    }
+
+    builder.declareLayer(name);
   }
 
   private static <Doc> void readCanvas(Scanner s, AnimationBuilder<Doc> builder) {
@@ -119,9 +133,10 @@ public class AnimationReader {
 
     String line = s.nextLine();
 
-    boolean usingAngles = line.split("\\w+").length == 20;
+    boolean usingAngles = line.split(" +").length == 19;
 
     Scanner lineScanner = new Scanner(line);
+    lineScanner.useDelimiter(" +");
     double[] vals = new double[18];
 
     for (int i = 0; i < 18; i++) {

@@ -364,6 +364,12 @@ public class AnimatorModelImpl implements AnimatorModel {
     }
 
     @Override
+    public AnimationBuilder<AnimatorModel> declareLayer(String layerName) {
+      model.addLayer(layerName);
+      return this;
+    }
+
+    @Override
     public AnimationBuilder<AnimatorModel> addMotion(
         String name,
         int t1, int x1, int y1, int w1, int h1, int r1, int g1, int b1, double a1,
