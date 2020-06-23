@@ -1,4 +1,9 @@
-package com.company.view.swing.editor;
+package com.company.view.swing.editor.boundingbox;
+
+import com.company.view.swing.DecoratedShape;
+import com.company.view.swing.editor.boundingbox.Anchor;
+import com.company.view.swing.editor.boundingbox.AnchorType;
+import com.company.view.swing.editor.boundingbox.BoundingBox;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,6 +18,7 @@ import java.util.List;
  */
 public class BoundingBoxImpl implements BoundingBox {
   private final Rectangle boundingBox;
+  private final double angle;
   private List<Anchor> anchorPoints;
 
   /**
@@ -21,8 +27,9 @@ public class BoundingBoxImpl implements BoundingBox {
    *
    * @param currentlyHighlightedShape the currently highlighted shape that the bounding box bounds
    */
-  public BoundingBoxImpl(Shape currentlyHighlightedShape) {
-    boundingBox = currentlyHighlightedShape.getBounds();
+  public BoundingBoxImpl(DecoratedShape currentlyHighlightedShape) {
+    boundingBox = currentlyHighlightedShape.shape.getBounds();
+    this.angle = currentlyHighlightedShape.angle;
 
     anchorPoints = new ArrayList<>();
     for (AnchorType type : AnchorType.values()) {
@@ -43,12 +50,14 @@ public class BoundingBoxImpl implements BoundingBox {
     Color originalColor = g.getColor();
 
     g.setColor(Color.LIGHT_GRAY);
+    g.rotate(-angle, this.boundingBox.getCenterX(), this.boundingBox.getCenterY());
     g.draw(this.boundingBox);
 
     for (Anchor anchor : anchorPoints) {
       anchor.renderTo(g);
     }
 
+    g.rotate(angle, this.boundingBox.getCenterX(), this.boundingBox.getCenterY());
     g.setColor(originalColor);
   }
 

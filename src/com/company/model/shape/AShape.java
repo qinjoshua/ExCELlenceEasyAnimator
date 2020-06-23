@@ -22,7 +22,7 @@ public abstract class AShape implements Shape {
    * @param height    this shape's height
    * @param color     this shape's color
    * @param shapeType this shape's type
-   * @param angle     this shape's angle
+   * @param angle     this shape's angle, in radians
    */
   public AShape(Posn posn, double width, double height, Color color, ShapeType shapeType,
                 double angle) {

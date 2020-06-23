@@ -37,13 +37,6 @@ public interface EditorView extends VisualView {
   void updateBoundingBox();
 
   /**
-   * Returns the currently highlighted shape on the canvas of this editor.
-   *
-   * @return the currently highlighted shape
-   */
-  Shape getHighlightedShape();
-
-  /**
    * Tells the EditorView to prepare to create a shape of the given type.
    *
    * @param type type of shape to be created

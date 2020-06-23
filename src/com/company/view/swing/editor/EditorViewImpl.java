@@ -159,11 +159,6 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.canvas.updateBoundingBox();
   }
 
-  @Override
-  public java.awt.Shape getHighlightedShape() {
-    return this.canvas.getHighlightedShape();
-  }
-
   /**
    * Gets the name of the currently highlighted shape.
    *

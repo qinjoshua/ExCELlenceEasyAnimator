@@ -28,7 +28,7 @@ public abstract class AShapesPanel extends JPanel {
   protected int t;
   // Map that maps a shape name to a colored shape, which contains a reference to the shape that
   // is drawn on screen
-  protected Map<String, ColoredShape> shapes;
+  protected Map<String, DecoratedShape> shapes;
 
   /**
    * Initializes the panel given a model. Sets the time t to 0 to it starts at the beginning.
@@ -55,16 +55,23 @@ public abstract class AShapesPanel extends JPanel {
     this.shapes = new LinkedHashMap<>();
     for (Map.Entry<String, Shape> shape : modelShapes.entrySet()) {
       java.awt.Shape newShape = this.toSwingShape(shape.getValue());
-      this.shapes.put(shape.getKey(), new ColoredShape(shape.getValue().getColor(), newShape));
+      this.shapes.put(shape.getKey(), new DecoratedShape(shape.getValue().getColor(), newShape,
+              shape.getValue().getShapeAngle()));
     }
   }
 
   private void drawModelShape(Graphics2D g) {
     Color oldColor = g.getColor();
 
-    for (ColoredShape coloredShape : shapes.values()) {
-      g.setColor(coloredShape.color);
-      g.fill(coloredShape.shape);
+    for (DecoratedShape decoratedShape : shapes.values()) {
+      g.setColor(decoratedShape.color);
+      g.rotate(-decoratedShape.angle, decoratedShape.shape.getBounds2D().getCenterX(),
+              decoratedShape.shape.getBounds2D().getCenterY());
+
+      g.fill(decoratedShape.shape);
+
+      g.rotate(decoratedShape.angle, decoratedShape.shape.getBounds2D().getCenterX(),
+              decoratedShape.shape.getBounds2D().getCenterY());
     }
 
     // restore previous fill color
@@ -149,16 +156,18 @@ public abstract class AShapesPanel extends JPanel {
     for (Map.Entry<String, Shape> shape : modelShapes.entrySet()) {
       if (this.shapes.containsKey(shape.getKey())) {
         this.shapes.get(shape.getKey()).color = shape.getValue().getColor();
+        this.shapes.get(shape.getKey()).angle = shape.getValue().getShapeAngle();
         this.shapes.get(shape.getKey()).shape = this.toSwingShape(shape.getValue());
       } else {
         java.awt.Shape newShape = this.toSwingShape(shape.getValue());
         this.shapes.put(shape.getKey(),
-            new ColoredShape(shape.getValue().getColor(), newShape));
+                new DecoratedShape(
+                        shape.getValue().getColor(), newShape, shape.getValue().getShapeAngle()));
       }
     }
 
-    Map<String, ColoredShape> toRemove = new LinkedHashMap<>();
-    for (Map.Entry<String, ColoredShape> shape : shapes.entrySet()) {
+    Map<String, DecoratedShape> toRemove = new LinkedHashMap<>();
+    for (Map.Entry<String, DecoratedShape> shape : shapes.entrySet()) {
       if (!modelShapes.containsKey(shape.getKey())) {
         toRemove.put(shape.getKey(), shape.getValue());
       }
@@ -166,20 +175,6 @@ public abstract class AShapesPanel extends JPanel {
 
     for (String shapeName : toRemove.keySet()) {
       shapes.remove(shapeName);
-    }
-  }
-
-  /**
-   * Struct-like class that stores a color associated with a shape, since Java's awt shapes don't
-   * have a color.
-   */
-  protected static class ColoredShape {
-    public Color color;
-    public java.awt.Shape shape;
-
-    public ColoredShape(Color color, java.awt.Shape shape) {
-      this.color = color;
-      this.shape = shape;
     }
   }
 }

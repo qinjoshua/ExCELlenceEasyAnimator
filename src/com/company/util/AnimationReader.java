@@ -57,12 +57,12 @@ public class AnimationReader {
   }
 
   private static <Doc> void readCanvas(Scanner s, AnimationBuilder<Doc> builder) {
-    int[] vals = new int[4];
+    double[] vals = new double[4];
     String[] fieldNames = {"left", "top", "width", "height"};
     for (int i = 0; i < 4; i++) {
-      vals[i] = getInt(s, "Canvas", fieldNames[i]);
+      vals[i] = getDouble(s, "Canvas", fieldNames[i]);
     }
-    builder.setBounds(vals[0], vals[1], vals[2], vals[3]);
+    builder.setBounds((int) vals[0], (int) vals[1], (int) vals[2], (int) vals[3]);
   }
 
   private static <Doc> void readShape(Scanner s, AnimationBuilder<Doc> builder) {
@@ -94,31 +94,49 @@ public class AnimationReader {
             "final red value", "final green value", "final blue value",
             "final angle",
     };
-    int[] vals = new int[16];
+
     String name;
     if (s.hasNext()) {
       name = s.next();
     } else {
       throw new IllegalStateException("Motion: Expected a shape name, but no more input available");
     }
-    for (int i = 0; i < 16; i++) {
-      vals[i] = getInt(s, "Motion", fieldNames[i]);
+
+    String line = s.nextLine();
+
+    boolean usingAngles = line.split("\\w+").length == 18;
+
+    Scanner lineScanner = new Scanner(line);
+    double[] vals = new double[18];
+
+    for (int i = 0; i < 18; i++) {
+      if (i == 8 || i == 17) {
+        if (usingAngles) {
+          vals[i] = getDouble(lineScanner, "Motion", fieldNames[i]);
+        }
+        //TODO
+        vals[i] = Math.PI/16;
+      } else {
+        vals[i] = getDouble(lineScanner, "Motion", fieldNames[i]);
+      }
     }
     builder.addMotion(name,
-        vals[0], vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7], vals[8],
-        vals[9], vals[10], vals[11], vals[12], vals[13], vals[14], vals[15], vals[16], vals[17]);
+            (int) vals[0], (int) vals[1], (int) vals[2], (int) vals[3], (int) vals[4],
+            (int) vals[5], (int) vals[6], (int) vals[7], vals[8],
+            (int) vals[9], (int) vals[10], (int) vals[11], (int) vals[12], (int) vals[13],
+            (int) vals[14], (int) vals[15], (int) vals[16], vals[17]);
   }
 
-  private static int getInt(Scanner s, String label, String fieldName) {
-    if (s.hasNextInt()) {
-      return s.nextInt();
+  private static double getDouble(Scanner s, String label, String fieldName) {
+    if (s.hasNextDouble()) {
+      return s.nextDouble();
     } else if (s.hasNext()) {
       throw new IllegalStateException(
-          String.format("%s: expected integer for %s, got: %s", label, fieldName, s.next()));
+              String.format("%s: expected integer for %s, got: %s", label, fieldName, s.next()));
     } else {
       throw new IllegalStateException(
-          String.format("%s: expected integer for %s, but no more input available",
-              label, fieldName));
+              String.format("%s: expected integer for %s, but no more input available",
+                      label, fieldName));
     }
   }
 }

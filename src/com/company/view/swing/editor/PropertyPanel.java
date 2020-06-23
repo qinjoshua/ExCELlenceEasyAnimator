@@ -1,6 +1,7 @@
 package com.company.view.swing.editor;
 
 import com.company.controller.animatoractions.AnimatorAction;
+import com.company.controller.animatoractions.ChangeAngle;
 import com.company.controller.animatoractions.ChangeColor;
 import com.company.controller.animatoractions.ChangeHeight;
 import com.company.controller.animatoractions.ChangeWidth;
@@ -125,26 +126,32 @@ public class PropertyPanel extends JPanel {
       SpinnerModel yField = new SpinnerNumberModel(
           origShape.getPosition().getY(),
           Integer.MIN_VALUE,
-          Integer.MAX_VALUE,
-          1);
+              Integer.MAX_VALUE,
+              1);
 
       SpinnerModel widthField = new SpinnerNumberModel(
-          origShape.getWidth(),
-          0,
-          Integer.MAX_VALUE,
-          1);
+              origShape.getWidth(),
+              0,
+              Integer.MAX_VALUE,
+              1);
 
       SpinnerModel heightField = new SpinnerNumberModel(
-          origShape.getHeight(),
-          0,
-          Integer.MAX_VALUE,
-          1);
+              origShape.getHeight(),
+              0,
+              Integer.MAX_VALUE,
+              1);
+
+      SpinnerModel angleField = new SpinnerNumberModel(
+              Math.toDegrees(origShape.getShapeAngle()),
+              0,
+              360,
+              1);
 
       xField.addChangeListener(e -> {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeX(shapeName, tick,
-            (double) source.getNumber() - currShape.getPosition().getX()));
+                (double) source.getNumber() - currShape.getPosition().getX()));
         this.getViewCallback().accept(new RefreshView());
       });
 
@@ -168,12 +175,20 @@ public class PropertyPanel extends JPanel {
         Shape currShape = model.shapesAt(tick).get(shapeName);
         SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
         modelCallback.accept(new ChangeHeight(shapeName, tick,
-            (double) source.getNumber() - currShape.getHeight()));
+                (double) source.getNumber() - currShape.getHeight()));
         this.getViewCallback().accept(new RefreshView());
       });
 
-      String[] labels = {"x", "y", "width", "height"};
-      SpinnerModel[] spinners = {xField, yField, widthField, heightField};
+      angleField.addChangeListener(e -> {
+        Shape currShape = model.shapesAt(tick).get(shapeName);
+        SpinnerNumberModel source = (SpinnerNumberModel) e.getSource();
+        modelCallback.accept(new ChangeAngle(shapeName, tick,
+                Math.toRadians((double) source.getNumber()) - currShape.getShapeAngle()));
+        this.getViewCallback().accept(new RefreshView());
+      });
+
+      String[] labels = {"x", "y", "width", "height", "angle"};
+      SpinnerModel[] spinners = {xField, yField, widthField, heightField, angleField};
 
       for (int i = 0; i < labels.length; i++) {
         JLabel label = new JLabel(labels[i], JLabel.TRAILING);
@@ -209,7 +224,7 @@ public class PropertyPanel extends JPanel {
 
       // from the Java tutorial
       SpringUtilities.makeGrid(nonColor,
-          4, 2,
+          5, 2,
           0, 0,
           10, 10
       );
