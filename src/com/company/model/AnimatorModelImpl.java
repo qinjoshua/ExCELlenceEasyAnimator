@@ -7,6 +7,7 @@ import com.company.util.AnimationBuilder;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -306,12 +308,24 @@ public class AnimatorModelImpl implements AnimatorModel {
     }
   }
 
+  @Override
+  public Collection<String> getLayers() {
+    // reverse layers map to sort by key
+    SortedMap<Layer, String> reverseLayers = new TreeMap<>();
+    for (Map.Entry<String, Layer> entry : layers.entrySet()) {
+      reverseLayers.put(entry.getValue(), entry.getKey());
+    }
+    return reverseLayers.values();
+  }
+
   /**
    * Inner class that allows you to build an animator model implementation.
    */
   public static final class Builder implements AnimationBuilder<AnimatorModel> {
     private final AnimatorModel model;
     private final Map<String, ShapeType> shapeTypes;
+    // Maps the shapes names to layer names.
+    private final Map<String, String> layers;
 
     /**
      * Creates a new builder with a default empty model.
@@ -319,6 +333,7 @@ public class AnimatorModelImpl implements AnimatorModel {
     public Builder() {
       this.model = new AnimatorModelImpl();
       this.shapeTypes = new HashMap<>();
+      this.layers = new HashMap<>();
     }
 
     @Override
@@ -338,7 +353,13 @@ public class AnimatorModelImpl implements AnimatorModel {
 
     @Override
     public AnimationBuilder<AnimatorModel> declareShape(String name, String type) {
+      return this.declareShape(name, type, DEFAULT_LAYER_NAME);
+    }
+
+    @Override
+    public AnimationBuilder<AnimatorModel> declareShape(String name, String type, String layer) {
       this.shapeTypes.put(name, ShapeType.getShapeTypeFromString(type));
+      this.layers.put(name, layer);
       return this;
     }
 
@@ -356,7 +377,13 @@ public class AnimatorModelImpl implements AnimatorModel {
         String name, int t, int x, int y, int w, int h, int r, int g, int b, double a) {
       Shape newShape = shapeTypes.get(name).getShape(new PosnImpl(x, y), w, h, new Color(r, g, b)
               , a);
-      this.model.createKeyframe(name, newShape, t);
+      String layerName = layers.get(name);
+      try {
+        model.addLayer(layerName);
+      } catch (IllegalArgumentException e) {
+        // the layer is already in the model, no need to do anything
+      }
+      this.model.createKeyframe(name, newShape, t, layers.get(name));
       return this;
     }
   }

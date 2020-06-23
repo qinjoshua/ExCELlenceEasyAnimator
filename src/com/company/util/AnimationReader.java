@@ -68,17 +68,32 @@ public class AnimationReader {
   private static <Doc> void readShape(Scanner s, AnimationBuilder<Doc> builder) {
     String name;
     String type;
-    if (s.hasNext()) {
-      name = s.next();
+    // make the IDE happy even though this can never be null and actually used
+    String layer = "";
+    String line = s.nextLine();
+    Scanner lineScanner = new Scanner(line);
+    boolean isUsingLayer;
+    if (lineScanner.hasNext()) {
+      name = lineScanner.next();
     } else {
       throw new IllegalStateException("Shape: Expected a name, but no more input available");
     }
-    if (s.hasNext()) {
-      type = s.next();
+    if (lineScanner.hasNext()) {
+      type = lineScanner.next();
     } else {
       throw new IllegalStateException("Shape: Expected a type, but no more input available");
     }
-    builder.declareShape(name, type);
+    if (lineScanner.hasNext()) {
+      layer = lineScanner.next();
+      isUsingLayer = true;
+    } else {
+      isUsingLayer = false;
+    }
+    if (isUsingLayer) {
+      builder.declareShape(name, type, layer);
+    } else {
+      builder.declareShape(name, type);
+    }
   }
 
   private static <Doc> void readMotion(Scanner s, AnimationBuilder<Doc> builder) {

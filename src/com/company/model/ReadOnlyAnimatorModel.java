@@ -2,6 +2,7 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -73,4 +74,11 @@ public interface ReadOnlyAnimatorModel {
    * @throws IllegalArgumentException if the layer name does not exist
    */
   List<String> getShapesInLayer(String layerName);
+
+  /**
+   * Returns an ordered collection of layer names in the model.
+   *
+   * @return the list of layers in the model
+   */
+  Collection<String> getLayers();
 }

@@ -32,6 +32,18 @@ public interface AnimationBuilder<Doc> {
    *             exist.
    * @param type The type of shape (e.g. "ellipse", "rectangle") to be added. The set of supported
    *             shapes is unspecified, but should include "ellipse" and "rectangle" as a minimum.
+   * @param layer the name of the layer the shape belongs to
+   * @return This {@link AnimationBuilder}
+   */
+  AnimationBuilder<Doc> declareShape(String name, String type, String layer);
+
+  /**
+   * Adds a new shape to the growing document on the default layer.
+   *
+   * @param name The unique name of the shape to be added. No shape with this name should already
+   *             exist.
+   * @param type The type of shape (e.g. "ellipse", "rectangle") to be added. The set of supported
+   *             shapes is unspecified, but should include "ellipse" and "rectangle" as a minimum.
    * @return This {@link AnimationBuilder}
    */
   AnimationBuilder<Doc> declareShape(String name, String type);
