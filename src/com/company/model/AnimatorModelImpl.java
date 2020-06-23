@@ -6,11 +6,14 @@ import com.company.model.shape.ShapeType;
 import com.company.util.AnimationBuilder;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -20,6 +23,7 @@ import java.util.TreeSet;
  */
 public class AnimatorModelImpl implements AnimatorModel {
   private final Map<String, NavigableSet<Frame>> timelines;
+  private final Map<String, Layer> layers;
 
   private int canvasWidth;
   private int canvasHeight;
@@ -32,6 +36,7 @@ public class AnimatorModelImpl implements AnimatorModel {
    */
   public AnimatorModelImpl() {
     this.timelines = new LinkedHashMap<>();
+    this.layers = new LinkedHashMap<>();
 
     this.canvasWidth = 640;
     this.canvasHeight = 400;
@@ -233,6 +238,66 @@ public class AnimatorModelImpl implements AnimatorModel {
               , a);
       this.model.createKeyframe(name, newShape, t);
       return this;
+    }
+  }
+
+  /**
+   * A class to hold both depth information and the shapes information layers have: what order
+   * this layer is drawn in compared to other layers and what shapes comprise this layer.
+   */
+  private static class Layer implements Comparable<Layer> {
+    // The drawing order: layers with earlier orders are drawn first and are occluded by later
+    // layers.
+    private int order;
+    // The names of each shape in this layer.
+    private final List<String> names;
+
+    /**
+     * Constructs a layer.
+     * @param order the order this layer is drawn in compared to others
+     */
+    public Layer(int order) {
+      this.order = order;
+      this.names = new ArrayList<String>();
+    }
+
+    /**
+     * Gets the drawing order.
+     * @return the drawing order
+     */
+    public int getOrder() {
+      return order;
+    }
+
+    /**
+     * Sets the drawing order.
+     * @param order the drawing order to set
+     */
+    public void setOrder(int order) {
+      this.order = order;
+    }
+
+    /**
+     * Gets the names in this shape.
+     * @return the names in this shape
+     */
+    public List<String> getNames() {
+      return names;
+    }
+
+    /**
+
+    /**
+     * Removes the shape with the given name if that shape is in this layer.
+     * @param shapeName the shape name to possibly remove
+     */
+    public void removeShapeIfPresent(String shapeName) {
+      names.remove(shapeName);
+    }
+
+    @Override
+    public int compareTo(Layer o) {
+      return 0;
     }
   }
 }

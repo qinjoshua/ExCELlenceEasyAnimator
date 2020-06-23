@@ -2,6 +2,7 @@ package com.company.model;
 
 import com.company.model.shape.Shape;
 
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -61,4 +62,14 @@ public interface ReadOnlyAnimatorModel {
    * @return the last tick of the animation, or 1 if no keyframes exist
    */
   double lastTick();
+
+  /**
+   * Returns the list of shape names in the given layer name, in correct drawing order (so shapes
+   * at the start will be obscured by shapes at the end).
+   *
+   * @param layerName the name of the layer
+   * @return the list of shapes in that layer
+   * @throws IllegalArgumentException if the layer name does not exist
+   */
+  List<String> getShapesInLayer(String layerName);
 }

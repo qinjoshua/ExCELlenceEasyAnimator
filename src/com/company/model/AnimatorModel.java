@@ -63,4 +63,32 @@ public interface AnimatorModel extends ReadOnlyAnimatorModel {
    * @throws IllegalArgumentException if the shape doesn't exist
    */
   void deleteShape(String shapeName);
+
+  /**
+   * Moves the layer with the given name up one level.
+   * @param layerName the name of the layer to move up
+   * @throws IllegalArgumentException if the layer name does not exist
+   */
+  void moveLayerUp(String layerName);
+
+  /**
+   * Moves the layer with the given name down one level.
+   * @param layerName the name of the layer to move down
+   * @throws IllegalArgumentException if the layer name does not exist
+   */
+  void moveLayerDown(String layerName);
+
+  /**
+   * Adds an empty later with the given name.
+   * @param layerName the name of the layer to add
+   * @throws IllegalArgumentException if the name already exists
+   */
+  void addLayer(String layerName);
+
+  /**
+   * Deletes the layer with the given name and all of its shapes.
+   * @param layerName the name of the layer to add
+   * @throws IllegalArgumentException if the name already exists
+   */
+  void deleteLayer(String layerName);
 }
