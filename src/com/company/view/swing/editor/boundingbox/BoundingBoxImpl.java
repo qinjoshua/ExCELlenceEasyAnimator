@@ -12,6 +12,8 @@ import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.company.view.swing.editor.MousePointUtils.transformPoint;
+
 /**
  * Represents a box that bounds a bounds a highlighted shape. The box may be resized and
  * repositioned, and contains anchors/handles that allows resizing operations to be done.
@@ -91,6 +93,8 @@ public class BoundingBoxImpl implements BoundingBox {
 
   @Override
   public boolean contains(int x, int y) {
+    x = transformPoint(x, y, boundingBox.getCenterX(), boundingBox.getCenterY(), angle).x;
+    y = transformPoint(x, y, boundingBox.getCenterX(), boundingBox.getCenterY(), angle).y;
     return this.boundingBox.contains(x, y);
   }
 
@@ -103,6 +107,9 @@ public class BoundingBoxImpl implements BoundingBox {
    */
   @Override
   public Anchor getAnchorAtPoint(int x, int y) {
+    x = transformPoint(x, y, boundingBox.getCenterX(), boundingBox.getCenterY(), angle).x;
+    y = transformPoint(x, y, boundingBox.getCenterX(), boundingBox.getCenterY(), angle).y;
+
     for (Anchor anchor : anchorPoints) {
       if (anchor.contains(x, y)) {
         return anchor;

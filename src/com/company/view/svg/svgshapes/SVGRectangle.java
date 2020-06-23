@@ -15,9 +15,9 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
     SVGTag shapeTag = super.getShapeTag(shapeName, shape, canvasX, canvasY);
 
     shapeTag.addAttribute(new SVGTagAttribute("x",
-        Double.toString(shape.getPosition().getX() - canvasX)));
+            Double.toString(shape.getPosition().getX() - canvasX)));
     shapeTag.addAttribute(new SVGTagAttribute("y",
-        Double.toString(shape.getPosition().getY() - canvasY)));
+            Double.toString(shape.getPosition().getY() - canvasY)));
 
     shapeTag.addAttribute(new SVGTagAttribute("width", Double.toString(shape.getWidth())));
     shapeTag.addAttribute(new SVGTagAttribute("height", Double.toString(shape.getHeight())));
@@ -28,6 +28,8 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
   @Override
   public void addMotionTags(
       Frame frame1, Frame frame2, SVGTag shapeTag, int fps, int canvasX, int canvasY) {
+    super.addMotionTags(frame1, frame2, shapeTag, fps, canvasX, canvasY);
+
     Shape frame1Shape = frame1.getShape();
     Shape frame2Shape = frame2.getShape();
 
@@ -48,13 +50,13 @@ public class SVGRectangle extends ASVGShape implements SVGShape {
     }
     if (frame1Shape.getHeight() != frame2Shape.getHeight()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "height",
-          Double.toString(frame1.getShape().getHeight()),
-          Double.toString(frame2.getShape().getHeight()), fps));
+              Double.toString(frame1.getShape().getHeight()),
+              Double.toString(frame2.getShape().getHeight()), fps));
     }
     if (frame1Shape.getColor() != frame2Shape.getColor()) {
       shapeTag.addTag(this.getAnimateTag(frame1, frame2, "fill",
-          colorToRGBString(frame1.getShape().getColor()),
-          colorToRGBString(frame2.getShape().getColor()), fps));
+              colorToRGBString(frame1.getShape().getColor()),
+              colorToRGBString(frame2.getShape().getColor()), fps));
     }
   }
 }

@@ -20,10 +20,12 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -32,6 +34,8 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+
+import static com.company.view.swing.editor.MousePointUtils.transformPoint;
 
 /**
  * Represents the canvas portion of the editor, the main area where the animation can be modified
@@ -266,7 +270,8 @@ public class CanvasPanel extends AShapesPanel {
       String toBeHighlighted = null;
 
       for (Map.Entry<String, DecoratedShape> coloredShape : shapes.entrySet()) {
-        if (coloredShape.getValue().shape.contains(e.getPoint())) {
+        if (coloredShape.getValue().shape.contains(transformPoint(e.getPoint(),
+                coloredShape.getValue()))) {
           toBeHighlighted = coloredShape.getKey();
         }
       }
