@@ -54,4 +54,11 @@ public interface ReadOnlyAnimatorModel {
    * @return the y coodinate of the canvas origin.
    */
   int getCanvasY();
+
+  /**
+   * Returns the tick of the last current keyframe: after this time, the animation doesn't change.
+   *
+   * @return the last tick of the animation, or 1 if no keyframes exist
+   */
+  double lastTick();
 }

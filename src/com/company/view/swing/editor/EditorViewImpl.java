@@ -114,16 +114,27 @@ public class EditorViewImpl extends JFrame implements EditorView {
   public void highlightShape(String toBeHighlighted) {
     this.canvas.highlightShape(toBeHighlighted);
 
+    this.updateProperties();
+
     if (toBeHighlighted == null) {
-      this.properties.hideProperties();
       this.timelines.deHighlightPanel();
     } else {
       this.modelCallback.accept(new CreateKeyframe(toBeHighlighted, tick));
-      this.updateProperties(toBeHighlighted);
       this.timelines.highlightPanel(toBeHighlighted);
     }
     this.updateBanner(toBeHighlighted);
     this.refreshView();
+  }
+
+  /**
+   * Updates the properties panel to match the current view state.
+   */
+  private void updateProperties() {
+    if (this.getHighlightedShapeName() == null) {
+      this.properties.hideProperties();
+    } else {
+      this.properties.addProperties(this.getHighlightedShapeName(), tick, modelCallback, model);
+    }
   }
 
   @Override
@@ -131,6 +142,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
     this.tick = tick;
     this.canvas.setTick(tick);
     this.timelines.setTick(tick);
+    this.updateProperties();
   }
 
   @Override

@@ -6,6 +6,7 @@ import com.company.model.shape.ShapeType;
 import com.company.util.AnimationBuilder;
 
 import java.awt.Color;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -166,6 +167,18 @@ public class AnimatorModelImpl implements AnimatorModel {
     } else {
       throw new IllegalArgumentException("Cannot remove nonexistent shape " + shapeName);
     }
+  }
+
+  @Override
+  public double lastTick() {
+    Frame maxFrame = new FrameImpl(1, null);
+    for (SortedSet<Frame> allFrames : this.timelines.values()) {
+      Frame newLastFrame = Collections.max(allFrames);
+      if (maxFrame.compareTo(newLastFrame) < 0) {
+        maxFrame = newLastFrame;
+      }
+    }
+    return maxFrame.getTime();
   }
 
   /**

@@ -235,5 +235,10 @@ public class MockModelTests {
         e.printStackTrace();
       }
     }
+
+    @Override
+    public double lastTick() {
+      return 0;
+    }
   }
 }

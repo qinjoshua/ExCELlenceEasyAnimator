@@ -196,6 +196,9 @@ public class TimelinesPanel extends JPanel {
     for (TimelinePanel timeline : timelines.values()) {
       timeline.setTick(tick);
     }
+    if (scrubber != null) {
+      scrubber.setTick(tick);
+    }
   }
 
   /**
@@ -245,13 +248,19 @@ public class TimelinesPanel extends JPanel {
     Consumer<EditorAction> viewCallback;
 
     public Scrubber() {
-      // TODO how do we want to get the slider max?
       this.setPreferredSize(new Dimension(800, 30));
-      timeSlider = new JSlider(JSlider.HORIZONTAL,1, 300, tick);
+      timeSlider = new JSlider(JSlider.HORIZONTAL,1, (int)model.lastTick(), tick);
       timeSlider.addChangeListener(e -> {
         getViewCallback().accept(new SetTick(((JSlider)e.getSource()).getValue()));
       });
       this.add(timeSlider);
+    }
+
+    public void setTick(int tick) {
+      if (tick > timeSlider.getMaximum()) {
+        timeSlider.setMaximum(tick);
+      }
+      timeSlider.setValue(tick);
     }
 
     public Consumer<EditorAction> getViewCallback() {

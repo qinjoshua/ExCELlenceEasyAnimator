@@ -229,5 +229,10 @@ public class FrameTest {
     public int getCanvasY() {
       return 0;
     }
+
+    @Override
+    public double lastTick() {
+      return 0;
+    }
   }
 }
