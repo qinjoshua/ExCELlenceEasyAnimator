@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -192,6 +193,26 @@ public class FrameTest {
     }
 
     @Override
+    public void moveLayerUp(String layerName) {
+
+    }
+
+    @Override
+    public void moveLayerDown(String layerName) {
+
+    }
+
+    @Override
+    public void addLayer(String layerName) {
+
+    }
+
+    @Override
+    public void deleteLayer(String layerName) {
+
+    }
+
+    @Override
     public Map<String, Shape> shapesAt(int tick) throws IllegalArgumentException {
       try {
         out.append(String.valueOf(tick)).append(" ");
@@ -233,6 +254,11 @@ public class FrameTest {
     @Override
     public double lastTick() {
       return 0;
+    }
+
+    @Override
+    public List<String> getShapesInLayer(String layerName) {
+      return null;
     }
   }
 }

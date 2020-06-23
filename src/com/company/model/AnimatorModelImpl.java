@@ -175,6 +175,26 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   @Override
+  public void moveLayerUp(String layerName) {
+
+  }
+
+  @Override
+  public void moveLayerDown(String layerName) {
+
+  }
+
+  @Override
+  public void addLayer(String layerName) {
+
+  }
+
+  @Override
+  public void deleteLayer(String layerName) {
+
+  }
+
+  @Override
   public double lastTick() {
     Frame maxFrame = new FrameImpl(1, null);
     for (SortedSet<Frame> allFrames : this.timelines.values()) {
@@ -184,6 +204,11 @@ public class AnimatorModelImpl implements AnimatorModel {
       }
     }
     return maxFrame.getTime();
+  }
+
+  @Override
+  public List<String> getShapesInLayer(String layerName) {
+    return null;
   }
 
   /**

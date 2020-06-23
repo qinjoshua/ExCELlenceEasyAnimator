@@ -3,7 +3,6 @@ package com.company.view.swing.editor;
 import com.company.controller.animatoractions.AnimatorAction;
 import com.company.controller.animatoractions.CreateKeyframe;
 import com.company.controller.viewactions.editoractions.EditorAction;
-import com.company.controller.viewactions.editoractions.HighlightShape;
 import com.company.model.ReadOnlyAnimatorModel;
 import com.company.model.shape.ShapeType;
 
@@ -28,7 +27,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
   private final ToolbarPanel toolbar;
   private final TimelinesPanel timelines;
   private final ReadOnlyAnimatorModel model;
-  private final PropertyPanel properties;
+  private final EastPanel properties;
   // Panels
   private BannerPanel banner;
   private Consumer<EditorAction> callback;
@@ -50,7 +49,7 @@ public class EditorViewImpl extends JFrame implements EditorView {
 
     this.canvas = new CanvasPanel(model, this.modelCallback);
 
-    this.properties = new PropertyPanel();
+    this.properties = new EastPanel();
 
     this.timelines = new TimelinesPanel(model, modelCallback, 1);
 

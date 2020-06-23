@@ -33,6 +33,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.KeyStroke;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import static com.company.view.swing.editor.MousePointUtils.transformPoint;
@@ -76,7 +77,7 @@ public class CanvasPanel extends AShapesPanel {
     this.addMouseMotionListener(resizer);
     boundingBoxImpl = null;
 
-    Border grayLine = BorderFactory.createLineBorder(Color.GRAY);
+    Border grayLine = BorderFactory.createSoftBevelBorder(BevelBorder.LOWERED);
     this.setBorder(grayLine);
 
     MouseAdapter mover = new MoveMouseAdapter();
