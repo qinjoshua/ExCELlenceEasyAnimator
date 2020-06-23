@@ -19,6 +19,7 @@ import org.junit.Test;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -239,6 +240,36 @@ public class MockModelTests {
     @Override
     public double lastTick() {
       return 0;
+    }
+
+    @Override
+    public void createKeyframe(String shapeName, Shape shape, int tick, String layerName) throws IllegalArgumentException {
+      createKeyframe(shapeName, shape, tick);
+    }
+
+    @Override
+    public void moveLayerUp(String layerName) {
+
+    }
+
+    @Override
+    public void moveLayerDown(String layerName) {
+
+    }
+
+    @Override
+    public void addLayer(String layerName) {
+
+    }
+
+    @Override
+    public void deleteLayer(String layerName) {
+
+    }
+
+    @Override
+    public List<String> getShapesInLayer(String layerName) {
+      return null;
     }
   }
 }

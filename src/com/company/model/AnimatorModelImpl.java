@@ -406,11 +406,13 @@ public class AnimatorModelImpl implements AnimatorModel {
     }
 
     /**
-     * Adds a shape name to the layer.
+     * Adds a shape name to the layer if not already present.
      * @param shapeName the shape name to add
      */
     public void addName(String shapeName) {
-      names.add(shapeName);
+      if (!names.contains(shapeName)) {
+        names.add(shapeName);
+      }
     }
 
     /**
