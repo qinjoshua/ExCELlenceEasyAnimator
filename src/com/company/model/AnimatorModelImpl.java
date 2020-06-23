@@ -31,12 +31,15 @@ public class AnimatorModelImpl implements AnimatorModel {
   private int canvasX;
   private int canvasY;
 
+  private static final String DEFAULT_LAYER_NAME = "default";
+
   /**
    * Default constructor that does not initialize any shapes.
    */
   public AnimatorModelImpl() {
     this.timelines = new LinkedHashMap<>();
     this.layers = new LinkedHashMap<>();
+    layers.put(DEFAULT_LAYER_NAME, new Layer(1));
 
     this.canvasWidth = 640;
     this.canvasHeight = 400;
@@ -53,20 +56,24 @@ public class AnimatorModelImpl implements AnimatorModel {
 
     Map<String, Shape> shapes = new LinkedHashMap<>();
 
-    for (Map.Entry<String, NavigableSet<Frame>> frame : timelines.entrySet()) {
-      Frame prevFrame = frame.getValue().floor(new FrameImpl(tick, null));
-      Frame nextFrame = frame.getValue().higher(new FrameImpl(tick, null));
-      if (prevFrame != null && nextFrame == null) {
-        // no frame after this time, use latest frame
-        shapes.put(frame.getKey(), prevFrame.getShape());
-      } else if (prevFrame != null) {
-        // both frames exist, interpolate
-        shapes.put(frame.getKey(), prevFrame.interpolateShape(
-            nextFrame, (tick - prevFrame.getTime()) / (nextFrame.getTime() - prevFrame.getTime())));
-      }
-      // If the time is before the first keyframe for this shape, don't draw the shape
-    }
+    for (Layer layer : this.getOrderedLayers()) {
+      for (String name : layer.getNames()) {
+        NavigableSet<Frame> frames = timelines.get(name);
 
+        Frame prevFrame = frames.floor(new FrameImpl(tick, null));
+        Frame nextFrame = frames.higher(new FrameImpl(tick, null));
+        if (prevFrame != null && nextFrame == null) {
+          // no frame after this time, use latest frame
+          shapes.put(name, prevFrame.getShape());
+        } else if (prevFrame != null) {
+          // both frames exist, interpolate
+          shapes.put(name, prevFrame.interpolateShape(
+              nextFrame, (tick - prevFrame.getTime()) /
+                  (nextFrame.getTime() - prevFrame.getTime())));
+        }
+        // If the time is before the first keyframe for this shape, don't draw the shape
+      }
+    }
     return shapes;
   }
 
@@ -86,6 +93,24 @@ public class AnimatorModelImpl implements AnimatorModel {
    */
   @Override
   public void createKeyframe(String shapeName, Shape shape, int tick) {
+    this.createKeyframe(shapeName, shape, tick, DEFAULT_LAYER_NAME);
+  }
+
+  /**
+   * Adds a new keyframe at the given time, with the given shape. This will overwrite any existing
+   * keyframes at the existing time, which is defined with nanosecond precision: any keyframe
+   * nanosecond or closer to the given time will be replaced with this new one.
+   *
+   * @param shapeName The name of the shape for which the keyframe is being created for
+   * @param shape     The shape in the keyframe
+   * @param tick      The time the keyframe is at
+   */
+  @Override
+  public void createKeyframe(String shapeName, Shape shape, int tick, String layerName) {
+    if (!layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Invalid layer name " + layerName);
+    }
+
     if (tick < 0) {
       throw new IllegalArgumentException("Time cannot be negative");
     }
@@ -107,6 +132,8 @@ public class AnimatorModelImpl implements AnimatorModel {
 
       this.timelines.put(shapeName, newFrames);
     }
+
+    layers.get(layerName).addName(shapeName);
   }
 
   @Override
@@ -169,29 +196,12 @@ public class AnimatorModelImpl implements AnimatorModel {
   public void deleteShape(String shapeName) {
     if (timelines.containsKey(shapeName)) {
       timelines.remove(shapeName);
+      for (Layer layer : layers.values()) {
+        layer.removeShapeIfPresent(shapeName);
+      }
     } else {
       throw new IllegalArgumentException("Cannot remove nonexistent shape " + shapeName);
     }
-  }
-
-  @Override
-  public void moveLayerUp(String layerName) {
-
-  }
-
-  @Override
-  public void moveLayerDown(String layerName) {
-
-  }
-
-  @Override
-  public void addLayer(String layerName) {
-
-  }
-
-  @Override
-  public void deleteLayer(String layerName) {
-
   }
 
   @Override
@@ -207,8 +217,93 @@ public class AnimatorModelImpl implements AnimatorModel {
   }
 
   @Override
+  public void moveLayerUp(String layerName) {
+    if (!layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Invalid layer name " + layerName);
+    }
+
+    Layer bottomLayer = layers.get(layerName);
+    int order = bottomLayer.getOrder();
+    for (Layer topLayer : layers.values()) {
+      if (topLayer.getOrder() == order - 1) {
+        // above the current layer, move this down and move our layer up
+        topLayer.setOrder(order);
+        bottomLayer.setOrder(order - 1);
+      }
+    }
+  }
+
+  @Override
+  public void moveLayerDown(String layerName) {
+    if (!layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Invalid layer name " + layerName);
+    }
+
+    Layer topLayer = layers.get(layerName);
+    int order = topLayer.getOrder();
+    for (Layer bottomLayer : layers.values()) {
+      if (bottomLayer.getOrder() == order + 1) {
+        // below the current layer, move this up and move our layer down
+        topLayer.setOrder(order + 1);
+        bottomLayer.setOrder(order);
+      }
+    }
+  }
+
+  @Override
+  public void addLayer(String layerName) {
+    if (layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Cannot add existing layer name " + layerName);
+    }
+
+    layers.put(layerName, new Layer(layers.size() + 1));
+  }
+
+  @Override
+  public void deleteLayer(String layerName) {
+    if (!layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Invalid layer name " + layerName);
+    }
+
+    for (String toRemove : layers.get(layerName).getNames()) {
+      this.deleteShape(toRemove);
+    }
+    layers.remove(layerName);
+
+    // keep class invariant that layer orders are the first n natural numbers
+    this.updateLayerOrders();
+  }
+
+  @Override
   public List<String> getShapesInLayer(String layerName) {
-    return null;
+    if (!layers.containsKey(layerName)) {
+      throw new IllegalArgumentException("Invalid layer name " + layerName);
+    }
+    return layers.get(layerName).getNames();
+  }
+
+  /**
+   * Gets the layers in drawing order as a list.
+   *
+   * @return the layers in drawing order as a list
+   */
+  private List<Layer> getOrderedLayers() {
+    List<Layer> layerList = new ArrayList<>(layers.values());
+    Collections.sort(layerList);
+    return layerList;
+  }
+
+  /**
+   * Updates the layer orders to the numbers 1-n where n is the number of layers, preserving the
+   * existing order.
+   */
+  private void updateLayerOrders() {
+    Map<Layer, Integer> newOrders = new HashMap<>();
+    int newOrder = 1;
+    for (Layer layer : this.getOrderedLayers()) {
+      layer.setOrder(newOrder);
+      newOrder += 1;
+    }
   }
 
   /**
@@ -303,14 +398,22 @@ public class AnimatorModelImpl implements AnimatorModel {
     }
 
     /**
-     * Gets the names in this shape.
-     * @return the names in this shape
+     * Gets the shape names in this layer.
+     * @return the shape names in this layer
      */
     public List<String> getNames() {
       return names;
     }
 
     /**
+     * Adds a shape name to the layer if not already present.
+     * @param shapeName the shape name to add
+     */
+    public void addName(String shapeName) {
+      if (!names.contains(shapeName)) {
+        names.add(shapeName);
+      }
+    }
 
     /**
      * Removes the shape with the given name if that shape is in this layer.
@@ -322,7 +425,7 @@ public class AnimatorModelImpl implements AnimatorModel {
 
     @Override
     public int compareTo(Layer o) {
-      return 0;
+      return order - o.order;
     }
   }
 }

@@ -257,6 +257,11 @@ public class FrameTest {
     }
 
     @Override
+    public void createKeyframe(String shapeName, Shape shape, int tick, String layerName) throws IllegalArgumentException {
+      createKeyframe(shapeName, shape, tick);
+    }
+
+    @Override
     public List<String> getShapesInLayer(String layerName) {
       return null;
     }
